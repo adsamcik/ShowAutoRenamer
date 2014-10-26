@@ -1,0 +1,26 @@
+﻿<Window x:Class="ShowAutoRenamer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Show renamer" Height="170" Width="649" Topmost="True" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="133*"/>
+            <ColumnDefinition Width="508*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="begin" Content="Rename" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="begin_Click" Grid.Column="1"/>
+        <Button Content="Select" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="75" Height="25" Click="Button_Click" Grid.Column="1"/>
+        <TextBox x:Name="textBox" Height="25" Margin="167,10,90,0" VerticalAlignment="Top" MaxLines="1" Padding="0,3,0,0" Grid.Column="1"/>
+        <Label x:Name="Preview" Content="" Margin="167,35,10,0" VerticalAlignment="Top" Background="#FFF0F0F0" Grid.Column="1"/>
+        <Grid Margin="10,6,351,0" Width="280" Background="#FFA6E7FF" Grid.ColumnSpan="2" HorizontalAlignment="Left">
+            <Label Content="OPTIONS" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="50" FontWeight="Bold" Padding="0" Margin="0,-22,0,0" Foreground="White" Height="53" Width="280" FontFamily="Segoe UI Black" HorizontalContentAlignment="Center"/>
+            <CheckBox x:Name="removeMinus" Content="Remove -" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Click="removeMinus_Click"/>
+            <CheckBox x:Name="remove_" Content="Remove _" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top" Click="removeMinus_Click"/>
+            <TextBox x:Name="showName" HorizontalAlignment="Left" Height="23" Margin="108,61,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" TextChanged="showName_TextChanged"/>
+            <Label Content="Show name (not required)" HorizontalAlignment="Left" Margin="108,35,0,0" VerticalAlignment="Top" Width="159"/>
+            <CheckBox x:Name="removeName" Content="Delete name from original" HorizontalAlignment="Left" Margin="108,89,0,0" VerticalAlignment="Top" Click="removeMinus_Click"/>
+            <CheckBox x:Name="useFolder" Content="Folder" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Click="removeMinus_Click"/>
+
+        </Grid>
+
+    </Grid>
+</Window>

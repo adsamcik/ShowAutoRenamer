@@ -1,0 +1,12 @@
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\bin\Release\ShowAutoRenamer.exe.config
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\bin\Release\ShowAutoRenamer.exe
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\bin\Release\ShowAutoRenamer.pdb
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\MainWindow.baml
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\MainWindow.g.cs
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\App.g.cs
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\ShowAutoRenamer_MarkupCompile.cache
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\ShowAutoRenamer.g.resources
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\ShowAutoRenamer.Properties.Resources.resources
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\ShowAutoRenamer.csproj.GenerateResource.Cache
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\ShowAutoRenamer.exe
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\ShowAutoRenamer.pdb

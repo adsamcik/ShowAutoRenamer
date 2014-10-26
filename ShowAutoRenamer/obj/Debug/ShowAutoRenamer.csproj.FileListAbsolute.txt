@@ -1,0 +1,15 @@
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\bin\Debug\ShowAutoRenamer.exe.config
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\bin\Debug\ShowAutoRenamer.exe
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\bin\Debug\ShowAutoRenamer.pdb
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.csprojResolveAssemblyReference.cache
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\MainWindow.baml
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\MainWindow.g.cs
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\App.g.cs
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\ShowAutoRenamer_MarkupCompile.cache
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.g.resources
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.Properties.Resources.resources
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.csproj.GenerateResource.Cache
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.exe
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.pdb
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\EnterName.baml
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\EnterName.g.cs
