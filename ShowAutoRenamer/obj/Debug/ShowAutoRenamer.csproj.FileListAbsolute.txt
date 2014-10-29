@@ -13,3 +13,7 @@ D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.ex
 D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.pdb
 D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\EnterName.baml
 D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\EnterName.g.cs
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\bin\Debug\Newtonsoft.Json.dll
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\bin\Debug\Newtonsoft.Json.xml
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\FindShow.baml
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\FindShow.g.cs
