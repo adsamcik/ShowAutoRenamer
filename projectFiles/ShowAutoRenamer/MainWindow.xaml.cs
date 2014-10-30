@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace ShowAutoRenamer {
     /// <summary>
@@ -17,6 +19,11 @@ namespace ShowAutoRenamer {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+
+            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable()) { episodeNaming.IsEnabled = false; episodeNaming.IsChecked = false; }
+
+            dispatcherTimer.Tick += new EventHandler(LessTimeLeft);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
@@ -44,37 +51,64 @@ namespace ShowAutoRenamer {
         }
 
         private void begin_Click(object sender, RoutedEventArgs e) {
-            if (Rename()) MessageBox.Show("Successfully renamed");
-            else MessageBox.Show("There was an error, nothing was renamed");
+            if((bool)episodeNaming.IsChecked) SmartRename();
+            else Rename();
         }
 
-        bool Rename() {
+        void Rename() {
             string[] files;
             string path = Path.GetDirectoryName(textBox.Text);
-            if (!Directory.Exists(path)) return false;
+            if (!Directory.Exists(path)) return;
             if ((bool)useFolder.IsChecked) files = Directory.GetFiles(path);
             else files = new string[] { textBox.Text };
-            if (files.Length < 1) return false;
+            if (files.Length < 1) return;
 
-            int season = Math.Abs(GetSE(Path.GetFileNameWithoutExtension(files[0]), true));
+            string name = Path.GetFileNameWithoutExtension(textBox.Text);
+            int season = GetSE(name,true);
+
             for (int i = 0; i < files.Length; i++) {
-                string name = Path.GetFileNameWithoutExtension(files[i]);
+                name = Path.GetFileNameWithoutExtension(files[i]);
                 int episode = GetSE(name, false);
-
-                if (!(bool)episodeNaming.IsChecked) name = CreateFileName(name, season, episode);
-                else name = GetEpisode(showName.Text, season - 1,episode).title;
-
+                name = normalizeName(CreateFileName(name, season, episode));
                 string newPath = Path.GetDirectoryName(files[i]) + "/" + name + Path.GetExtension(files[i]);
+                
                 if (!File.Exists(newPath)) System.IO.File.Move(files[i], newPath);
-
+                else { statusText.Content = "There is already " + Path.GetFileName(newPath); return; }
             }
+        }
 
-            if (season == -1) return false;
-            return true;
+        void SmartRename() {
+            string[] files;
+            string path = Path.GetDirectoryName(textBox.Text);
+            if (!Directory.Exists(path)) return;
+            if ((bool)useFolder.IsChecked) files = Directory.GetFiles(path);
+            else files = new string[] { textBox.Text };
+            if (files.Length < 1) return;
+
+            string name = Search(showName.Text).Title;
+            Season season = GetSeason(name, GetSE(Path.GetFileNameWithoutExtension(textBox.Text), true));
+            List<Episode> episodes = GetEpisodes(name, season.season);
+            if (season.season < 0) return;
+            for (int i = 0; i < files.Length; i++) {
+                name = Path.GetFileNameWithoutExtension(files[i]);
+                int episode = GetSE(name, false);
+                name = normalizeName(CreateFileName(season.season, episode, episodes[episode - 1].title));
+                string newPath = Path.GetDirectoryName(files[i]) + "/" + name + Path.GetExtension(files[i]);
+
+                if (!File.Exists(newPath)) System.IO.File.Move(files[i], newPath);
+                else { statusText.Content = "There is already " + Path.GetFileName(newPath);}
+            }
+        }
+
+        string normalizeName(string name) {
+            string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+            Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+            name = r.Replace(name, "");
+            return name;
         }
 
         string Request(string adress) {
-            Debug.WriteLine(adress);
+            
             // Create a request for the URL. 
             WebRequest request = WebRequest.Create(adress);
             // Get the response.
@@ -95,6 +129,7 @@ namespace ShowAutoRenamer {
 
         Show Search(string forWhat) {
             List<Show> episodes = JsonConvert.DeserializeObject<List<Show>>(Request("http://api.trakt.tv/search/shows.json/c01ff5475f1333863127ffd8816fb776?query=" + forWhat));
+            if (episodes.Count == 0) return new Show();
             return episodes[0];
         }
 
@@ -104,8 +139,6 @@ namespace ShowAutoRenamer {
             return episodes;
         }
 
-        Episode cachedResult;
-        bool nameChanged;
         /// <summary>
         /// Recommended to use since it uses caching
         /// </summary>
@@ -113,23 +146,45 @@ namespace ShowAutoRenamer {
         /// <param name="season"></param>
         /// <returns></returns>
         Episode GetEpisode(string showName, int season, int episode) {
-            if (!nameChanged) return cachedResult;
-            nameChanged = false;
-            string title = Search(showName).Title.Replace(" ", "-").Replace("(", "").Replace(")", "");
+            episode--;
+            string title = Search(showName).Title;
+            if (title == null) return new Episode("Show not found!");
+            title = title.Replace(" ", "-").Replace("(", "").Replace(")", "");
             List<Episode> episodes = JsonConvert.DeserializeObject<List<Episode>>(Request("http://api.trakt.tv/show/season.json/c01ff5475f1333863127ffd8816fb776/" + title + "/" + season));
-            cachedResult = episodes[episode];
+            if (episodes.Count == 0) return new Episode("Show not found");
+            else if (episode > episodes.Count) return new Episode("Found " + title + " which in season " + ++season + " has less episodes");
             return episodes[episode];
         }
+
+        int GetEpisodeCount(string showName, int season) {
+            return JsonConvert.DeserializeObject<List<Season>>(Request("http://api.trakt.tv/show/seasons.json/c01ff5475f1333863127ffd8816fb776/" + showName))[season].episodes;
+        }
+
+        Season GetSeason(string showName, int season) {
+            return JsonConvert.DeserializeObject<List<Season>>(Request("http://api.trakt.tv/show/seasons.json/c01ff5475f1333863127ffd8816fb776/" + showName)).Find(x => x.season == season);
+        }
+
 
         string CreateFileName(string n, int s, int e) {
             string season = (s < 10) ? "0" + s.ToString() : s.ToString();
             string episode = (e < 10) ? "0" + e.ToString() : e.ToString();
 
-            n = ((bool)episodeNaming.IsChecked) ? GetEpisode(showName.Text, s,e).title : FormatName(n, season, episode) ;
+            n = ((bool)episodeNaming.IsChecked && showName.Text != "") ? GetEpisode(showName.Text, s,e).title : FormatName(n, season, episode) ;
 
             //string final = (n.Length == 0) ? "S" + s + "E" + e : "S" + s + "E" + e + " - " + n;
+            if (n == null) n = "Error during name creation";
 
             string final = (n.Length == 0) ? "S" + season + "E" + episode : "S" + season + "E" + episode + " - " + n;
+            final = ((bool)displayName.IsChecked && showName.Text.Trim() != "") ? showName.Text + " " + final : final;
+
+            return final;
+        }
+
+        string CreateFileName(int s, int e, string episodeName) {
+            string season = (s < 10) ? "0" + s.ToString() : s.ToString();
+            string episode = (e < 10) ? "0" + e.ToString() : e.ToString();
+
+            string final = "S" + season + "E" + episode + " - " + episodeName;
             final = ((bool)displayName.IsChecked && showName.Text.Trim() != "") ? showName.Text + " " + final : final;
 
             return final;
@@ -138,10 +193,7 @@ namespace ShowAutoRenamer {
 
 
         string FormatName(string n, string s, string e) {
-
-
             if (n.Contains("(" + s + "x" + e + ")")) n = n.Replace("(" + s + "x" + e + ")", "");
-
 
             if (n.ToUpper().Contains(e)) n = Regex.Split(n, e, RegexOptions.IgnoreCase)[1];
             else if (n.ToUpper().Contains("X")) {
@@ -158,11 +210,7 @@ namespace ShowAutoRenamer {
                 }
             }
 
-
-            //while (n.ToUpper().Contains(ep)) n = Regex.Replace(n, ep, "", RegexOptions.IgnoreCase);
             n = TestForEndings(n);
-
-
             n = n.Replace('.', ' ');
 
             if ((bool)removeMinus.IsChecked) n = Regex.Replace(n, "-", " ", RegexOptions.IgnoreCase);
@@ -178,17 +226,6 @@ namespace ShowAutoRenamer {
 
                 if (!changed) break;
             }
-
-            //Future feature - if name is null, it will ask you to fill that name
-            //if (n == "") {
-            //    EnterName edit = new EnterName(n, season, episode);
-            //    if ((bool)edit.ShowDialog()) {
-            //        n = edit.Name;
-            //        season = edit.Season;
-            //        episode = edit.Episode;
-            //    }
-            //}
-
        
             return n;
         }
@@ -210,7 +247,6 @@ namespace ShowAutoRenamer {
 
             if (tempString.Contains(what)) {
                 string[] split = Regex.Split(tempString, what, RegexOptions.IgnoreCase);
-                //Debug.WriteLine("split0 " + split[split.Length - 2] + "split1 " + split[split.Length - 1]);
                 if ((split[split.Length - 2].EndsWith(" ") || split[split.Length - 2].EndsWith(".") || split[split.Length - 2].Length < 1) &&
                     (split[split.Length - 1].StartsWith(" ") || split[split.Length - 1].StartsWith(".") || split[split.Length - 1].Length < 1)) {
                     if (who.Length - 3 > split[split.Length - 1].Length) who = who.Remove(who.Length - 3 - split[split.Length - 1].Length);
@@ -267,7 +303,7 @@ namespace ShowAutoRenamer {
             return -1;
         }
 
-        private void removeMinus_Click(object sender, RoutedEventArgs e) {
+        private void Update(object sender, RoutedEventArgs e) {
             UpdatePreview();
         }
 
@@ -278,12 +314,25 @@ namespace ShowAutoRenamer {
         }
 
         private void showName_TextChanged(object sender, TextChangedEventArgs e) {
-            nameChanged = true;
-            UpdatePreview();
+            //UpdatePreview();
+            PlannedUpdate();
+
         }
 
-        private void findShow_Click(object sender, RoutedEventArgs e) {
+        float timeLeft;
+        System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+        void PlannedUpdate() {
+            if (!dispatcherTimer.IsEnabled) dispatcherTimer.Start();
+            timeLeft = 1;         
+        }
 
+        void LessTimeLeft(object sender, EventArgs e) {
+            timeLeft -= 0.25f;
+            if (timeLeft < 0) { dispatcherTimer.Stop(); UpdatePreview(); timeLeft = 0;}
+        }
+
+        private void Analyze_Click(object sender, RoutedEventArgs e) {
+            
         }
 
         private void drop(object sender, DragEventArgs e) {
@@ -299,7 +348,6 @@ namespace ShowAutoRenamer {
         }
 
         private void textBox_TextChanged(object sender, TextChangedEventArgs e) {
-            if (File.Exists(textBox.Text)) nameChanged = true;
             UpdatePreview();
         }
 

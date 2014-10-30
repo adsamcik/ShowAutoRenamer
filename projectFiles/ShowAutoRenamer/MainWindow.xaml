@@ -11,17 +11,19 @@
         <Button Content="Select" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="75" Height="25" Click="Button_Click" Grid.Column="1"/>
         <TextBox x:Name="textBox" Height="25" Margin="139,10,90,0" VerticalAlignment="Top" MaxLines="1" Padding="0,3,0,0" Grid.Column="1" TextChanged="textBox_TextChanged"/>
         <Label x:Name="Preview" Content="" Margin="139,35,10,0" VerticalAlignment="Top" Background="#FFF0F0F0" Grid.Column="1"/>
-        <TextBox x:Name="showName" HorizontalAlignment="Left" Height="23" Margin="298,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="202" TextChanged="showName_TextChanged" Background="#FFE6E6E6" Grid.Column="1"/>
-        <Label Content="Show name (not required)" HorizontalAlignment="Left" Margin="139,66,0,0" VerticalAlignment="Top" Width="159" Foreground="Black" Grid.Column="1"/>
-        <Grid Margin="10,6,0,0" Width="257" Background="#FF7396F1" Grid.ColumnSpan="2" HorizontalAlignment="Left">
+        <TextBox x:Name="showName" HorizontalAlignment="Left" Height="25" Margin="210,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" TextChanged="showName_TextChanged" Background="#FFE6E6E6" Grid.Column="1" VerticalContentAlignment="Center"/>
+        <Label Content="Show name" HorizontalAlignment="Left" Margin="140,70,0,0" VerticalAlignment="Top" Width="65" Foreground="Black" Grid.Column="1" Height="25" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Grid Width="267" Background="#FF7396F1" Grid.ColumnSpan="2" HorizontalAlignment="Left">
             <Label Content="OPTIONS" FontSize="50" FontWeight="Bold" Padding="0" Margin="0,-22,0,0" Foreground="White" Height="53" Width="280" FontFamily="Segoe UI Black" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-            <CheckBox x:Name="removeMinus" Content="Remove -" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Click="removeMinus_Click" Foreground="White"/>
-            <CheckBox x:Name="remove_" Content="Remove _" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top" Click="removeMinus_Click" Foreground="White"/>
-            <CheckBox x:Name="displayName" Content="Show name in title" HorizontalAlignment="Left" Margin="10,101,0,0" VerticalAlignment="Top" Click="removeMinus_Click" Foreground="White"/>
-            <CheckBox x:Name="useFolder" Content="Folder" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Click="removeMinus_Click" Foreground="White"/>
-            <CheckBox x:Name="episodeNaming" Content="Automagical episode naming" HorizontalAlignment="Left" Margin="10,121,0,0" VerticalAlignment="Top" Click="removeMinus_Click" Foreground="White"/>
+            <CheckBox x:Name="removeMinus" Content="Remove -" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="Update" Foreground="White"/>
+            <CheckBox x:Name="remove_" Content="Remove _" HorizontalAlignment="Left" Margin="120,40,0,0" VerticalAlignment="Top" Click="Update" Foreground="White"/>
+            <CheckBox x:Name="displayName" Content="Show name in title" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top" Click="Update" Foreground="White"/>
+            <CheckBox x:Name="useFolder" Content="Use Folder" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Click="Update" Foreground="White"/>
+            <CheckBox x:Name="episodeNaming" Content="Automagical episode naming" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" IsChecked="True"/>
+            <CheckBox x:Name="recursive" Content="Recursive" HorizontalAlignment="Left" Margin="120,60,0,0" VerticalAlignment="Top" Click="Update" Foreground="White"/>
         </Grid>
-        <Button x:Name="findShow" Content="Find Show" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="75" Click="findShow_Click"/>
+        <Button x:Name="Analyze" Content="Analyze" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="75" Click="Analyze_Click"/>
+        <Label x:Name="statusText" Content="" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,170,10" VerticalAlignment="Bottom" Width="200" Height="20" Padding="5,0,0,0" VerticalContentAlignment="Center" Background="#00000000" Foreground="#FF646464"/>
 
     </Grid>
 </Window>

@@ -59,6 +59,7 @@
     <Compile Include="FindShow.xaml.cs">
       <DependentUpon>FindShow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Season.cs" />
     <Compile Include="Show.cs" />
     <Page Include="EnterName.xaml">
       <SubType>Designer</SubType>
