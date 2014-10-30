@@ -10,3 +10,10 @@ D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\ShowAutoRenamer.
 D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\ShowAutoRenamer.csproj.GenerateResource.Cache
 D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\ShowAutoRenamer.exe
 D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\ShowAutoRenamer.pdb
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\bin\Release\Newtonsoft.Json.dll
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\bin\Release\Newtonsoft.Json.xml
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\ShowAutoRenamer.csprojResolveAssemblyReference.cache
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\EnterName.baml
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\FindShow.baml
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\EnterName.g.cs
+D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Release\FindShow.g.cs
