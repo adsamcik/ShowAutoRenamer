@@ -7,9 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Windows.Input;
 using System.Diagnostics;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace ShowAutoRenamer {
     /// <summary>
@@ -51,52 +50,64 @@ namespace ShowAutoRenamer {
         }
 
         private void begin_Click(object sender, RoutedEventArgs e) {
-            if((bool)episodeNaming.IsChecked) SmartRename();
-            else Rename();
+            Rename();
+        }
+
+        void RecursiveFolderRenamer(string path) {
+            if (!Directory.Exists(path)) path = Path.GetDirectoryName(path);
+            string[] directories = Directory.GetDirectories(path);
+
+            for (int i = 0; i < directories.Length; i++) {RecursiveFolderRenamer(directories[i]); }
+
+            if ((bool)episodeNaming.IsChecked) SmartRename(Directory.GetFiles(path));
+            else ClassicRename(Directory.GetFiles(path));
         }
 
         void Rename() {
-            string[] files;
             string path = Path.GetDirectoryName(textBox.Text);
             if (!Directory.Exists(path)) return;
-            if ((bool)useFolder.IsChecked) files = Directory.GetFiles(path);
-            else files = new string[] { textBox.Text };
-            if (files.Length < 1) return;
 
+            if ((bool)recursive.IsChecked && (bool)useFolder.IsChecked) RecursiveFolderRenamer(path);
+            else {
+                string[] files;
+                if ((bool)useFolder.IsChecked) files = Directory.GetFiles(path);
+                else files = new string[] { textBox.Text };
+
+                if ((bool)episodeNaming.IsChecked) SmartRename(files);
+                else ClassicRename(files);
+            }
+
+        }
+
+        void ClassicRename(string[] files) {
             string name = Path.GetFileNameWithoutExtension(textBox.Text);
-            int season = GetSE(name,true);
+            int season = GetSE(name, true);
 
             for (int i = 0; i < files.Length; i++) {
                 name = Path.GetFileNameWithoutExtension(files[i]);
                 int episode = GetSE(name, false);
                 name = normalizeName(CreateFileName(name, season, episode));
                 string newPath = Path.GetDirectoryName(files[i]) + "/" + name + Path.GetExtension(files[i]);
-                
+
                 if (!File.Exists(newPath)) System.IO.File.Move(files[i], newPath);
-                else { statusText.Content = "There is already " + Path.GetFileName(newPath); return; }
+                else { statusText.Text = "There is already " + Path.GetFileName(newPath); return; }
             }
         }
-
-        void SmartRename() {
-            string[] files;
-            string path = Path.GetDirectoryName(textBox.Text);
-            if (!Directory.Exists(path)) return;
-            if ((bool)useFolder.IsChecked) files = Directory.GetFiles(path);
-            else files = new string[] { textBox.Text };
-            if (files.Length < 1) return;
-
+        void SmartRename(string[] files) {
             string name = Search(showName.Text).Title;
             Season season = GetSeason(name, GetSE(Path.GetFileNameWithoutExtension(textBox.Text), true));
+
             List<Episode> episodes = GetEpisodes(name, season.season);
             if (season.season < 0) return;
             for (int i = 0; i < files.Length; i++) {
                 name = Path.GetFileNameWithoutExtension(files[i]);
                 int episode = GetSE(name, false);
-                name = normalizeName(CreateFileName(season.season, episode, episodes[episode - 1].title));
+                if (episode >= episodes.Count) name = normalizeName(CreateFileName(name, season.season, episode));
+                else name = normalizeName(CreateFileName(season.season, episode, episodes[episode - 1].title));
                 string newPath = Path.GetDirectoryName(files[i]) + "/" + name + Path.GetExtension(files[i]);
 
                 if (!File.Exists(newPath)) System.IO.File.Move(files[i], newPath);
-                else { statusText.Content = "There is already " + Path.GetFileName(newPath);}
+                else { statusText.Text = "There is already " + Path.GetFileName(newPath);}
             }
         }
 
@@ -129,7 +140,8 @@ namespace ShowAutoRenamer {
 
         Show Search(string forWhat) {
             List<Show> episodes = JsonConvert.DeserializeObject<List<Show>>(Request("http://api.trakt.tv/search/shows.json/c01ff5475f1333863127ffd8816fb776?query=" + forWhat));
-            if (episodes.Count == 0) return new Show();
+            if (episodes.Count == 0) { statusText.Text = "Couldn't find any shows"; return new Show(); }
+            statusText.Text = "Found " + episodes[0].Title;
             return episodes[0];
         }
 
@@ -152,7 +164,7 @@ namespace ShowAutoRenamer {
             title = title.Replace(" ", "-").Replace("(", "").Replace(")", "");
             List<Episode> episodes = JsonConvert.DeserializeObject<List<Episode>>(Request("http://api.trakt.tv/show/season.json/c01ff5475f1333863127ffd8816fb776/" + title + "/" + season));
             if (episodes.Count == 0) return new Episode("Show not found");
-            else if (episode > episodes.Count) return new Episode("Found " + title + " which in season " + ++season + " has less episodes");
+            else if (episode >= episodes.Count) return new Episode("Found " + title + " which in season " + ++season + " has less episodes");
             return episodes[episode];
         }
 
@@ -260,15 +272,6 @@ namespace ShowAutoRenamer {
             return who;
         }
 
-        bool ContainsFromEnd(string who, string what, int index = 0) {
-            if (who.Length < what.Length) return false;
-
-            if (who.Length - index - 2 < 0) return false;
-            if (who.Substring(who.Length - index - 2, 2) == what) return true;
-            else ContainsFromEnd(who, what, index++);
-            return false;
-        }
-
         int GetSE(string n, bool season) {
             n = n.ToUpper();
             if (n.Contains("X")) {
@@ -276,14 +279,14 @@ namespace ShowAutoRenamer {
                 int result;
                 if (int.TryParse(x[0].Last().ToString(), out result) && int.TryParse(x[1].First().ToString(), out result)) {
                     if (season) {
-                        if (!((x[0].Length > 0 && int.TryParse(x[0].Substring(x[0].Length - 1, 1), out result)) || (x[0].Length > 1 && int.TryParse(x[0].Substring(x[0].Length - 2, 2), out result)))) result = -1;
+                        if (!((x[0].Length > 0 && int.TryParse(x[0].Substring(x[0].Length - 1, 1), out result)) || (x[0].Length > 1 && int.TryParse(x[0].Substring(x[0].Length - 2, 2), out result)))) result = 1;
                     }
-                    else if (!((x[1].Length > 1 && int.TryParse(x[1].Substring(0, 2), out result)) || (x[0].Length > 0 && int.TryParse(x[1].Substring(0, 1), out result)))) result = -1;
+                    else if (!((x[1].Length > 1 && int.TryParse(x[1].Substring(0, 2), out result)) || (x[0].Length > 0 && int.TryParse(x[1].Substring(0, 1), out result)))) result = 1;
 
                     return result;
                 }
             }
-
+            
             string lookFor = (season) ? "S" : "E";
 
             for (int i = 0; i < 10; i++) {
@@ -300,10 +303,16 @@ namespace ShowAutoRenamer {
 
             if (n.Contains("PILOT")) return 0;
 
-            return -1;
+             if(!season) {
+                int result;
+                if (int.TryParse(n.Substring(0, 2), out result) || int.TryParse(n.Substring(0, 1), out result)) return result;
+            }
+
+            return 1;
         }
 
         private void Update(object sender, RoutedEventArgs e) {
+            RecursiveFolderRenamer(textBox.Text);
             UpdatePreview();
         }
 
@@ -316,7 +325,8 @@ namespace ShowAutoRenamer {
         private void showName_TextChanged(object sender, TextChangedEventArgs e) {
             //UpdatePreview();
             PlannedUpdate();
-
+            if (showName.Text == "") showNameOverText.Visibility = System.Windows.Visibility.Visible;
+            else showNameOverText.Visibility = System.Windows.Visibility.Hidden;
         }
 
         float timeLeft;
@@ -331,10 +341,6 @@ namespace ShowAutoRenamer {
             if (timeLeft < 0) { dispatcherTimer.Stop(); UpdatePreview(); timeLeft = 0;}
         }
 
-        private void Analyze_Click(object sender, RoutedEventArgs e) {
-            
-        }
-
         private void drop(object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 // Note that you can have more than one file.
@@ -344,6 +350,7 @@ namespace ShowAutoRenamer {
                 // handling code you have defined.
                 textBox.Text = files[0];
             }
+            dragdropOverlay.Visibility = System.Windows.Visibility.Hidden;
             UpdatePreview();
         }
 
@@ -353,40 +360,23 @@ namespace ShowAutoRenamer {
 
 
 
+        private void Close_Click(object sender, RoutedEventArgs e) {
+            this.Close();
+        }
+
+        private void Window_DragEnter(object sender, DragEventArgs e) {
+            dragdropOverlay.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void Window_DragLeave(object sender, DragEventArgs e) {
+            dragdropOverlay.Visibility = System.Windows.Visibility.Hidden;
+        }
+
+        private void Rectangle_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            if (e.LeftButton == MouseButtonState.Pressed) {
+                DragMove();
+            }
+        }
+
     }
 }
-
-
-
-//[
-//   {
-//      "title":"The Big Bang Theory",
-//      "year":2007,
-//      "url":"http://trakt.tv/show/the-big-bang-theory",
-//      "first_aired":1190617200,
-//      "country":"United States",
-//      "overview":"What happens when hyperintelligent roommates Sheldon and Leonard meet Penny, a free-spirited beauty moving in next door, and realize they know next to nothing about life outside of the lab. Rounding out the crew are the smarmy Wolowitz, who thinks he's as sexy as he is brainy, and Koothrappali, who suffers from an inability to speak in the presence of a woman.",
-//      "runtime":30,
-//      "network":"CBS",
-//      "air_day":"Thursday",
-//      "air_time":"8:00pm",
-//      "certification":"TV-PG",
-//      "imdb_id":"tt0898266",
-//      "tvdb_id":80379,
-//      "tvrage_id":8511,
-//      "ended":false,
-//      "images":{
-//         "poster":"http://slurm.trakt.us/images/posters/34.71.jpg",
-//         "fanart":"http://slurm.trakt.us/images/fanart/34.71.jpg",
-//         "banner":"http://slurm.trakt.us/images/banners/34.71.jpg"
-//      },
-//      "ratings":{
-//         "percentage":87,
-//         "votes":25097,
-//         "loved":23414,
-//         "hated":1683
-//      },
-//      "genres":[
-//         "Comedy"
-//      ]
-//   }
