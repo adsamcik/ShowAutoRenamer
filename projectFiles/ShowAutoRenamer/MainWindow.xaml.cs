@@ -312,7 +312,6 @@ namespace ShowAutoRenamer {
         }
 
         private void Update(object sender, RoutedEventArgs e) {
-            RecursiveFolderRenamer(textBox.Text);
             UpdatePreview();
         }
 
