@@ -105,6 +105,8 @@ namespace ShowAutoRenamer {
             if (showName.Text == "") nm.AddNotification("Enter show name", "Please enter showname or uncheck Smart-Rename");
             string name = Search(showName.Text).Title;
 
+            if (name == null) { nm.AddNotification("Show was not found", "Are you sure you typed in the correct name in english?"); return; }
+
             Season season = GetSeason(name, GetSE(Path.GetFileNameWithoutExtension(files[0]), true));
             if (season == null || season.season < 0) return;
             
@@ -127,15 +129,15 @@ namespace ShowAutoRenamer {
                 string name = Path.GetFileNameWithoutExtension(files[i]);
                 int s = GetSE(name, true);
                 int e = GetSE(name, false);
-
+                
                 
 
                 if (s == season) {
                     if ((bool)smartRename.IsChecked) {
-                        if (e-1 >= episodes.Count) nm.AddNotification(new Notification("Skipping " + name, "Smart-Rename didn't find episode " + e + " in season " + s + " for show " + show));
-                        else name = CreateFileName(episodes[e-1].title,s, e);
+                        if (e - 1 >= episodes.Count) nm.AddNotification(new Notification("Skipping " + name, "Smart-Rename didn't find episode " + e + " in season " + s + " for show " + show));
+                        else name = CreateFileName(episodes[e - 1].title, s, e);
                     }
-                    else name = CreateFileName(FormatName(name, s, e), s, e);
+                    else { Debug.WriteLine("!" + name); name = CreateFileName(FormatName(name, s, e), s, e); }
                     foundEpisodes.Add(new Episode(name, s, e, files[i]));
                 }
                 else nm.AddNotification(new Notification("Skipping " + files[i], "Season doesn't correspond with season of the selected file."));
@@ -243,9 +245,16 @@ namespace ShowAutoRenamer {
         string FormatName(string n, int s, int e) {
             string season = (s < 10) ? "0" + s.ToString() : s.ToString();
             string episode = (e < 10) ? "0" + e.ToString() : e.ToString();
-
+            Debug.WriteLine(n + " after " + n.Replace("(" + s + "x" + e + ")", ""));
             n = n.Replace("(" + s + "x" + e + ")", "");
-            if (n.ToUpper().Contains(episode)) n = Regex.Split(n, episode, RegexOptions.IgnoreCase)[1];
+            Debug.WriteLine(n);
+            if (n.ToUpper().Contains(episode)) { 
+                string[] a = Regex.Split(n, episode, RegexOptions.IgnoreCase); 
+                //a[0] = "";
+                n = string.Join(" ", a.Skip((s==e)?2:1));
+
+                Debug.WriteLine(n);
+            }
             else if (n.ToUpper().Contains("X")) {
                 string[] x = Regex.Split(n, "X", RegexOptions.IgnoreCase);
                 int result;
@@ -254,12 +263,11 @@ namespace ShowAutoRenamer {
                     else if (x[0].Length > 0 && int.TryParse(x[0].Substring(x[0].Length - 1, 1), out result)) x[0] = x[0].Remove(x[0].Length - 1, 1);
 
                     if (x[1].Length > 1 && int.TryParse(x[1].Substring(0, 2), out result)) x[1] = x[1].Remove(0, 2);
-                    else if (x[0].Length > 0 && int.TryParse(x[1].Substring(0, 1), out result)) x[1] = x[1].Remove(0, 1); ;
+                    else if (x[0].Length > 0 && int.TryParse(x[1].Substring(0, 1), out result)) x[1] = x[1].Remove(0, 1);
 
                     n = string.Join("", x);
                 }
             }
-
             n = TestForEndings(n);
             n = n.Replace('.', ' ');
             if ((bool)removeMinus.IsChecked) n = Regex.Replace(n, "-", " ", RegexOptions.IgnoreCase);
@@ -267,7 +275,6 @@ namespace ShowAutoRenamer {
             if ((bool)displayName.IsChecked && showName.Text.Trim() != "") n = Regex.Replace(n, showName.Text, " ", RegexOptions.IgnoreCase);
 
             n = Regex.Replace(n, @"\s+", " ");
-
             while (true) {
                 bool changed = false;
                 n = n.Trim();
@@ -362,7 +369,7 @@ namespace ShowAutoRenamer {
                 if (showName.Text == "") { nm.AddNotification(new Notification("Enter show name", "Please enter showname or uncheck Smart-Rename", true)); return; }
                 string searched = Search(showName.Text).Title;
 
-                if (searched == "") { nm.AddNotification(new Notification("Couldn't find your show", "Unable to find show you searched for (" + showName.Text + ")", true)); return; }
+                if (searched == "" || searched == null) { nm.AddNotification(new Notification("Couldn't find your show", "Unable to find show. You searched for (" + showName.Text + ")", true)); return; }
                 else nm.AddNotification(new Notification("Found " + searched, "Smart-Rename will use this show to rename your files", true));
 
                 Preview.Content = CreateFileName(GetEpisode(searched, s, e).title, GetSE(name, true), GetSE(name, false));
@@ -371,7 +378,7 @@ namespace ShowAutoRenamer {
             else {
                 nm.DeleteSearchRelated();
 
-                Debug.WriteLine(ProcessFilesInFolder(new string[] { filePath.Text }, name, s)[0].title);
+                //Debug.WriteLine(ProcessFilesInFolder(new string[] { filePath.Text }, name, s)[0].title);
                 Preview.Content = ProcessFilesInFolder(new string[] { filePath.Text }, name, s)[0].title;
                 //Preview.Content = CreateFileName(FormatName(name, s.ToString(), e.ToString()), s, e);
             }
