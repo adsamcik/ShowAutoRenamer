@@ -6,7 +6,8 @@ S01E01 - Days Gone Bye.
 
 ##Features
 - Renames your ugly episode names to ones that are easier to read
+- Beautiful and user friendly
 - Smart-Rename (Automatically finds episode name) 
-- Supports recursive renaming (always assumes that folder = season) -- season detection by folder name in next update
+- Supports recursive renaming (always assumes that folder = season)
 - Supports Drag&Drop
 - Written in C#
