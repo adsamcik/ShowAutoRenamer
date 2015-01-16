@@ -67,24 +67,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="FindShow.xaml.cs">
-      <DependentUpon>FindShow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Classes\Functions.cs" />
-    <Compile Include="Classes\NetworkController.cs" />
+    <Compile Include="Classes\Network.cs" />
     <Compile Include="Objects\Notification.cs" />
     <Compile Include="Classes\NotificationManager.cs" />
     <Compile Include="Objects\Season.cs" />
     <Compile Include="Objects\Show.cs" />
     <Compile Include="Classes\ShowStorage.cs" />
-    <Page Include="EnterName.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="FindShow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -92,9 +81,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EnterName.xaml.cs">
-      <DependentUpon>EnterName.xaml</DependentUpon>
     </Compile>
     <Compile Include="Objects\Episode.cs" />
     <Compile Include="MainWindow.xaml.cs">
