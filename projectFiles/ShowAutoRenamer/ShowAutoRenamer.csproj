@@ -46,7 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -70,10 +70,13 @@
     <Compile Include="FindShow.xaml.cs">
       <DependentUpon>FindShow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Notification.cs" />
-    <Compile Include="NotificationManager.cs" />
-    <Compile Include="Season.cs" />
-    <Compile Include="Show.cs" />
+    <Compile Include="Classes\Functions.cs" />
+    <Compile Include="Classes\NetworkController.cs" />
+    <Compile Include="Objects\Notification.cs" />
+    <Compile Include="Classes\NotificationManager.cs" />
+    <Compile Include="Objects\Season.cs" />
+    <Compile Include="Objects\Show.cs" />
+    <Compile Include="Classes\ShowStorage.cs" />
     <Page Include="EnterName.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -93,7 +96,7 @@
     <Compile Include="EnterName.xaml.cs">
       <DependentUpon>EnterName.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Episode.cs" />
+    <Compile Include="Objects\Episode.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -133,6 +136,7 @@
   <ItemGroup>
     <Resource Include="showAutoRenamerIcon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

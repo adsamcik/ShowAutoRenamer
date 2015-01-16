@@ -22,6 +22,7 @@ D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\Sho
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\ShowAutoRenamer.pdb
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\Newtonsoft.Json.dll
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\Newtonsoft.Json.xml
+D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.csprojResolveAssemblyReference.cache
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\EnterName.baml
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\FindShow.baml
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\MainWindow.baml
@@ -35,4 +36,3 @@ D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\Sho
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.csproj.GenerateResource.Cache
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.exe
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.pdb
-D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.csprojResolveAssemblyReference.cache
