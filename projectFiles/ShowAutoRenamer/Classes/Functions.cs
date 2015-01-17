@@ -22,18 +22,6 @@ namespace ShowAutoRenamer {
             return filtered.Select(f => f.FullName).ToArray();
         }
 
-        public void RecursiveFolderRename(string path, string showName) {
-            if (!Directory.Exists(path)) path = Path.GetDirectoryName(path);
-            string[] directories = Directory.GetDirectories(path);
-
-            for (int i = 0; i < directories.Length; i++) { RecursiveFolderRename(directories[i]); }
-
-            string[] files = Functions.GetFilesInDirectory(path);
-            if (files.Length == 0) return;
-            if (Functions.smartRename) Functions.SmartRename(files, showName);
-            else Functions.ClassicRename(files);
-        }
-
         public static IList<Episode> ProcessFilesInFolder(string[] files, string showName, int season) {
             List<Episode> foundEpisodes = new List<Episode>();
             List<Episode> episodes;
@@ -62,7 +50,6 @@ namespace ShowAutoRenamer {
                 for (int y = 0; y < foundEpisodes.Count; y++) {
                     if (i != y && foundEpisodes[i].episode == foundEpisodes[y].episode) {
                         NotificationManager.AddNotification(new Notification("Found duplicite episode (S" + foundEpisodes[i].season + "E" + foundEpisodes[i].episode + ")", foundEpisodes[i].path + " AND " + foundEpisodes[y].path));
-                        if (++i > foundEpisodes.Count) break;
                     }
                 }
             }
@@ -95,7 +82,7 @@ namespace ShowAutoRenamer {
             else path = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(path)) return;
 
-            if (Functions.recursive && Functions.useFolder) RecursiveFolderRename(path);
+            if (Functions.recursive && Functions.useFolder) RecursiveFolderRename(path, showName);
             else {
                 string[] files;
                 if (Functions.useFolder) files = Functions.GetFilesInDirectory(path);
@@ -258,7 +245,7 @@ namespace ShowAutoRenamer {
             if (!Directory.Exists(path)) path = Path.GetDirectoryName(path);
             string[] directories = Directory.GetDirectories(path);
 
-            for (int i = 0; i < directories.Length; i++) { RecursiveFolderRename(directories[i]); }
+            for (int i = 0; i < directories.Length; i++) { RecursiveFolderRename(directories[i], showName); }
 
             string[] files = Functions.GetFilesInDirectory(path);
             if (files.Length == 0) return;

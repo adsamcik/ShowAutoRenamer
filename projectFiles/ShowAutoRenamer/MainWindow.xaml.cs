@@ -15,7 +15,6 @@ namespace ShowAutoRenamer {
 
 
     public partial class MainWindow : Window {
-        NotificationManager NotificationManager;
 
         public MainWindow() {
             InitializeComponent();
@@ -45,11 +44,18 @@ namespace ShowAutoRenamer {
         }
 
         private void begin_Click(object sender, RoutedEventArgs e) {
-            //Functions.Rename(showName.Text);
+            Functions.Rename(filePath.Text, showName.Text);
         }
 
         private void Update(object sender, RoutedEventArgs e) {
+            Functions.useFolder = (bool)useFolder.IsChecked;
+            Functions.smartRename = (bool)smartRename.IsChecked;
+            Functions.recursive = (bool)recursive.IsChecked;
+            Functions.displayName = (bool)displayName.IsChecked;
+            Functions.remove_ = (bool)remove_.IsChecked;
+            Functions.removeDash = (bool)removeDash.IsChecked;
             UpdatePreview();
+            
         }
 
         void UpdatePreview() {

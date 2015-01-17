@@ -35,14 +35,14 @@ namespace ShowAutoRenamer {
             }
         }
 
-        Show Search(string forWhat) {
+        public static Show Search(string forWhat) {
             List<Show> episodes = JsonConvert.DeserializeObject<List<Show>>(Request("http://api.trakt.tv/search/shows.json/c01ff5475f1333863127ffd8816fb776?query=" + forWhat));
             NotificationManager.DeleteSearchRelated();
             if (episodes.Count == 0) return new Show();
             return episodes[0];
         }
 
-        List<Episode> GetEpisodes(string showName, int season) {
+        public static List<Episode> GetEpisodes(string showName, int season) {
             string title = showName.Replace(" ", "-").Replace("(", "").Replace(")", "").Replace("&", "and").Replace(".", "").Replace("'", "");
             List<Episode> episodes = JsonConvert.DeserializeObject<List<Episode>>(Request("http://api.trakt.tv/show/season.json/c01ff5475f1333863127ffd8816fb776/" + title + "/" + season));
             return episodes;
@@ -54,7 +54,7 @@ namespace ShowAutoRenamer {
         /// <param name="showName"></param>
         /// <param name="season"></param>
         /// <returns></returns>
-        static Episode GetEpisode(string showName, int season, int episode) {
+        public static Episode GetEpisode(string showName, int season, int episode) {
             episode--;
             string title = showName;
             if (title == null) return new Episode("Show not found!");

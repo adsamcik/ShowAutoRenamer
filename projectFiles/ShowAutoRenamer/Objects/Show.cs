@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ShowAutoRenamer {
-    class Show {
+    public class Show {
 #pragma warning disable 0649
         public string Title;
 #pragma warning disable 0649

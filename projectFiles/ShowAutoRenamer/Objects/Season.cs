@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ShowAutoRenamer {
-    class Season {
+    public class Season {
 #pragma warning disable 0649
         public int season;
 #pragma warning disable 0649

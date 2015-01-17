@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ShowAutoRenamer {
-    class Notification {
+    public class Notification {
         public string title;
         public string text;
 

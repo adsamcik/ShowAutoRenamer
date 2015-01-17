@@ -18,11 +18,7 @@ D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\bin\Debug\Newtonsoft.Json.xm
 D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\FindShow.baml
 D:\Dropbox\Projects\ShowAutoRenamer\ShowAutoRenamer\obj\Debug\FindShow.g.cs
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Debug\Newtonsoft.Json.xml
-D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\EnterName.baml
-D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\FindShow.baml
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\MainWindow.baml
-D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\EnterName.g.cs
-D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\FindShow.g.cs
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\MainWindow.g.cs
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\App.g.cs
 D:\Dropbox\Projects\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer_MarkupCompile.cache
