@@ -10,16 +10,19 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
+using System.Threading.Tasks;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace ShowAutoRenamer {
-
 
     public partial class MainWindow : Window {
 
         public MainWindow() {
             InitializeComponent();
 
-            NotificationManager.Initialize(notification, nTitle, nText);
+            Network.Initialize(NetworkActivity);
+            NotificationManager.Initialize(notification, nTitle, nText, System.Windows.Threading.Dispatcher.CurrentDispatcher);
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable()) { smartRename.IsEnabled = false; smartRename.IsChecked = false; }
 
             dispatcherTimer.Tick += new EventHandler(LessTimeLeft);
@@ -43,11 +46,11 @@ namespace ShowAutoRenamer {
             }
         }
 
-        private void begin_Click(object sender, RoutedEventArgs e) {
-            Functions.Rename(filePath.Text, showName.Text);
+        private async void begin_Click(object sender, RoutedEventArgs e) {
+            await Functions.Rename(filePath.Text, showName.Text);
         }
 
-        private void Update(object sender, RoutedEventArgs e) {
+        void Update(object sender, RoutedEventArgs e) {
             Functions.useFolder = (bool)useFolder.IsChecked;
             Functions.smartRename = (bool)smartRename.IsChecked;
             Functions.recursive = (bool)recursive.IsChecked;
@@ -55,11 +58,15 @@ namespace ShowAutoRenamer {
             Functions.remove_ = (bool)remove_.IsChecked;
             Functions.removeDash = (bool)removeDash.IsChecked;
             UpdatePreview();
-            
         }
 
-        void UpdatePreview() {
-            if (!File.Exists(filePath.Text)) { Preview.Content = "Path doesn't exist"; return; }
+        async void UpdatePreview() {
+            if (!File.Exists(filePath.Text)) {
+                await Preview.Dispatcher.BeginInvoke((Action)(() => {
+                    Preview.Content = "Path doesn't exist";
+                }));
+                return;
+            }
             string name = Path.GetFileNameWithoutExtension(filePath.Text);
             int s = Functions.GetSE(name, true);
             int e = Functions.GetSE(name, false);
@@ -67,25 +74,34 @@ namespace ShowAutoRenamer {
             if ((bool)smartRename.IsChecked) {
                 NotificationManager.DeleteSearchRelated();
                 if (showName.Text == "") { NotificationManager.AddNotification(new Notification("Enter show name", "Please enter showname or uncheck Smart-Rename", true)); return; }
-                string searched = Network.Search(showName.Text).Title;
-                if (searched == "" || searched == null) { NotificationManager.AddNotification(new Notification("Couldn't find your show", "Unable to find show. You searched for (" + showName.Text + ")", true)); return; }
+                Show sh = await Network.Search(showName.Text).ConfigureAwait(false);
+                string searched = (sh != null) ? sh.Title : null;
+                if (searched == "" || searched == null) {
+                    this.Dispatcher.Invoke((Action)(() => NotificationManager.AddNotification(new Notification("Couldn't find your show", "Unable to find show. You searched for (" + showName.Text + ")", true))));
+                    return;
+                }
                 else NotificationManager.AddNotification(new Notification("Found " + searched, "Smart-Rename will use this show to rename your files", true));
 
-                Preview.Content = Functions.CreateFileName(Network.GetEpisode(searched, s, e).title, Functions.GetSE(name, true), Functions.GetSE(name, false), showName.Text);
+                string namePreview = (await Network.GetEpisode(searched, s, e)).title;
+                Preview.Dispatcher.Invoke((Action)(() => {
+                    namePreview = Functions.CreateFileName(namePreview, Functions.GetSE(name, true), Functions.GetSE(name, false), showName.Text);
+                    Preview.Content = namePreview;
+                }));
+
 
             }
             else {
                 NotificationManager.DeleteSearchRelated();
 
                 //Debug.WriteLine(ProcessFilesInFolder(new string[] { filePath.Text }, name, s)[0].title);
-                Preview.Content = Functions.ProcessFilesInFolder(new string[] { filePath.Text }, name, s)[0].title;
+                Preview.Content = (await Functions.ProcessFilesInFolder(new string[] { filePath.Text }, name, s))[0].title;
                 //Preview.Content = CreateFileName(FormatName(name, s.ToString(), e.ToString()), s, e);
             }
 
         }
 
         float timeLeft;
-        System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+        DispatcherTimer dispatcherTimer = new DispatcherTimer();
         void PlannedUpdate() {
             if (!dispatcherTimer.IsEnabled) dispatcherTimer.Start();
             timeLeft = 1;

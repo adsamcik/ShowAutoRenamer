@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace ShowAutoRenamer {
     public static class NotificationManager {
@@ -11,11 +12,13 @@ namespace ShowAutoRenamer {
         static Grid nGrid;
         static Label title;
         static TextBlock text;
+        static Dispatcher dispatcher;
 
-        public static void Initialize(Grid g, Label l, TextBlock tb) {
+        public static void Initialize(Grid g, Label l, TextBlock tb, Dispatcher d) {
             nGrid = g;
             title = l;
             text = tb;
+            dispatcher = d;
             Update();
         }
 
@@ -43,11 +46,16 @@ namespace ShowAutoRenamer {
         }
 
         static void Update() {
-            if (notifications.Count == 0) { nGrid.Visibility = System.Windows.Visibility.Hidden; return; }
-            else if (nGrid.Visibility == System.Windows.Visibility.Hidden) nGrid.Visibility = System.Windows.Visibility.Visible;
+            dispatcher.Invoke((Action)(() => {
+                if (notifications.Count == 0) { nGrid.Visibility = System.Windows.Visibility.Hidden; return; }
+                else if (nGrid.Visibility == System.Windows.Visibility.Hidden) nGrid.Visibility = System.Windows.Visibility.Visible;
 
-            title.Content = notifications[0].title;
-            text.Text = notifications[0].text;
+                title.Content = notifications[0].title;
+                text.Text = notifications[0].text;
+            }));
+
+
+
         }
 
     }
