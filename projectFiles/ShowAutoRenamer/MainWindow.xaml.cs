@@ -73,20 +73,27 @@ namespace ShowAutoRenamer {
 
             if ((bool)smartRename.IsChecked) {
                 NotificationManager.DeleteSearchRelated();
-                if (showName.Text == "") { NotificationManager.AddNotification(new Notification("Enter show name", "Please enter showname or uncheck Smart-Rename", true)); return; }
+                if (showName.Text == "") { NotificationManager.AddNotification(new Notification("Enter show name", "Please enter showname or uncheck Smart-Rename", true, Importance.high)); return; }
                 Show sh = await Network.Search(showName.Text).ConfigureAwait(false);
-                string searched = (sh != null) ? sh.Title : null;
+                if (sh == null) return;
+                string searched = (sh != null) ? sh.title : null;
                 if (searched == "" || searched == null) {
-                    this.Dispatcher.Invoke((Action)(() => NotificationManager.AddNotification(new Notification("Couldn't find your show", "Unable to find show. You searched for (" + showName.Text + ")", true))));
+                    this.Dispatcher.Invoke((Action)(() => NotificationManager.AddNotification(new Notification("Couldn't find your show", "Unable to find show. You searched for (" + showName.Text + ")", true, Importance.high))));
                     return;
                 }
                 else NotificationManager.AddNotification(new Notification("Found " + searched, "Smart-Rename will use this show to rename your files", true));
 
-                string namePreview = (await Network.GetEpisode(searched, s, e)).title;
-                Preview.Dispatcher.Invoke((Action)(() => {
-                    namePreview = Functions.CreateFileName(namePreview, Functions.GetSE(name, true), Functions.GetSE(name, false), showName.Text);
-                    Preview.Content = namePreview;
-                }));
+                Episode ep = await Network.GetEpisode(sh, s, e);
+
+                if (ep.error == null) {
+                    string namePreview = ep.title;
+                    Preview.Dispatcher.Invoke((Action)(() => {
+                        namePreview = Functions.CreateFileName(namePreview, Functions.GetSE(name, true), Functions.GetSE(name, false), showName.Text);
+                        Preview.Content = namePreview;
+                    }));
+                }
+                else
+                    NotificationManager.AddNotification(new Notification(ep.title, "Error occured: " + ep.error, true, Importance.high));
 
 
             }

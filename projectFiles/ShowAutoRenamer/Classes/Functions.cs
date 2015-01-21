@@ -40,7 +40,7 @@ namespace ShowAutoRenamer {
                         if (e - 1 >= episodes.Count) NotificationManager.AddNotification(new Notification("Skipping " + name, "Smart-Rename didn't find episode " + e + " in season " + s + " for show " + showName));
                         else name = CreateFileName(episodes[e - 1].title, s, e, showName);
                     }
-                    else { name = CreateFileName(Functions.FormatName(name, s, e, showName), s, e, showName); }
+                    else name = Functions.BeautifyName(name, s, e, showName);
                     foundEpisodes.Add(new Episode(name, s, e, files[i]));
                 }
                 else NotificationManager.AddNotification(new Notification("Skipping " + files[i], "Season doesn't correspond with season of the selected file."));
@@ -57,7 +57,7 @@ namespace ShowAutoRenamer {
             return foundEpisodes;
         }
 
-        public static string normalizeName(string name) {
+        public static string NameCleanup(string name) {
             string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
             Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
             name = r.Replace(name, "");
@@ -65,17 +65,14 @@ namespace ShowAutoRenamer {
         }
 
         public static string CreateFileName(string n, int s, int e, string showName) {
-            Debug.WriteLine("heh");
             if (n == null) return "";
             string season = (s < 10) ? "0" + s.ToString() : s.ToString();
             string episode = (e < 10) ? "0" + e.ToString() : e.ToString();
 
-
-
             string final = (n.Length == 0) ? "S" + season + "E" + episode : "S" + season + "E" + episode + " - " + n;
             final = (displayName && showName.Trim() != "") ? showName + " " + final : final;
 
-            return normalizeName(final);
+            return NameCleanup(final);
         }
 
         public static async Task Rename(string filePath, string showName) {
@@ -102,6 +99,7 @@ namespace ShowAutoRenamer {
         }
 
         public static async Task ClassicRename(string[] files) {
+
             string name = Path.GetFileNameWithoutExtension(files[0]);
             int season = GetSE(name, true);
             IList<Episode> foundEpisodes = await ProcessFilesInFolder(files, name, season);
@@ -116,7 +114,7 @@ namespace ShowAutoRenamer {
 
         public static async Task SmartRename(string[] files, string showName) {
             if (showName == "") NotificationManager.AddNotification("Enter show name", "Please enter showname or uncheck Smart-Rename");
-            string name = (await Network.Search(showName)).Title;
+            string name = (await Network.Search(showName)).title;
 
             if (name == null) { NotificationManager.AddNotification("Show was not found", "Are you sure you typed in the correct name in english?"); return; }
 
@@ -132,18 +130,19 @@ namespace ShowAutoRenamer {
             }
         }
 
-        public static string FormatName(string n, int s, int e, string showName) {
+        public static string BeautifyName(string n, int s, int e, string fileName) {
             string season = (s < 10) ? "0" + s.ToString() : s.ToString();
             string episode = (e < 10) ? "0" + e.ToString() : e.ToString();
-            Debug.WriteLine(n + " after " + n.Replace("(" + s + "x" + e + ")", ""));
+            string episodeName = "";
+            string showName = "";
+            n = SmartDotReplace(fileName);
+            n = TestForEndings(n);
             n = n.Replace("(" + s + "x" + e + ")", "");
-            Debug.WriteLine(n);
-            if (n.ToUpper().Contains(episode)) {
-                string[] a = Regex.Split(n, episode, RegexOptions.IgnoreCase);
-                //a[0] = "";
-                n = string.Join(" ", a.Skip((s == e) ? 2 : 1));
-
-                Debug.WriteLine(n);
+            string splitter = "S" + season + "E" + episode;
+            if (n.ToUpper().Contains(splitter)) {
+                string[] a = Regex.Split(n, splitter, RegexOptions.IgnoreCase);
+                showName = a[0];
+                episodeName = string.Join(" ", a.Skip((s == e) ? 2 : 1));
             }
             else if (n.ToUpper().Contains("X")) {
                 string[] x = Regex.Split(n, "X", RegexOptions.IgnoreCase);
@@ -155,24 +154,33 @@ namespace ShowAutoRenamer {
                     if (x[1].Length > 1 && int.TryParse(x[1].Substring(0, 2), out result)) x[1] = x[1].Remove(0, 2);
                     else if (x[0].Length > 0 && int.TryParse(x[1].Substring(0, 1), out result)) x[1] = x[1].Remove(0, 1);
 
-                    n = string.Join("", x);
+                    episodeName = string.Join("", x);
                 }
             }
-            n = TestForEndings(n);
-            n = n.Replace('.', ' ');
+
             if (removeDash) n = Regex.Replace(n, "-", " ", RegexOptions.IgnoreCase);
             if (remove_) n = Regex.Replace(n, "_", " ", RegexOptions.IgnoreCase);
-            if (displayName && showName.Trim() != "") n = Regex.Replace(n, showName, " ", RegexOptions.IgnoreCase);
 
-            n = Regex.Replace(n, @"\s+", " ");
-            while (true) {
-                bool changed = false;
-                n = n.Trim();
-                if (n.StartsWith("-")) { n = n.TrimStart('-'); changed = true; }
-                if (n.EndsWith("-")) { n = n.TrimEnd('-'); changed = true; }
+            //Trim unwanted characters at the beginning and end
+            char[] trimChars = { ' ', '-' };
+            showName = showName.Trim(trimChars);
+            episodeName = episodeName.Trim(trimChars);
 
-                if (!changed) break;
+            string final = (displayName && showName.Trim() != "") ? showName.Trim() + " " : "";
+            final += "S" + season + "E" + episode;
+            final += (episodeName.Trim() != "") ? " - " + episodeName.Trim() : "";
+            return NameCleanup(final);
+        }
+
+
+        public static string SmartDotReplace(string n) {
+            string[] r = n.Split('.');
+            n = "";
+            for (int i = 0; i < r.Length; i++) {
+                if (r[i].Length == 1) n += r[i] + ".";
+                else n += r[i] + " ";
             }
+            //n.Any(c => char.IsUpper(c));
             return n;
         }
 
@@ -207,18 +215,8 @@ namespace ShowAutoRenamer {
 
         public static int GetSE(string n, bool season) {
             n = n.ToUpper();
-            if (n.Contains("X")) {
-                string[] x = Regex.Split(n, "X", RegexOptions.IgnoreCase);
-                int result;
-                if (int.TryParse(x[0].Last().ToString(), out result) && int.TryParse(x[1].First().ToString(), out result)) {
-                    if (season) {
-                        if (!((x[0].Length > 1 && int.TryParse(x[0].Substring(x[0].Length - 2, 2), out result)) || (x[0].Length > 0 && int.TryParse(x[0].Substring(x[0].Length - 1, 1), out result)))) result = 1;
-                    }
-                    else if (!((x[1].Length > 1 && int.TryParse(x[1].Substring(0, 2), out result)) || (x[0].Length > 0 && int.TryParse(x[1].Substring(0, 1), out result)))) result = 1;
 
-                    return result;
-                }
-            }
+            if (n.Contains("PILOT")) return 0;
 
             string lookFor = (season) ? "S" : "E";
 
@@ -234,15 +232,22 @@ namespace ShowAutoRenamer {
                 }
             }
 
-            if (n.Contains("PILOT")) return 0;
-
-            if (!season) {
+            if (n.Contains("X")) {
+                string[] x = Regex.Split(n, "X", RegexOptions.IgnoreCase);
                 int result;
-                if (int.TryParse(n.Substring(0, 2), out result) || int.TryParse(n.Substring(0, 1), out result)) return result;
+                if (int.TryParse(x[0].Last().ToString(), out result) && int.TryParse(x[1].First().ToString(), out result)) {
+                    if (season) {
+                        if (!((x[0].Length > 1 && int.TryParse(x[0].Substring(x[0].Length - 2, 2), out result)) || (x[0].Length > 0 && int.TryParse(x[0].Substring(x[0].Length - 1, 1), out result)))) result = 1;
+                    }
+                    else if (!((x[1].Length > 1 && int.TryParse(x[1].Substring(0, 2), out result)) || (x[0].Length > 0 && int.TryParse(x[1].Substring(0, 1), out result)))) result = 1;
+
+                    return result;
+                }
             }
 
             return 1;
         }
+
         public static async Task RecursiveFolderRename(string path, string showName) {
             if (!Directory.Exists(path)) path = Path.GetDirectoryName(path);
             string[] directories = Directory.GetDirectories(path);
@@ -252,7 +257,7 @@ namespace ShowAutoRenamer {
             string[] files = Functions.GetFilesInDirectory(path);
             if (files.Length == 0) return;
             if (Functions.smartRename) await Functions.SmartRename(files, showName);
-            else Functions.ClassicRename(files);
+            else await Functions.ClassicRename(files);
         }
     }
 }

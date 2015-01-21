@@ -9,12 +9,12 @@ namespace ShowAutoRenamer {
         public string title;
         public int season;
         public int episode;
-
         public string path;
+        public string error;
 
         public Episode() { }
-        public Episode(string title) {
-            this.title = title;
+        public Episode(string error) {
+            this.error = error;
         }
         public Episode(string title, int season, int episode) {
             this.title = title;

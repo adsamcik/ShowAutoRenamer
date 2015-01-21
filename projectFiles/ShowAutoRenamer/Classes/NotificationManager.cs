@@ -8,6 +8,7 @@ using System.Windows.Threading;
 
 namespace ShowAutoRenamer {
     public static class NotificationManager {
+
         static List<Notification> notifications = new List<Notification>();
         static Grid nGrid;
         static Label title;
@@ -46,6 +47,7 @@ namespace ShowAutoRenamer {
         }
 
         static void Update() {
+            notifications = notifications.OrderByDescending(x => x.importance).ToList();
             dispatcher.Invoke((Action)(() => {
                 if (notifications.Count == 0) { nGrid.Visibility = System.Windows.Visibility.Hidden; return; }
                 else if (nGrid.Visibility == System.Windows.Visibility.Hidden) nGrid.Visibility = System.Windows.Visibility.Visible;
@@ -58,5 +60,12 @@ namespace ShowAutoRenamer {
 
         }
 
+    }
+
+    public enum Importance {
+        low,
+        normal,
+        high,
+        important
     }
 }

@@ -169,7 +169,6 @@
             <TextBox x:Name="showName" Height="25" VerticalAlignment="Bottom" Width="240" TextChanged="showName_TextChanged" Background="#00E6E6E6" VerticalContentAlignment="Bottom" Margin="0,0,0,10" FontFamily="Segoe UI Semibold" BorderBrush="#FFC8C8C8" BorderThickness="0,0,0,2" Padding="10,0,0,1" SelectionBrush="White" Foreground="White" Style="{DynamicResource textBoxStyle}"/>
             <TextBlock x:Name="showNameOverText" Margin="9,0,0,9" Text="Show name" VerticalAlignment="Bottom" Height="24" Padding="3,4,0,0" IsHitTestVisible="False" Foreground="#FFDADADA" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" Width="75"/>
             <Ellipse x:Name="NetworkActivity" Fill="White" HorizontalAlignment="Center" Height="15" Margin="245,170,3,9" Stroke="Black" VerticalAlignment="Center" Width="15" Grid.ColumnSpan="2" StrokeThickness="0" RenderTransformOrigin="-0.067,0.267"/>
-
         </Grid>
 
         <Rectangle Fill="#FF7396F0" Grid.ColumnSpan="2" StrokeThickness="0" Margin="0" MouseDown="Rectangle_MouseDown">
@@ -185,7 +184,7 @@
             <TextBlock x:Name="nText" Margin="0,25,0,0" TextWrapping="Wrap" Padding="5,0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Right" Width="360"/>
             <Label x:Name="nTitle" Content="Label" BorderBrush="Gainsboro" BorderThickness="0,0,0,1" RenderTransformOrigin="-0.579,0.556" Height="24" Padding="5,1,5,0" FontFamily="Segoe UI Semibold" FontSize="14" Foreground="#FF969696" Margin="0,0,60,66"/>
         </Grid>
-        <Label Content="Show renamer" Margin="10,1,55,0" Grid.ColumnSpan="2" FontFamily="Segoe UI Semibold" FontSize="16" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="26" IsHitTestVisible="False" AllowDrop="False" Foreground="Gainsboro"/>
+        <Label Content="SHOW RENAMER alpha 3.0" Margin="10,1,55,0" Grid.ColumnSpan="2" FontFamily="Segoe UI Semibold" FontSize="16" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="26" IsHitTestVisible="False" AllowDrop="False" Foreground="Gainsboro"/>
         <Rectangle x:Name="dragdropOverlay" Stroke="#FF7396F0" SnapsToDevicePixels="True" Grid.ColumnSpan="2" Grid.Row="1" Fill="#997396F0" Cursor="None" Drop="drop" StrokeThickness="3" Visibility="Hidden"/>
 
 
