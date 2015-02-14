@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<VSPerformanceSession Version="1.00">
+  <Options>
+    <Solution>ShowAutoRenamer.sln</Solution>
+    <CollectionMethod>Sampling</CollectionMethod>
+    <AllocationMethod>None</AllocationMethod>
+    <AddReport>true</AddReport>
+    <ResourceBasedAnalysisSelected>true</ResourceBasedAnalysisSelected>
+    <UniqueReport>Timestamp</UniqueReport>
+    <SamplingMethod>Cycles</SamplingMethod>
+    <CycleCount>10000000</CycleCount>
+    <PageFaultCount>10</PageFaultCount>
+    <SysCallCount>10</SysCallCount>
+    <SamplingCounter Name="" ReloadValue="00000000000f4240" DisplayName="" />
+    <RelocateBinaries>false</RelocateBinaries>
+    <HardwareCounters EnableHWCounters="false" />
+    <EtwSettings />
+    <PdhSettings>
+      <PdhCountersEnabled>false</PdhCountersEnabled>
+      <PdhCountersRate>500</PdhCountersRate>
+      <PdhCounters>
+        <PdhCounter>\Fyzick&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#253; disk(_Total)\Středn&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#237; d&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#233;lka fronty disku</PdhCounter>
+        <PdhCounter>\Paměť\Str&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#225;nky/s</PdhCounter>
+        <PdhCounter>\Procesor(_Total)\% času procesoru</PdhCounter>
+      </PdhCounters>
+    </PdhSettings>
+  </Options>
+  <ExcludeSmallFuncs>true</ExcludeSmallFuncs>
+  <InteractionProfilingEnabled>false</InteractionProfilingEnabled>
+  <JScriptProfilingEnabled>false</JScriptProfilingEnabled>
+  <PreinstrumentEvent>
+    <InstrEventExclude>false</InstrEventExclude>
+  </PreinstrumentEvent>
+  <PostinstrumentEvent>
+    <InstrEventExclude>false</InstrEventExclude>
+  </PostinstrumentEvent>
+  <Binaries>
+    <ProjBinary>
+      <Path>ShowAutoRenamer\obj\Debug\ShowAutoRenamer.exe</Path>
+      <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
+      <Instrument>true</Instrument>
+      <Sample>true</Sample>
+      <ExternalWebsite>false</ExternalWebsite>
+      <InteractionProfilingEnabled>false</InteractionProfilingEnabled>
+      <IsLocalJavascript>false</IsLocalJavascript>
+      <IsWindowsStoreApp>false</IsWindowsStoreApp>
+      <IsWWA>false</IsWWA>
+      <LaunchProject>true</LaunchProject>
+      <OverrideProjectSettings>false</OverrideProjectSettings>
+      <LaunchMethod>Executable</LaunchMethod>
+      <ExecutablePath>ShowAutoRenamer\bin\Debug\ShowAutoRenamer.exe</ExecutablePath>
+      <StartupDirectory>ShowAutoRenamer\bin\Debug\</StartupDirectory>
+      <Arguments>
+      </Arguments>
+      <NetAppHost>IIS</NetAppHost>
+      <NetBrowser>InternetExplorer</NetBrowser>
+      <ExcludeSmallFuncs>true</ExcludeSmallFuncs>
+      <JScriptProfilingEnabled>false</JScriptProfilingEnabled>
+      <PreinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PreinstrumentEvent>
+      <PostinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PostinstrumentEvent>
+      <ProjRef>{F22A9896-A3CF-4991-83ED-D73991F8FEC2}|ShowAutoRenamer\ShowAutoRenamer.csproj</ProjRef>
+      <ProjPath>ShowAutoRenamer\ShowAutoRenamer.csproj</ProjPath>
+      <ProjName>ShowAutoRenamer</ProjName>
+    </ProjBinary>
+  </Binaries>
+  <Reports>
+    <Report>
+      <Path>ShowAutoRenamer150121.vspx</Path>
+    </Report>
+  </Reports>
+  <Launches>
+    <ProjBinary>
+      <Path>:PB:{F22A9896-A3CF-4991-83ED-D73991F8FEC2}|ShowAutoRenamer\ShowAutoRenamer.csproj</Path>
+    </ProjBinary>
+  </Launches>
+</VSPerformanceSession>

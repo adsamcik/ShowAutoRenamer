@@ -27,5 +27,9 @@ namespace ShowAutoRenamer {
             this.episode = episode;
             this.path = path;
         }
+
+        public string GetNameForFile() {
+            return "S" + (season < 10 ? "0" + season : season.ToString()) + "E" + (episode < 10 ? "0" + episode : episode.ToString()) + " - " + title;
+        }
     }
 }

@@ -152,8 +152,8 @@
         </Grid.ColumnDefinitions>
         <Button x:Name="begin" Content="Rename" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="120" Click="begin_Click" Grid.Column="1" Height="30" Grid.Row="1" BorderThickness="0" Background="#FF3399FF" Padding="0" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="White" Style="{DynamicResource ButtonStyle}" Margin="260,0,0,0"/>
         <Label x:Name="Preview" Content="" VerticalAlignment="Top" Background="Gainsboro" Margin="10,35,10,0" Grid.Column="1" Height="26" Grid.Row="1" BorderThickness="0" FontFamily="Segoe UI Semibold"/>
-        <Button Content="Select" HorizontalAlignment="Center" VerticalAlignment="Center" Width="85" Height="25" Click="Button_Click" BorderThickness="0" Background="#FF748FE1" Foreground="White" FontSize="18" FontFamily="Segoe UI Semibold" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource ButtonStyle}" Grid.Column="1" Margin="285,10,10,158" Grid.Row="1"/>
-        <TextBox x:Name="filePath" Height="25" VerticalAlignment="Top" MaxLines="1" Padding="0,3,0,0" TextChanged="textBox_TextChanged" BorderThickness="2,2,0,2" SelectionBrush="{x:Null}" BorderBrush="#FF3399FF" Margin="10,10,95,0" Grid.Column="1" Grid.Row="1" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+        <Button Content="Select" HorizontalAlignment="Center" VerticalAlignment="Center" Width="85" Height="25" Click="Button_Click" BorderThickness="0" Background="#FF748FE1" Foreground="White" FontSize="18" FontFamily="Segoe UI Semibold" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource ButtonStyle}" Margin="285,10,10,158" Grid.Column="1" Grid.Row="1"/>
+        <TextBox x:Name="filePath" Height="25" VerticalAlignment="Top" MaxLines="1" Padding="0,3,0,0" TextChanged="textBox_TextChanged" BorderThickness="2,2,0,2" SelectionBrush="{x:Null}" BorderBrush="#FF3399FF" FontFamily="Segoe UI Semibold" IsReadOnly="True" Margin="10,10,95,0" Grid.Column="1" Grid.Row="1"/>
         <Grid Background="#FF7396F0" Grid.Row="1" Margin="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="127*"/>
@@ -165,7 +165,7 @@
             <CheckBox x:Name="displayName" Content="Show name in title" HorizontalAlignment="Left" Margin="25,75,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" Height="15" Width="118"/>
             <CheckBox x:Name="useFolder" Content="Use Folder" HorizontalAlignment="Left" Margin="25,55,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" Height="15" Width="76" Unchecked="useFolder_Unchecked"/>
             <CheckBox x:Name="smartRename" Content="Smart-Rename" HorizontalAlignment="Left" Margin="25,95,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" IsChecked="True" Height="15" Width="99"/>
-            <CheckBox x:Name="recursive" Content="Recursive" HorizontalAlignment="Left" Margin="118,55,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" Height="15" Width="70" Checked="recursive_Checked" RenderTransformOrigin="0.443,0.133"/>
+            <CheckBox x:Name="recursive" Content="Recursive" HorizontalAlignment="Left" Margin="118,55,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" Height="15" Width="70" Checked="recursive_Checked" RenderTransformOrigin="0.443,0.133" IsEnabled="False"/>
             <TextBox x:Name="showName" Height="25" VerticalAlignment="Bottom" Width="240" TextChanged="showName_TextChanged" Background="#00E6E6E6" VerticalContentAlignment="Bottom" Margin="0,0,0,10" FontFamily="Segoe UI Semibold" BorderBrush="#FFC8C8C8" BorderThickness="0,0,0,2" Padding="10,0,0,1" SelectionBrush="White" Foreground="White" Style="{DynamicResource textBoxStyle}"/>
             <TextBlock x:Name="showNameOverText" Margin="9,0,0,9" Text="Show name" VerticalAlignment="Bottom" Height="24" Padding="3,4,0,0" IsHitTestVisible="False" Foreground="#FFDADADA" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" Width="75"/>
             <Ellipse x:Name="NetworkActivity" Fill="White" HorizontalAlignment="Center" Height="15" Margin="245,170,3,9" Stroke="Black" VerticalAlignment="Center" Width="15" Grid.ColumnSpan="2" StrokeThickness="0" RenderTransformOrigin="-0.067,0.267"/>
@@ -174,7 +174,7 @@
         <Rectangle Fill="#FF7396F0" Grid.ColumnSpan="2" StrokeThickness="0" Margin="0" MouseDown="Rectangle_MouseDown">
 
             <Rectangle.Effect>
-                <DropShadowEffect Opacity="0.3" Direction="-90" ShadowDepth="3"/>
+                <DropShadowEffect Opacity="0.4" Direction="270" BlurRadius="8" ShadowDepth="4"/>
             </Rectangle.Effect>
         </Rectangle>
         <Button Content="X" Grid.Column="1" HorizontalAlignment="Center" Margin="305,0,0,0" Width="75" BorderThickness="0" Background="#FFE62828" BorderBrush="#FF9C9C9C" FontWeight="Bold" Foreground="White" Style="{DynamicResource CloseButStyle}" Padding="0,2,0,0" FontSize="16" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" Click="Close_Click"/>
@@ -184,7 +184,7 @@
             <TextBlock x:Name="nText" Margin="0,25,0,0" TextWrapping="Wrap" Padding="5,0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Right" Width="360"/>
             <Label x:Name="nTitle" Content="Label" BorderBrush="Gainsboro" BorderThickness="0,0,0,1" RenderTransformOrigin="-0.579,0.556" Height="24" Padding="5,1,5,0" FontFamily="Segoe UI Semibold" FontSize="14" Foreground="#FF969696" Margin="0,0,60,66"/>
         </Grid>
-        <Label Content="SHOW RENAMER alpha 3.0" Margin="10,1,55,0" Grid.ColumnSpan="2" FontFamily="Segoe UI Semibold" FontSize="16" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="26" IsHitTestVisible="False" AllowDrop="False" Foreground="Gainsboro"/>
+        <Label Content="SHOW RENAMER alpha 3.0" Margin="10,1,0,0" FontFamily="Segoe UI Semibold" FontSize="16" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="26" IsHitTestVisible="False" AllowDrop="False" Foreground="Gainsboro"/>
         <Rectangle x:Name="dragdropOverlay" Stroke="#FF7396F0" SnapsToDevicePixels="True" Grid.ColumnSpan="2" Grid.Row="1" Fill="#997396F0" Cursor="None" Drop="drop" StrokeThickness="3" Visibility="Hidden"/>
 
 

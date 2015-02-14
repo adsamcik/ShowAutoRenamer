@@ -15,5 +15,9 @@ namespace ShowAutoRenamer {
         public string url;
 
         public IList<Episode> episodeList = new List<Episode>();
+
+        public Season(int season) {
+            this.season = season;
+        }
     }
 }

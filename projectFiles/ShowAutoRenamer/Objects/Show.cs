@@ -11,8 +11,9 @@ namespace ShowAutoRenamer {
         public string title;
 #pragma warning disable 0649
         public int tvdb_id;
+        public int seasons;
 
-        public IList<Season> seasons = new List<Season>();
+        public IList<Season> seasonList = new List<Season>();
 
         public Show() { }
 

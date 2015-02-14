@@ -36,7 +36,7 @@ namespace ShowAutoRenamer {
 
             // Set filter for file extension and default file extension 
             //dlg.DefaultExt = ".*";
-            //dlg.Filter = "AVI (*.avi)|*.avi|MKV (*.mkv)|*.mkv|MP4 (*.mp4)|*.mp4";
+            dlg.Filter = "ALL|*.*|VIDEO FILES | *.mp4;*.avi;*.mkv";
 
             Nullable<bool> result = dlg.ShowDialog();
 
@@ -47,7 +47,7 @@ namespace ShowAutoRenamer {
         }
 
         private async void begin_Click(object sender, RoutedEventArgs e) {
-            await Functions.Rename(filePath.Text, showName.Text);
+            await Functions.Rename(filePath.Text);
         }
 
         void Update(object sender, RoutedEventArgs e) {
@@ -61,49 +61,59 @@ namespace ShowAutoRenamer {
         }
 
         async void UpdatePreview() {
-            if (!File.Exists(filePath.Text)) {
-                await Preview.Dispatcher.BeginInvoke((Action)(() => {
-                    Preview.Content = "Path doesn't exist";
-                }));
-                return;
-            }
-            string name = Path.GetFileNameWithoutExtension(filePath.Text);
-            int s = Functions.GetSE(name, true);
-            int e = Functions.GetSE(name, false);
+            Show s = (await Functions.PrepareShow(filePath.Text));
 
-            if ((bool)smartRename.IsChecked) {
-                NotificationManager.DeleteSearchRelated();
-                if (showName.Text == "") { NotificationManager.AddNotification(new Notification("Enter show name", "Please enter showname or uncheck Smart-Rename", true, Importance.high)); return; }
-                Show sh = await Network.Search(showName.Text).ConfigureAwait(false);
-                if (sh == null) return;
-                string searched = (sh != null) ? sh.title : null;
-                if (searched == "" || searched == null) {
-                    this.Dispatcher.Invoke((Action)(() => NotificationManager.AddNotification(new Notification("Couldn't find your show", "Unable to find show. You searched for (" + showName.Text + ")", true, Importance.high))));
-                    return;
-                }
-                else NotificationManager.AddNotification(new Notification("Found " + searched, "Smart-Rename will use this show to rename your files", true));
-
-                Episode ep = await Network.GetEpisode(sh, s, e);
-
-                if (ep.error == null) {
-                    string namePreview = ep.title;
-                    Preview.Dispatcher.Invoke((Action)(() => {
-                        namePreview = Functions.CreateFileName(namePreview, Functions.GetSE(name, true), Functions.GetSE(name, false), showName.Text);
-                        Preview.Content = namePreview;
-                    }));
-                }
-                else
-                    NotificationManager.AddNotification(new Notification(ep.title, "Error occured: " + ep.error, true, Importance.high));
+            if (string.IsNullOrWhiteSpace(showName.Text)) showName.Text = s.title;
 
 
-            }
-            else {
-                NotificationManager.DeleteSearchRelated();
+            //Just for the fun of 3 ternary operators inside. Do not try this at your own code, you wont ever be able to read it again
+            //So what this does? it checks if we want to use showname, if so than it check whether the show itself has a name defined, if not it checks if user has entered 
+            //showname, if not, than it will ignore this option and not even insert that initial space, that would be there otherwise
+            Preview.Content = (Functions.displayName ? (string.IsNullOrWhiteSpace(s.title) ? (string.IsNullOrWhiteSpace(showName.Text) ? "" : showName.Text + " ") : s.title + " ") : "") + s.seasonList[0].episodeList[0].GetNameForFile();
+            
 
-                //Debug.WriteLine(ProcessFilesInFolder(new string[] { filePath.Text }, name, s)[0].title);
-                Preview.Content = (await Functions.ProcessFilesInFolder(new string[] { filePath.Text }, name, s))[0].title;
-                //Preview.Content = CreateFileName(FormatName(name, s.ToString(), e.ToString()), s, e);
-            }
+            return;
+
+            //if (!File.Exists(filePath.Text)) {
+            //    await Preview.Dispatcher.BeginInvoke((Action)(() => {
+            //        Preview.Content = "Path doesn't exist";
+            //    }));
+            //    return;
+            //}
+            //string name = Path.GetFileNameWithoutExtension(filePath.Text);
+            //int s = Functions.GetSE(name, true);
+            //int e = Functions.GetSE(name, false);
+
+            //NotificationManager.DeleteSearchRelated();
+            //if ((bool)smartRename.IsChecked) {
+
+            //    if (showName.Text == "") { NotificationManager.AddNotification(new Notification("Enter show name", "Please enter showname or uncheck Smart-Rename", true, Importance.high)); return; }
+            //    Show sh = await Network.Search(showName.Text).ConfigureAwait(false);
+            //    if (sh == null) return;
+            //    string searched = (sh != null) ? sh.title : null;
+            //    if (searched == "" || searched == null) {
+            //        this.Dispatcher.Invoke((Action)(() => NotificationManager.AddNotification(new Notification("Couldn't find your show", "Unable to find show. You searched for (" + showName.Text + ")", true, Importance.high))));
+            //        return;
+            //    }
+            //    else NotificationManager.AddNotification(new Notification("Found " + searched, "Smart-Rename will use this show to rename your files", true));
+
+            //    Episode ep = await Network.GetEpisode(sh, s, e);
+
+            //    if (ep.error == null) {
+            //        string namePreview = ep.title;
+            //        Preview.Dispatcher.Invoke((Action)(() => {
+            //            namePreview = Functions.CreateFileName(namePreview, Functions.GetSE(name, true), Functions.GetSE(name, false), showName.Text);
+            //            Preview.Content = namePreview;
+            //        }));
+            //    }
+            //    else
+            //        NotificationManager.AddNotification(new Notification(ep.title, "Error occured: " + ep.error, true, Importance.high));
+
+
+            //}
+            //else {
+            //    Preview.Content = (await Functions.ProcessFilesInFolder(new string[] { filePath.Text }, name, s))[0].title;
+            //}
 
         }
 
