@@ -19,8 +19,8 @@
       <PdhCountersEnabled>false</PdhCountersEnabled>
       <PdhCountersRate>500</PdhCountersRate>
       <PdhCounters>
-        <PdhCounter>\Fyzick&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#253; disk(_Total)\Středn&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#237; d&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#233;lka fronty disku</PdhCounter>
-        <PdhCounter>\Paměť\Str&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#225;nky/s</PdhCounter>
+        <PdhCounter>\Fyzick&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#253; disk(_Total)\Středn&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#237; d&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#233;lka fronty disku</PdhCounter>
+        <PdhCounter>\Paměť\Str&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#225;nky/s</PdhCounter>
         <PdhCounter>\Procesor(_Total)\% času procesoru</PdhCounter>
       </PdhCounters>
     </PdhSettings>

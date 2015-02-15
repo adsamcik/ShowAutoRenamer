@@ -65,14 +65,10 @@ namespace ShowAutoRenamer {
 
             if (string.IsNullOrWhiteSpace(showName.Text)) showName.Text = s.title;
 
-
-            //Just for the fun of 3 ternary operators inside. Do not try this at your own code, you wont ever be able to read it again
-            //So what this does? it checks if we want to use showname, if so than it check whether the show itself has a name defined, if not it checks if user has entered 
-            //showname, if not, than it will ignore this option and not even insert that initial space, that would be there otherwise
-            Preview.Content = (Functions.displayName ? (string.IsNullOrWhiteSpace(s.title) ? (string.IsNullOrWhiteSpace(showName.Text) ? "" : showName.Text + " ") : s.title + " ") : "") + s.seasonList[0].episodeList[0].GetNameForFile();
-            
-
-            return;
+            Preview.Content = Functions.ConstructName(
+                s.seasonList[0].episodeList[0],
+                string.IsNullOrWhiteSpace(showName.Text) ? s.title : showName.Text);
+            Debug.WriteLine(Preview.Content);
 
             //if (!File.Exists(filePath.Text)) {
             //    await Preview.Dispatcher.BeginInvoke((Action)(() => {
