@@ -11,7 +11,8 @@ namespace ShowAutoRenamer {
         public string title;
 #pragma warning disable 0649
         public int tvdb_id;
-        public int seasons;
+        int _seasons;
+        public int seasons { get { return _seasons == null || _seasons == 0 ? seasonList.Count : _seasons; } set { _seasons = value; } }
 
         public IList<Season> seasonList = new List<Season>();
 

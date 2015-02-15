@@ -61,14 +61,13 @@ namespace ShowAutoRenamer {
         }
 
         async void UpdatePreview() {
+            Debug.WriteLine("fire in the hole");
             Show s = (await Functions.PrepareShow(filePath.Text));
-
             if (string.IsNullOrWhiteSpace(showName.Text)) showName.Text = s.title;
 
             Preview.Content = Functions.ConstructName(
                 s.seasonList[0].episodeList[0],
-                string.IsNullOrWhiteSpace(showName.Text) ? s.title : showName.Text);
-            Debug.WriteLine(Preview.Content);
+                showName.Text);
 
             //if (!File.Exists(filePath.Text)) {
             //    await Preview.Dispatcher.BeginInvoke((Action)(() => {
@@ -162,10 +161,6 @@ namespace ShowAutoRenamer {
             else showNameOverText.Visibility = System.Windows.Visibility.Hidden;
         }
 
-        private void textBox_TextChanged(object sender, TextChangedEventArgs e) {
-            UpdatePreview();
-        }
-
         private void Close_Click(object sender, RoutedEventArgs e) {
             this.Close();
         }
@@ -194,6 +189,14 @@ namespace ShowAutoRenamer {
 
         private void nClose_Click(object sender, RoutedEventArgs e) {
             NotificationManager.RemoveNotification();
+        }
+
+        private void showName_TextInput(object sender, TextCompositionEventArgs e) {
+            UpdatePreview();
+        }
+
+        private void textBox_TextChanged(object sender, TextCompositionEventArgs e) {
+            UpdatePreview();
         }
 
     }

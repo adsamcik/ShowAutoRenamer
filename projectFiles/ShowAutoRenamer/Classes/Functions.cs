@@ -23,40 +23,39 @@ namespace ShowAutoRenamer {
             return filtered.Select(f => f.FullName).ToArray();
         }
 
-        public static async Task<IList<Episode>> ProcessFilesInFolder(string[] files, string showName, int season) {
-            List<Episode> foundEpisodes = new List<Episode>();
-            List<Episode> episodes;
-            if (smartRename) episodes = await Network.GetEpisodes(showName, season);
-            else episodes = new List<Episode>();
+        //public static async Task<IList<Episode>> ProcessFilesInFolder(string[] files, string showName, int season) {
+        //    List<Episode> foundEpisodes = new List<Episode>();
+        //    List<Episode> episodes;
 
-            for (int i = 0; i < files.Length; i++) {
-                string name = Path.GetFileNameWithoutExtension(files[i]);
-                int s = GetSE(name, true);
-                int e = GetSE(name, false);
+        //    if (smartRename) episodes = await Network.GetEpisodes(showName, season);
+        //    else episodes = new List<Episode>();
 
+        //    for (int i = 0; i < files.Length; i++) {
+        //        string name = Path.GetFileNameWithoutExtension(files[i]);
+        //        int s = GetSE(name, true);
+        //        int e = GetSE(name, false);
 
+        //        if (s == season) {
+        //            if (smartRename) {
+        //                if (e - 1 >= episodes.Count) NotificationManager.AddNotification(new Notification("Skipping " + name, "Smart-Rename didn't find episode " + e + " in season " + s + " for show " + showName));
+        //                else name = ConstructName(episodes[i], showName);
+        //            }
+        //            else name = Functions.BeautifyName(name, s, e, showName);
+        //            foundEpisodes.Add(new Episode(name, s, e, files[i]));
+        //        }
+        //        else NotificationManager.AddNotification(new Notification("Skipping " + files[i], "Season doesn't correspond with season of the selected file."));
+        //    }
 
-                if (s == season) {
-                    if (smartRename) {
-                        if (e - 1 >= episodes.Count) NotificationManager.AddNotification(new Notification("Skipping " + name, "Smart-Rename didn't find episode " + e + " in season " + s + " for show " + showName));
-                        else name = CreateFileName(episodes[e - 1].title, s, e, showName);
-                    }
-                    else name = Functions.BeautifyName(name, s, e, showName);
-                    foundEpisodes.Add(new Episode(name, s, e, files[i]));
-                }
-                else NotificationManager.AddNotification(new Notification("Skipping " + files[i], "Season doesn't correspond with season of the selected file."));
-            }
+        //    for (int i = 0; i < foundEpisodes.Count - 1; i++) {
+        //        for (int y = 0; y < foundEpisodes.Count; y++) {
+        //            if (i != y && foundEpisodes[i].episode == foundEpisodes[y].episode) {
+        //                NotificationManager.AddNotification(new Notification("Found duplicite episode (S" + foundEpisodes[i].season + "E" + foundEpisodes[i].episode + ")", foundEpisodes[i].path + " AND " + foundEpisodes[y].path));
+        //            }
+        //        }
+        //    }
 
-            for (int i = 0; i < foundEpisodes.Count - 1; i++) {
-                for (int y = 0; y < foundEpisodes.Count; y++) {
-                    if (i != y && foundEpisodes[i].episode == foundEpisodes[y].episode) {
-                        NotificationManager.AddNotification(new Notification("Found duplicite episode (S" + foundEpisodes[i].season + "E" + foundEpisodes[i].episode + ")", foundEpisodes[i].path + " AND " + foundEpisodes[y].path));
-                    }
-                }
-            }
-
-            return foundEpisodes;
-        }
+        //    return foundEpisodes;
+        //}
 
         public static string NameCleanup(string name) {
             string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
@@ -65,15 +64,30 @@ namespace ShowAutoRenamer {
             return name;
         }
 
-        public static string CreateFileName(string n, int s, int e, string showName) {
-            if (n == null) return "";
-            string season = (s < 10) ? "0" + s.ToString() : s.ToString();
-            string episode = (e < 10) ? "0" + e.ToString() : e.ToString();
+        public static string ConstructName(Episode e, string showName = "") {
+            string preview = "";
+            if (displayName) {
+                if (!string.IsNullOrWhiteSpace(showName))
+                    preview += showName + " ";
+                else if (!string.IsNullOrWhiteSpace(e.showName)) {
+                    preview += e.showName + " ";          
+                }
+                else {
+                    try {
+                        string dir = Path.GetDirectoryName(e.path);
+                        string dirName = dir.Split('\\').Last();
+                        int result;
+                        if ((dirName.Length > 1 && dirName.StartsWith("S") && int.TryParse(dirName.Substring(1), out result)) || dirName.StartsWith("Season"))
+                            preview += Directory.GetParent(dir).Name + " ";
+                        else
+                            preview += dirName + " ";
+                    }
+                    catch { }
+                }
+            }
 
-            string final = (n.Length == 0) ? "S" + season + "E" + episode : "S" + season + "E" + episode + " - " + n;
-            final = (displayName && showName.Trim() != "") ? showName + " " + final : final;
-
-            return NameCleanup(final);
+            preview += e.GetNameForFile();
+            return NameCleanup(preview);
         }
 
         public async static Task<Show> PrepareShow(string refFile) {
@@ -107,21 +121,6 @@ namespace ShowAutoRenamer {
             return showName;
         }
 
-        //static async Task<List<Season>> RecursivePrepareSeason(string refFile) {
-        //    string path;
-        //    if (!Directory.Exists(refFile)) path = Path.GetDirectoryName(path);
-        //    else path = refFile;
-
-        //    string[] directories = Directory.GetDirectories(path);
-
-        //    for (int i = 0; i < directories.Length; i++) { await RecursivePrepareSeason(directories[i]); }
-
-        //    string[] files = Functions.GetFilesInDirectory(path);
-        //    if (files.Length == 0) return null;
-        //    if (Functions.smartRename) await Functions.SmartRename(files, showName);
-        //    else await Functions.ClassicRename(files);
-        //}
-
         static async Task<Season> PrepareSeason(string refFile) {
             Season season = new Season(GetSE(refFile, true));
             if (useFolder) {
@@ -142,14 +141,17 @@ namespace ShowAutoRenamer {
 
             int episode = GetSE(fileName, false);
             string episodeName = "";
+            string showName = "";
             string n = SmartDotReplace(fileName);
             n = TestForEndings(n);
 
             n = n.Replace("(" + season + "x" + episode + ")", "");
-            string splitter = "S" + season + "E" + episode;
-            if (n.ToUpper().Contains(splitter)) {
+            string splitter = "S(\\d{1,2})E(\\d{1,2})";
+            if (Regex.Match(n.ToUpper(), splitter).Success) {
                 string[] a = Regex.Split(n, splitter, RegexOptions.IgnoreCase);
-                episodeName = string.Join(" ", a.Skip((season == episode) ? 2 : 1));
+                episodeName = a[a.Length - 1];
+                //episodeName = string.Join(" ", a.Skip((season == episode) ? 4 : 3));
+                showName = a[0];
             }
             else if (n.ToUpper().Contains("X")) {
                 string[] x = Regex.Split(n, "X", RegexOptions.IgnoreCase);
@@ -161,6 +163,7 @@ namespace ShowAutoRenamer {
                     if (x[1].Length > 1 && int.TryParse(x[1].Substring(0, 2), out result)) x[1] = x[1].Remove(0, 2);
                     else if (x[0].Length > 0 && int.TryParse(x[1].Substring(0, 1), out result)) x[1] = x[1].Remove(0, 1);
 
+                    
                     episodeName = string.Join("", x);
                 }
             }
@@ -170,33 +173,14 @@ namespace ShowAutoRenamer {
 
             //Trim unwanted characters at the beginning and end
             char[] trimChars = { ' ', '-' };
+            showName = showName.Trim(trimChars);
+            showName = showName.Trim();
             episodeName = episodeName.Trim(trimChars);
 
-            return new Episode(episodeName, season, episode, filePath);
+            return new Episode(episodeName, season, episode, filePath, showName);
         }
 
-        public static string ConstructName(Episode e, string showName = "") {
-            string preview = "";
-            if (displayName)
-                if (!string.IsNullOrWhiteSpace(showName))
-                    preview += showName + " ";
-                else {
-                    try { 
-                        string dir = Path.GetDirectoryName(e.path);
-                        string dirName = dir.Split('\\').Last();
-                        int result;
-                        if ((dirName.Length > 1 && dirName.StartsWith("S") && int.TryParse(dirName.Substring(1), out result)) || dirName.StartsWith("Season"))
-                            preview += Directory.GetParent(dir).Name + " ";
-                        else
-                            preview += dirName + " ";
-                    }
-                    catch { }
-                }
-                    
-
-            preview += e.GetNameForFile();
-            return preview;
-        }
+       
 
         public static async Task Rename(string path) {
             if (string.IsNullOrWhiteSpace(path)) return;
@@ -233,14 +217,19 @@ namespace ShowAutoRenamer {
             //}
         }
 
-        public static async Task ClassicRename(string[] files) {
+        public static async Task ClassicRename(string refFile) {
 
-            string name = Path.GetFileNameWithoutExtension(files[0]);
+            string name = Path.GetFileNameWithoutExtension(refFile);
             int season = GetSE(name, true);
-            IList<Episode> foundEpisodes = await ProcessFilesInFolder(files, name, season);
+            Show show = await PrepareShow(refFile);
 
-            for (int i = 0; i < foundEpisodes.Count; i++) {
-                string newPath = Path.GetDirectoryName(foundEpisodes[i].path) + "/" + foundEpisodes[i].title + Path.GetExtension(foundEpisodes[i].path);
+            for (int i = 0; i < show.seasons; i++) {
+                for (int y = 0; y < show.seasonList[i].episodeList.Count; y++) {
+                    Episode e = show.seasonList[i].episodeList[y];
+
+
+                    string newPath = Path.GetDirectoryName(e.path) + "/" + ConstructName(e,show.title) + Path.GetExtension(e.path);
+                }
 
                 //if (!preview && !File.Exists(newPath)) System.IO.File.Move(foundEpisodes[i].path, newPath);
                 //else NotificationManager.AddNotification(new Notification("Could not rename", "There is already " + Path.GetFileName(newPath)));

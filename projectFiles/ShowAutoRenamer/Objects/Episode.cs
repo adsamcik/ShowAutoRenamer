@@ -47,15 +47,16 @@ namespace ShowAutoRenamer {
             this.episode = episode;
         }
 
-        public Episode(string title, int season, int episode, string path) {
+        public Episode(string title, int season, int episode, string path, string showName = "") {
             this.path = path;
             this.title = title;
             this.season = season;
             this.episode = episode;
+            if (!string.IsNullOrWhiteSpace(showName)) this.showName = showName;
         }
 
         public string GetNameForFile() {
-            return "S" + (season < 10 ? "0" + season : season.ToString()) + "E" + (episode < 10 ? "0" + episode : episode.ToString()) + " - " + title;
+            return "S" + (season < 10 ? "0" + season : season.ToString()) + "E" + (episode < 10 ? "0" + episode : episode.ToString()) + ((string.IsNullOrWhiteSpace(title)) ? "" : " - " + title);
         }
     }
 }
