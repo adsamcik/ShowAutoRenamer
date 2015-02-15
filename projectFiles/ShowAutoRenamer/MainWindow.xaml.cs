@@ -29,6 +29,13 @@ namespace ShowAutoRenamer {
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
 
             if (!CheckForInternetConnection()) { smartRename.IsChecked = false; smartRename.IsEnabled = false; }
+
+            Functions.useFolder = (bool)useFolder.IsChecked;
+            Functions.smartRename = (bool)smartRename.IsChecked;
+            Functions.recursive = (bool)recursive.IsChecked;
+            Functions.displayName = (bool)displayName.IsChecked;
+            Functions.remove_ = (bool)remove_.IsChecked;
+            Functions.removeDash = (bool)removeDash.IsChecked;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
@@ -42,12 +49,12 @@ namespace ShowAutoRenamer {
 
             if (result == true) {
                 filePath.Text = dlg.FileName;
-                UpdatePreview();
+                TextChanged();
             }
         }
 
         private async void begin_Click(object sender, RoutedEventArgs e) {
-            await Functions.Rename(filePath.Text);
+            await Functions.Rename(filePath.Text, showName.Text);
         }
 
         void Update(object sender, RoutedEventArgs e) {
@@ -61,13 +68,13 @@ namespace ShowAutoRenamer {
         }
 
         async void UpdatePreview() {
-            Debug.WriteLine("fire in the hole");
-            Show s = (await Functions.PrepareShow(filePath.Text));
+            Show s = (await Functions.PrepareShow(filePath.Text, showName.Text));
             if (string.IsNullOrWhiteSpace(showName.Text)) showName.Text = s.title;
 
-            Preview.Content = Functions.ConstructName(
-                s.seasonList[0].episodeList[0],
-                showName.Text);
+            if (s != null && s.seasonList[0] != null && s.seasonList[0].episodeList[0] != null)
+                Preview.Content = Functions.ConstructName(
+                    s.seasonList[0].episodeList[0],
+                    showName.Text);
 
             //if (!File.Exists(filePath.Text)) {
             //    await Preview.Dispatcher.BeginInvoke((Action)(() => {
@@ -153,14 +160,6 @@ namespace ShowAutoRenamer {
             return false;
         }
 
-        private void showName_TextChanged(object sender, TextChangedEventArgs e) {
-            //UpdatePreview();
-            NotificationManager.DeleteSearchRelated();
-            PlannedUpdate();
-            if (showName.Text == "") showNameOverText.Visibility = System.Windows.Visibility.Visible;
-            else showNameOverText.Visibility = System.Windows.Visibility.Hidden;
-        }
-
         private void Close_Click(object sender, RoutedEventArgs e) {
             this.Close();
         }
@@ -191,12 +190,21 @@ namespace ShowAutoRenamer {
             NotificationManager.RemoveNotification();
         }
 
-        private void showName_TextInput(object sender, TextCompositionEventArgs e) {
+        private void textBox_TextChanged(object sender, TextCompositionEventArgs e) {
+            TextChanged();
+        }
+
+        private void TextChanged() {
+            NotificationManager.DeleteSearchRelated();
+            //PlannedUpdate();
+            if (showName.Text == "") showNameOverText.Visibility = System.Windows.Visibility.Visible;
+            else showNameOverText.Visibility = System.Windows.Visibility.Hidden;
             UpdatePreview();
         }
 
-        private void textBox_TextChanged(object sender, TextCompositionEventArgs e) {
-            UpdatePreview();
+        private void showName_TextChanged(object sender, TextChangedEventArgs e) {
+            if (!Functions.insideInput) TextChanged();
+            else Functions.insideInput = false;
         }
 
     }

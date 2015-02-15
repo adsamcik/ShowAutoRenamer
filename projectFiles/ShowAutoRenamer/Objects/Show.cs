@@ -12,7 +12,7 @@ namespace ShowAutoRenamer {
 #pragma warning disable 0649
         public int tvdb_id;
         int _seasons;
-        public int seasons { get { return _seasons == null || _seasons == 0 ? seasonList.Count : _seasons; } set { _seasons = value; } }
+        public int seasons { get { return _seasons == default(int) || _seasons == 0 ? seasonList.Count : _seasons; } set { _seasons = value; } }
 
         public IList<Season> seasonList = new List<Season>();
 
