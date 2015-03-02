@@ -41,15 +41,13 @@ namespace ShowAutoRenamer {
         private void Button_Click(object sender, RoutedEventArgs e) {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
-            // Set filter for file extension and default file extension 
-            //dlg.DefaultExt = ".*";
             dlg.Filter = "ALL|*.*|VIDEO FILES | *.mp4;*.avi;*.mkv";
 
             Nullable<bool> result = dlg.ShowDialog();
 
             if (result == true) {
                 filePath.Text = dlg.FileName;
-                TextChanged();
+                UpdatePreview();
             }
         }
 
@@ -69,54 +67,14 @@ namespace ShowAutoRenamer {
 
         async void UpdatePreview() {
             Show s = (await Functions.PrepareShow(filePath.Text, showName.Text));
-            if (string.IsNullOrWhiteSpace(showName.Text)) showName.Text = s.title;
+            if (s != null) {
+                if (string.IsNullOrWhiteSpace(showName.Text)) showName.Text = s.title;
 
-            if (s != null && s.seasonList[0] != null && s.seasonList[0].episodeList[0] != null)
-                Preview.Content = Functions.ConstructName(
-                    s.seasonList[0].episodeList[0],
-                    showName.Text);
-
-            //if (!File.Exists(filePath.Text)) {
-            //    await Preview.Dispatcher.BeginInvoke((Action)(() => {
-            //        Preview.Content = "Path doesn't exist";
-            //    }));
-            //    return;
-            //}
-            //string name = Path.GetFileNameWithoutExtension(filePath.Text);
-            //int s = Functions.GetSE(name, true);
-            //int e = Functions.GetSE(name, false);
-
-            //NotificationManager.DeleteSearchRelated();
-            //if ((bool)smartRename.IsChecked) {
-
-            //    if (showName.Text == "") { NotificationManager.AddNotification(new Notification("Enter show name", "Please enter showname or uncheck Smart-Rename", true, Importance.high)); return; }
-            //    Show sh = await Network.Search(showName.Text).ConfigureAwait(false);
-            //    if (sh == null) return;
-            //    string searched = (sh != null) ? sh.title : null;
-            //    if (searched == "" || searched == null) {
-            //        this.Dispatcher.Invoke((Action)(() => NotificationManager.AddNotification(new Notification("Couldn't find your show", "Unable to find show. You searched for (" + showName.Text + ")", true, Importance.high))));
-            //        return;
-            //    }
-            //    else NotificationManager.AddNotification(new Notification("Found " + searched, "Smart-Rename will use this show to rename your files", true));
-
-            //    Episode ep = await Network.GetEpisode(sh, s, e);
-
-            //    if (ep.error == null) {
-            //        string namePreview = ep.title;
-            //        Preview.Dispatcher.Invoke((Action)(() => {
-            //            namePreview = Functions.CreateFileName(namePreview, Functions.GetSE(name, true), Functions.GetSE(name, false), showName.Text);
-            //            Preview.Content = namePreview;
-            //        }));
-            //    }
-            //    else
-            //        NotificationManager.AddNotification(new Notification(ep.title, "Error occured: " + ep.error, true, Importance.high));
-
-
-            //}
-            //else {
-            //    Preview.Content = (await Functions.ProcessFilesInFolder(new string[] { filePath.Text }, name, s))[0].title;
-            //}
-
+                if (s.seasonList[0] != null && s.seasonList[0].episodeList[0] != null)
+                    Preview.Content = Functions.ConstructName(
+                        s.seasonList[0].episodeList[0],
+                        showName.Text);
+            }
         }
 
         float timeLeft;
@@ -190,16 +148,11 @@ namespace ShowAutoRenamer {
             NotificationManager.RemoveNotification();
         }
 
-        private void textBox_TextChanged(object sender, TextCompositionEventArgs e) {
-            TextChanged();
-        }
-
         private void TextChanged() {
             NotificationManager.DeleteSearchRelated();
-            //PlannedUpdate();
             if (showName.Text == "") showNameOverText.Visibility = System.Windows.Visibility.Visible;
             else showNameOverText.Visibility = System.Windows.Visibility.Hidden;
-            UpdatePreview();
+            PlannedUpdate();
         }
 
         private void showName_TextChanged(object sender, TextChangedEventArgs e) {
