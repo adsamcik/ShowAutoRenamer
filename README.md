@@ -5,9 +5,13 @@ Automagically renames all your episodes to nicer, easier to read format. For exa
 S01E01 - Days Gone Bye. 
 
 **Alpha builds** are for testing, they will be always at least partly working but they are not tested.
+
 **Beta builds** should be at least somehow tested, most of new things for the release are done and this is bugfixing phase mostly
+
 **Gamma builds** are there just in case of new features and so on
+
 **Release candidate builds** are feature complete builds meant for testing and findings nasty bugs
+
 **Stable builds** should be the most stable builds, but I don't gurantee anything. 
 
 ##Features
