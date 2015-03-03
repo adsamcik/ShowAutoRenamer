@@ -66,7 +66,10 @@ namespace ShowAutoRenamer {
 
         public static async Task<Season> GetSeason(string showName, int season) {
             List<Season> list = await Request<List<Season>>("http://api.trakt.tv/show/seasons.json/c01ff5475f1333863127ffd8816fb776/" + showName);
-            return list == default(List<Season>) ? default(Season) : list.Find(x => x.season == season);
+            Season s = list == default(List<Season>) ? default(Season) : list.Find(x => x.season == season);
+            if (s != default(Season))
+                s.episodeList = await GetEpisodes(showName, s.season);
+            return s;
         }
     }
 }

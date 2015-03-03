@@ -8,12 +8,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("newtonsoft.json/newtonsoft.json.csproj")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("newtonsoft.json/newtonsoft.json.net20.csproj")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("newtonsoft.json/newtonsoft.json.net35.csproj")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("newtonsoft.json/newtonsoft.json.net40.csproj")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("newtonsoft.json/newtonsoft.json.portable.csproj")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("newtonsoft.json/newtonsoft.json.portable40.csproj")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("newtonsoft.json/newtonsoft.json.winrt.csproj")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("json/bin/debug/portable40/newtonsoft.json.dll")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("json/bin/debug/portable40/newtonsoft.json.pdb")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("json/newtonsoft.json.csproj")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("json/newtonsoft.json.net20.csproj")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("json/newtonsoft.json.net35.csproj")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("json/newtonsoft.json.net40.csproj")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("json/newtonsoft.json.portable.csproj")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("json/newtonsoft.json.portable40.csproj")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("json/newtonsoft.json.winrt.csproj")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("json/obj/debug/newtonsoft.json.dll")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("json/obj/debug/newtonsoft.json.pdb")]
 
 

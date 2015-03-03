@@ -19,8 +19,8 @@
       <PdhCountersEnabled>false</PdhCountersEnabled>
       <PdhCountersRate>500</PdhCountersRate>
       <PdhCounters>
-        <PdhCounter>\Fyzick&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#253; disk(_Total)\Středn&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#237; d&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#233;lka fronty disku</PdhCounter>
-        <PdhCounter>\Paměť\Str&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#225;nky/s</PdhCounter>
+        <PdhCounter>\Fyzick&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#253; disk(_Total)\Středn&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#237; d&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#233;lka fronty disku</PdhCounter>
+        <PdhCounter>\Paměť\Str&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#225;nky/s</PdhCounter>
         <PdhCounter>\Procesor(_Total)\% času procesoru</PdhCounter>
       </PdhCounters>
     </PdhSettings>
@@ -36,7 +36,7 @@
   </PostinstrumentEvent>
   <Binaries>
     <ProjBinary>
-      <Path>ShowAutoRenamer\obj\Debug\ShowAutoRenamer.exe</Path>
+      <Path>ShowAutoRenamer\obj\Release\ShowAutoRenamer.exe</Path>
       <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
       <Instrument>true</Instrument>
       <Sample>true</Sample>
@@ -48,8 +48,8 @@
       <LaunchProject>true</LaunchProject>
       <OverrideProjectSettings>false</OverrideProjectSettings>
       <LaunchMethod>Executable</LaunchMethod>
-      <ExecutablePath>ShowAutoRenamer\bin\Debug\ShowAutoRenamer.exe</ExecutablePath>
-      <StartupDirectory>ShowAutoRenamer\bin\Debug\</StartupDirectory>
+      <ExecutablePath>ShowAutoRenamer\bin\Release\ShowAutoRenamer.exe</ExecutablePath>
+      <StartupDirectory>ShowAutoRenamer\bin\Release\</StartupDirectory>
       <Arguments>
       </Arguments>
       <NetAppHost>IIS</NetAppHost>
