@@ -90,4 +90,10 @@ D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.g.resources
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.Properties.Resources.resources
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.csproj.GenerateResource.Cache
-D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer_Content.g.cs
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Debug\Newtonsoft.Json.dll
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Debug\System.Net.Http.Extensions.dll
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Debug\System.Net.Http.Primitives.dll
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Debug\Newtonsoft.Json.xml
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Debug\System.Net.Http.Extensions.xml
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Debug\System.Net.Http.Primitives.xml
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.csproj.App.config

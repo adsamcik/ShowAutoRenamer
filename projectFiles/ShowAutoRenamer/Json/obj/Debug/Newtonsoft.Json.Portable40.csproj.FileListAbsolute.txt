@@ -1,7 +1,0 @@
-D:\Github\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Debug\Portable40\Newtonsoft.Json.dll
-D:\Github\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Debug\Portable40\Newtonsoft.Json.pdb
-D:\Github\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Debug\Portable40\Newtonsoft.Json.dll.CodeAnalysisLog.xml
-D:\Github\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Debug\Portable40\Newtonsoft.Json.dll.lastcodeanalysissucceeded
-D:\Github\Newtonsoft.Json\Src\Newtonsoft.Json\obj\Debug\Newtonsoft.Json.Portable40.csprojResolveAssemblyReference.cache
-D:\Github\Newtonsoft.Json\Src\Newtonsoft.Json\obj\Debug\Newtonsoft.Json.dll
-D:\Github\Newtonsoft.Json\Src\Newtonsoft.Json\obj\Debug\Newtonsoft.Json.pdb

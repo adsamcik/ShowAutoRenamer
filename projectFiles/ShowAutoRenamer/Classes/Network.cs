@@ -2,15 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
 
 namespace ShowAutoRenamer {
     public static class Network {
+        
         static Ellipse nA;
 
         public static void Initialize(Ellipse networkActivity) {
@@ -18,14 +17,27 @@ namespace ShowAutoRenamer {
         }
 
         static async Task<T> Request<T>(string adress) {
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             adress = adress.Replace(" ", "-");
-            try {
-                using (WebClient webClient = new WebClient()) {
-                    return JsonConvert.DeserializeObject<T>(await webClient.DownloadStringTaskAsync(adress));
+            /*using (var httpClient = new HttpClient { BaseAddress = new Uri("https://api-v2launch.trakt.tv/") }) {
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("trakt-api-version", "2");
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
+                Debug.WriteLine(httpClient.DefaultRequestHeaders);
+               // httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                using (var response = await httpClient.GetAsync("search{?query,type,year}")) {
+                    T val =  await Task.Factory.StartNew<T>(() => JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result));
+                    Debug.WriteLine(response.RequestMessage);
+                    Debug.WriteLine(response.StatusCode);
+                    return val;
                 }
-            }
-            catch {
-                return default(T);
+            }*/
+
+            using (var httpClient = new HttpClient { BaseAddress = new Uri("https://api-v2launch.trakt.tv/") }) {
+                using (var response = await httpClient.GetAsync("search{?query,type,year}")) {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine(response.StatusCode);
+                    return await Task.Factory.StartNew<T>(() => JsonConvert.DeserializeObject<T>(responseContent));
+                }
             }
         }
 
