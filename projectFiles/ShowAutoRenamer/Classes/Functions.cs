@@ -67,7 +67,6 @@ namespace ShowAutoRenamer {
 
             if (smartRename) {
                 if (showName == "") {
-                    NotificationManager.AddNotification(new Notification("Showname automatic detection", "Showname has been automatically detected from file/folder name. Please check if the show name is correct.", false, Importance.high));
                     string tempName = string.IsNullOrWhiteSpace(showName) ? GetShowName(refFile) : showName;
                     if(!string.IsNullOrWhiteSpace(tempName))
                         show = await Network.Search(tempName);
@@ -210,15 +209,12 @@ namespace ShowAutoRenamer {
             for (int i = 0; i < s.seasonList.Count; i++) {
                 for (int y = 0; y < s.seasonList[i].episodeList.Count; y++) {
                     Episode e = s.seasonList[i].episodeList[y];
-                    if (!File.Exists(e.path)) {
+                    if (!File.Exists(e.path)) 
                         NotificationManager.AddNotification("File not found", "File not found at path " + e.path + ". If the path is obviously incorrect, please report this as a bug.");
-                    }
                     else {
                         string newPath = Path.GetDirectoryName(e.path) + "/" + ConstructName(e, s.title) + Path.GetExtension(e.path);
                         if (!File.Exists(newPath)) System.IO.File.Move(e.path, newPath);
                         else NotificationManager.AddNotification(new Notification("Could not rename", "There is already " + Path.GetFileName(newPath)));
-
-                        Debug.WriteLine("Renamed");
                     }
 
                 }

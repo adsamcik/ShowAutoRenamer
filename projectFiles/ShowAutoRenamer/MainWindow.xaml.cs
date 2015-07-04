@@ -38,7 +38,7 @@ namespace ShowAutoRenamer {
             Functions.removeDash = (bool)removeDash.IsChecked;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e) {
+        private void BrowseButtonClick(object sender, RoutedEventArgs e) {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
             dlg.Filter = "ALL|*.*|VIDEO FILES | *.mp4;*.avi;*.mkv";
@@ -51,7 +51,7 @@ namespace ShowAutoRenamer {
             }
         }
 
-        private async void begin_Click(object sender, RoutedEventArgs e) {
+        private async void RenameButtonClick(object sender, RoutedEventArgs e) {
             await Functions.Rename(filePath.Text, showName.Text);
         }
 
