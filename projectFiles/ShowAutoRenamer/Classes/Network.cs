@@ -31,7 +31,8 @@ namespace ShowAutoRenamer {
 
         public static async Task<Show> Search(string forWhat) {
             NotificationManager.DeleteSearchRelated();
-            List<Show> sh = await Request<List<Show>>("http://api.trakt.tv/search/shows.json/c01ff5475f1333863127ffd8816fb776?query=" + forWhat);
+
+            List<Show> sh = await Request<List<Show>>("https://api-v2launch.trakt.tv/search?query=" + forWhat + "&type=show");
             if (sh == null || sh.Count == 0) {
                 NotificationManager.AddNotification(new Notification(forWhat + " was not found.", "Are you sure this is the right name for the show?", true, Importance.high));
                 return null;
@@ -42,30 +43,16 @@ namespace ShowAutoRenamer {
 
         public static async Task<List<Episode>> GetEpisodes(string showName, int season) {
             string title = showName.Replace(" ", "-").Replace("(", "").Replace(")", "").Replace("&", "and").Replace(".", "").Replace("'", "");
-            List<Episode> episodes = await Request<List<Episode>>("http://api.trakt.tv/show/season.json/c01ff5475f1333863127ffd8816fb776/" + title + "/" + season);
+            List<Episode> episodes = await Request<List<Episode>>("https://api-v2launch.trakt.tv/shows/" + title + "/seasons/" + season);
             return episodes;
         }
 
-        /// <summary>
-        /// Recommended to use since it uses caching
-        /// </summary>
-        /// <param name="showName"></param>
-        /// <param name="season"></param>
-        /// <returns></returns>
         public static async Task<Episode> GetEpisode(Show sh, int season, int episode) {
-            List<Episode> episodes = await Request<List<Episode>>("http://api.trakt.tv/show/season.json/c01ff5475f1333863127ffd8816fb776/" + sh.tvdb_id + "/" + season);
-            if (episodes == null) return new Episode("S" + season + "E" + episode + " was not found in show " + sh.title + ". Possibly a mistake?");
-            else if (episode > episodes.Count) return new Episode(sh.title + " has less episodes in S" + season + " than you requested. Is this the right show?"); //to improve
-
-            return episodes[episode - 1];
-        }
-
-        public static int GetEpisodeCount(string showName, int season) {
-            return JsonConvert.DeserializeObject<List<Season>>(Request<string>("http://api.trakt.tv/show/seasons.json/c01ff5475f1333863127ffd8816fb776/" + showName).Result)[season].episodes;
+            return await Request<Episode>("https://api-v2launch.trakt.tv/shows/" + sh.tvdb_id + "/seasons/" + season + "/episodes/" + episode);
         }
 
         public static async Task<Season> GetSeason(string showName, int season) {
-            List<Season> list = await Request<List<Season>>("http://api.trakt.tv/show/seasons.json/c01ff5475f1333863127ffd8816fb776/" + showName);
+            List<Season> list = await Request<List<Season>>("https://api-v2launch.trakt.tv/shows/" + showName + "/seasons");
             Season s = list == default(List<Season>) ? default(Season) : list.Find(x => x.season == season);
             if (s != default(Season))
                 s.episodeList = await GetEpisodes(showName, s.season);

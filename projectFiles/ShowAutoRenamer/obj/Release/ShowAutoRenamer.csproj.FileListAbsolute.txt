@@ -45,3 +45,6 @@ D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenam
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.pdb
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer_Content.g.cs
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.csprojResolveAssemblyReference.cache
+E:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\ShowAutoRenamer.exe.config
+E:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.exe
+E:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.pdb
