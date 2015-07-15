@@ -23,7 +23,6 @@ namespace ShowAutoRenamer {
 
             Network.Initialize(NetworkActivity);
             NotificationManager.Initialize(notification, nTitle, nText, System.Windows.Threading.Dispatcher.CurrentDispatcher);
-            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable()) { smartRename.IsEnabled = false; smartRename.IsChecked = false; }
 
             dispatcherTimer.Tick += new EventHandler(LessTimeLeft);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
@@ -86,7 +85,11 @@ namespace ShowAutoRenamer {
 
         void LessTimeLeft(object sender, EventArgs e) {
             timeLeft -= 0.25f;
-            if (timeLeft < 0) { dispatcherTimer.Stop(); UpdatePreview(); timeLeft = 0; }
+            if (timeLeft < 0) {
+                dispatcherTimer.Stop();
+                UpdatePreview();
+                timeLeft = 0;
+            }
         }
 
         private void drop(object sender, DragEventArgs e) {
@@ -103,7 +106,7 @@ namespace ShowAutoRenamer {
 
         public static bool CheckForInternetConnection() {
             Ping myPing = new Ping();
-            String host = "api.trakt.tv";
+            String host = "api-v2launch.trakt.tv";
             byte[] buffer = new byte[32];
             int timeout = 1000;
             PingOptions pingOptions = new PingOptions();
