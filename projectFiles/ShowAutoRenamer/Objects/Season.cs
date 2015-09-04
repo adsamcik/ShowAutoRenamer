@@ -9,15 +9,14 @@ namespace ShowAutoRenamer {
     public class Season {
 #pragma warning disable 0649
         public int season;
-#pragma warning disable 0649
-        public int episodes;
-#pragma warning disable 0649
-        public string url;
+
+        public Show show;
 
         public IList<Episode> episodeList = new List<Episode>();
 
-        public Season(int season) {
+        public Season(int season, Show s) {
             this.season = season;
+            this.show = s;
         }
     }
 }

@@ -65,11 +65,11 @@ namespace ShowAutoRenamer {
         }
 
         async void UpdatePreview() {
-            Show s = (await Functions.PrepareShow(filePath.Text, showName.Text));
+            Show s = await Functions.PrepareShow(filePath.Text, showName.Text);
             if (s != null) {
                 if (string.IsNullOrWhiteSpace(showName.Text)) showName.Text = s.title;
 
-                if (s.seasonList[0] != null && s.seasonList[0].episodeList[0] != null)
+                if (s.seasonList.Count > 0 && s.seasonList[0] != null && s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
                     Preview.Content = Functions.ConstructName(
                         s.seasonList[0].episodeList[0],
                         showName.Text);

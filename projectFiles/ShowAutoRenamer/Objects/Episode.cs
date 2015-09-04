@@ -9,54 +9,35 @@ using System.Threading.Tasks;
 namespace ShowAutoRenamer {
     public class Episode {
         public string title;
-        int _season;
-        public int season {
-            get { return _season; }
-            set {
-                if (value < 0) {
-                    int result = 1;
-                    string dirName = Path.GetDirectoryName(path).Split('\\').Last();
-                    bool nameFromDir = false;
-                    if (int.TryParse(dirName, out result)) nameFromDir = true;
-                    else if (dirName.Length > 1 && dirName[0] == 'S' && int.TryParse(dirName.Substring(1), out result)) nameFromDir = true;
-
-                    if (nameFromDir)
-                        try { showName = Directory.GetParent(Path.GetDirectoryName(path)).Name; }
-                        catch { }
-
-                    _season = result++;
-                    return;
-                }
-                _season = value;
-
-            }
-        }
-        public int episode;
+        public int season;
+        public int number;
         public string path;
         public string error;
-        public string showName;
+
+        public Show show;
 
         public Episode() { }
         public Episode(string error) {
             this.error = error;
         }
 
-        public Episode(string title, int season, int episode) {
+        public Episode(string title, int season, int episode, Show s) {
             this.title = title;
             this.season = season;
-            this.episode = episode;
+            this.number = episode;
+            this.show = s;
         }
 
-        public Episode(string title, int season, int episode, string path, string showName = "") {
+        public Episode(string title, int season, int episode, string path, Show s) {
             this.path = path;
             this.title = title;
             this.season = season;
-            this.episode = episode;
-            if (!string.IsNullOrWhiteSpace(showName)) this.showName = showName;
+            this.number = episode;
+            this.show = s;
         }
 
         public string GetNameForFile() {
-            return "S" + (season < 10 ? "0" + season : season.ToString()) + "E" + (episode < 10 ? "0" + episode : episode.ToString()) + ((string.IsNullOrWhiteSpace(title)) ? "" : " - " + title);
+            return "S" + (season < 10 ? "0" + season : season.ToString()) + "E" + (number < 10 ? "0" + number : number.ToString()) + ((string.IsNullOrWhiteSpace(title)) ? "" : " - " + title);
         }
     }
 }

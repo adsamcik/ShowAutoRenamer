@@ -184,7 +184,7 @@
             <TextBlock x:Name="nText" Margin="0,25,0,0" TextWrapping="Wrap" Padding="5,0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Right" Width="360"/>
             <Label x:Name="nTitle" Content="Label" BorderBrush="Gainsboro" BorderThickness="0,0,0,1" RenderTransformOrigin="-0.579,0.556" Height="24" Padding="5,1,5,0" FontFamily="Segoe UI Semibold" FontSize="14" Foreground="#FF969696" Margin="0,0,60,66"/>
         </Grid>
-        <Label Content="SHOW RENAMER alpha 3.0" Margin="10,1,0,0" FontFamily="Segoe UI Semibold" FontSize="16" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="26" IsHitTestVisible="False" AllowDrop="False" Foreground="Gainsboro"/>
+        <Label Content="SHOW RENAMER alpha 4.0" Margin="10,1,0,0" FontFamily="Segoe UI Semibold" FontSize="16" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Height="26" IsHitTestVisible="False" AllowDrop="False" Foreground="Gainsboro"/>
         <Rectangle x:Name="dragdropOverlay" Stroke="#FF7396F0" SnapsToDevicePixels="True" Grid.ColumnSpan="2" Grid.Row="1" Fill="#997396F0" Cursor="None" Drop="drop" StrokeThickness="3" Visibility="Hidden"/>
 
 

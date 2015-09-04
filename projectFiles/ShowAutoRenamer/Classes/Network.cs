@@ -19,6 +19,7 @@ namespace ShowAutoRenamer {
 
         static async Task<string> Request(string requestString) {
             requestString = requestString.Replace(" ", "-");
+            Debug.WriteLine("request url https://api-v2launch.trakt.tv/" + requestString);
             using (var httpClient = new HttpClient { BaseAddress = new Uri("https://api-v2launch.trakt.tv/") }) {
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("trakt-api-version", "2");
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("trakt-api-key", API_KEY);
@@ -48,14 +49,15 @@ namespace ShowAutoRenamer {
         }
 
         public static async Task<Episode> GetEpisode(Show sh, int season, int episode) {
-            return JsonConvert.DeserializeObject<Episode>(await Request("shows/" + sh.tvdb_id + "/seasons/" + season + "/episodes/" + episode));
+            return JsonConvert.DeserializeObject<Episode>(await Request("shows/" + sh.title + "/seasons/" + season + "/episodes/" + episode));
         }
 
-        public static async Task<Season> GetSeason(string showName, int season) {
-            List<Season> list = JsonConvert.DeserializeObject<List<Season>>(await Request("shows/" + showName + "/seasons"));
-            Season s = list == default(List<Season>) ? default(Season) : list.Find(x => x.season == season);
+        public static async Task<Season> GetSeason(Show show, int season) {
+            string result = await Request("shows/" + show.title + "/seasons/" + season);
+            Season s = new Season(season, show);
+            s.episodeList = JsonConvert.DeserializeObject<List<Episode>>(result);
             if (s != default(Season))
-                s.episodeList = await GetEpisodes(showName, s.season);
+                s.episodeList = await GetEpisodes(show.title, s.season);
             return s;
         }
     }
