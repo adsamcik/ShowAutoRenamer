@@ -1,18 +1,9 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
+using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Controls;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Windows.Input;
-using System.Diagnostics;
-using System.Net.NetworkInformation;
-using System.Threading.Tasks;
 using System.Windows.Threading;
-using System.Threading;
 
 namespace ShowAutoRenamer {
 
@@ -27,52 +18,60 @@ namespace ShowAutoRenamer {
             dispatcherTimer.Tick += new EventHandler(LessTimeLeft);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
 
-            if (!CheckForInternetConnection()) { smartRename.IsChecked = false; smartRename.IsEnabled = false; }
+            if (!CheckForInternetConnection()) { SmartRenameToggle.IsChecked = false; SmartRenameToggle.IsEnabled = false; }
 
-            Functions.useFolder = (bool)useFolder.IsChecked;
-            Functions.smartRename = (bool)smartRename.IsChecked;
-            Functions.recursive = (bool)recursive.IsChecked;
-            Functions.displayName = (bool)displayName.IsChecked;
-            Functions.remove_ = (bool)remove_.IsChecked;
-            Functions.removeDash = (bool)removeDash.IsChecked;
+            Functions.useFolder = (bool)UseFolderToggle.IsChecked;
+            Functions.smartRename = (bool)SmartRenameToggle.IsChecked;
+            Functions.recursive = (bool)RecursiveToggle.IsChecked;
+            Functions.displayName = (bool)DisplayNameField.IsChecked;
+            Functions.removeUnderscore = (bool)RemoveUnderscoreToggle.IsChecked;
+            Functions.removeDash = (bool)RemoveDashToggle.IsChecked;
         }
 
         private void BrowseButtonClick(object sender, RoutedEventArgs e) {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
             dlg.Filter = "ALL|*.*|VIDEO FILES | *.mp4;*.avi;*.mkv";
+            dlg.Multiselect = true;
 
             Nullable<bool> result = dlg.ShowDialog();
 
             if (result == true) {
-                filePath.Text = dlg.FileName;
+                Functions.fileQueue = dlg.FileNames;
                 UpdatePreview();
             }
         }
 
         private async void RenameButtonClick(object sender, RoutedEventArgs e) {
-            await Functions.Rename(filePath.Text, showName.Text);
+            if (Functions.fileQueue == null || Functions.fileQueue.Length == 0) {
+                NotificationManager.AddNotification("No file added", "You can't rename void. Sorry.");
+                return;
+            }
+            await Functions.Rename(ShowNameInput.Text);
         }
 
         void Update(object sender, RoutedEventArgs e) {
-            Functions.useFolder = (bool)useFolder.IsChecked;
-            Functions.smartRename = (bool)smartRename.IsChecked;
-            Functions.recursive = (bool)recursive.IsChecked;
-            Functions.displayName = (bool)displayName.IsChecked;
-            Functions.remove_ = (bool)remove_.IsChecked;
-            Functions.removeDash = (bool)removeDash.IsChecked;
+            Functions.useFolder = (bool)UseFolderToggle.IsChecked;
+            Functions.smartRename = (bool)SmartRenameToggle.IsChecked;
+            Functions.recursive = (bool)RecursiveToggle.IsChecked;
+            Functions.displayName = (bool)DisplayNameField.IsChecked;
+            Functions.removeUnderscore = (bool)RemoveUnderscoreToggle.IsChecked;
+            Functions.removeDash = (bool)RemoveDashToggle.IsChecked;
             UpdatePreview();
         }
 
         async void UpdatePreview() {
-            Show s = await Functions.PrepareShow(filePath.Text, showName.Text);
+            Show s = await Functions.PrepareShow(Functions.fileQueue, ShowNameInput.Text);
             if (s != null) {
-                if (string.IsNullOrWhiteSpace(showName.Text)) showName.Text = s.title;
+                if (string.IsNullOrWhiteSpace(ShowNameInput.Text)) {
+                    ignoreTextChange = true;
+                    ShowNameInput.Text = s.title;
+                }
 
                 if (s.seasonList.Count > 0 && s.seasonList[0] != null && s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
                     Preview.Content = Functions.ConstructName(
                         s.seasonList[0].episodeList[0],
-                        showName.Text);
+                        ShowNameInput.Text);
             }
         }
 
@@ -93,13 +92,9 @@ namespace ShowAutoRenamer {
         }
 
         private void drop(object sender, DragEventArgs e) {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                Functions.fileQueue = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-                // Note that you can have more than one file.
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                // We will use only one
-                filePath.Text = files[0];
-            }
             dragdropOverlay.Visibility = System.Windows.Visibility.Hidden;
             UpdatePreview();
         }
@@ -140,22 +135,27 @@ namespace ShowAutoRenamer {
         }
 
         private void recursive_Checked(object sender, RoutedEventArgs e) {
-            useFolder.IsChecked = true;
+            UseFolderToggle.IsChecked = true;
         }
 
         private void useFolder_Unchecked(object sender, RoutedEventArgs e) {
-            recursive.IsChecked = false;
+            RecursiveToggle.IsChecked = false;
         }
 
         private void nClose_Click(object sender, RoutedEventArgs e) {
             NotificationManager.RemoveNotification();
         }
 
+        bool ignoreTextChange;
         private void TextChanged() {
             NotificationManager.DeleteSearchRelated();
-            if (showName.Text == "") showNameOverText.Visibility = System.Windows.Visibility.Visible;
+            if (ShowNameInput.Text == "") showNameOverText.Visibility = System.Windows.Visibility.Visible;
             else showNameOverText.Visibility = System.Windows.Visibility.Hidden;
-            PlannedUpdate();
+
+            if (!ignoreTextChange)
+                PlannedUpdate();
+            else
+                ignoreTextChange = false;
         }
 
         private void showName_TextChanged(object sender, TextChangedEventArgs e) {

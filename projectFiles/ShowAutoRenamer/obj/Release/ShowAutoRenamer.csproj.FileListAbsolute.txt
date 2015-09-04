@@ -43,8 +43,14 @@ D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenam
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.csproj.GenerateResource.Cache
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.exe
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.pdb
-D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer_Content.g.cs
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.csprojResolveAssemblyReference.cache
 E:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\ShowAutoRenamer.exe.config
 E:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.exe
 E:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.pdb
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\Newtonsoft.Json.dll
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\System.Net.Http.Extensions.dll
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\System.Net.Http.Primitives.dll
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\Newtonsoft.Json.xml
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\System.Net.Http.Extensions.xml
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\System.Net.Http.Primitives.xml
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.csproj.App.config
