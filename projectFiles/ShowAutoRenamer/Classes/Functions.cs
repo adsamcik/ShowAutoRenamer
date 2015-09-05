@@ -87,6 +87,8 @@ namespace ShowAutoRenamer {
             else 
                 show = new Show(tempName);
 
+            Debug.WriteLine("So far ok");
+
             for (int i = 0; i < refFile.Length; i++) {
                 if(smartRename)
                     show.seasonList.Add(await PrepareSeasonNetwork(refFile[i], show));

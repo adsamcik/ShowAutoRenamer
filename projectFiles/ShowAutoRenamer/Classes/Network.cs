@@ -32,13 +32,12 @@ namespace ShowAutoRenamer {
             NotificationManager.DeleteSearchRelated();
 
             string result = await Request("search?query=" + forWhat + "&type=show");
-            Show s = JsonConvert.DeserializeObject<Show>(Functions.CutFromJson(result, "show"));
-            if (s == null) {
+            if (result == "[]") {
                 NotificationManager.AddNotification(new Notification(forWhat + " was not found.", "Are you sure this is the right name for the show?", true, Importance.high));
-                return s;
+                return null;
             }
             else
-                return s;
+                return JsonConvert.DeserializeObject<Show>(Functions.CutFromJson(result, "show"));
         }
 
         public static async Task<List<Episode>> GetEpisodes(string showName, int season) {
