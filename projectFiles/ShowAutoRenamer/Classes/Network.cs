@@ -11,10 +11,9 @@ using System.Windows.Shapes;
 namespace ShowAutoRenamer {
     public static class Network {
         public const string API_KEY = "5c241f3e48baaeb82e5f86889c570dd00c0ef2b57c8f8aae5b6143edbf0c70c3";
-        static Ellipse nA;
 
-        public static void Initialize(Ellipse networkActivity) {
-            nA = networkActivity;
+        public static void Initialize() {
+            
         }
 
         static async Task<string> Request(string requestString) {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ShowAutoRenamer {
     public static class Functions {
-        public static bool useFolder, smartRename, recursive, displayName, removeUnderscore, removeDash, insideInput;
+        public static bool useFolder, smartRename, recursive, displayName, remove_, removeDash, insideInput;
 
         public static List<Show> shows = new List<Show>();
         public static string[] fileQueue;
@@ -120,7 +120,8 @@ namespace ShowAutoRenamer {
                 string[] files = await GetFilesInDirectory(refFile);
 
                 for (int i = 0; i < files.Length; i++) {
-                    Episode e = PrepareEpisode(files[i], season);
+                    Episode e;
+                    e = PrepareEpisode(files[i], season);
                     if (e != null) season.episodeList.Add(e);
                 }
             }
@@ -148,6 +149,7 @@ namespace ShowAutoRenamer {
                 }
                 else {
                     Episode e = await PrepareEpisodeNetwork(refFile, seasonReference);
+                    Debug.WriteLine("episode");
                     if (e != null) {
                         season.episodeList.Add(e);
                         Debug.WriteLine(season.episodeList[season.episodeList.Count - 1].title);
@@ -203,7 +205,7 @@ namespace ShowAutoRenamer {
             }
 
             if (removeDash) n = Regex.Replace(n, "-", " ", RegexOptions.IgnoreCase);
-            if (removeUnderscore) n = Regex.Replace(n, "_", " ", RegexOptions.IgnoreCase);
+            if (remove_) n = Regex.Replace(n, "_", " ", RegexOptions.IgnoreCase);
 
             //Trim unwanted characters at the beginning and end
             char[] trimChars = { ' ', '-' };
@@ -263,7 +265,7 @@ namespace ShowAutoRenamer {
             }
 
             if (removeDash) n = Regex.Replace(n, "-", " ", RegexOptions.IgnoreCase);
-            if (removeUnderscore) n = Regex.Replace(n, "_", " ", RegexOptions.IgnoreCase);
+            if (remove_) n = Regex.Replace(n, "_", " ", RegexOptions.IgnoreCase);
 
             //Trim unwanted characters at the beginning and end
             char[] trimChars = { ' ', '-' };

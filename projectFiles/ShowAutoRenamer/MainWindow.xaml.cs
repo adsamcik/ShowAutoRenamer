@@ -12,7 +12,7 @@ namespace ShowAutoRenamer {
         public MainWindow() {
             InitializeComponent();
 
-            Network.Initialize(NetworkActivity);
+            Network.Initialize();
             NotificationManager.Initialize(notification, nTitle, nText, System.Windows.Threading.Dispatcher.CurrentDispatcher);
 
             dispatcherTimer.Tick += new EventHandler(LessTimeLeft);
@@ -24,8 +24,8 @@ namespace ShowAutoRenamer {
             Functions.smartRename = (bool)SmartRenameToggle.IsChecked;
             Functions.recursive = (bool)RecursiveToggle.IsChecked;
             Functions.displayName = (bool)DisplayNameField.IsChecked;
-            Functions.removeUnderscore = (bool)RemoveUnderscoreToggle.IsChecked;
-            Functions.removeDash = (bool)RemoveDashToggle.IsChecked;
+            Functions.remove_ = (bool)RemoveUnderscoreToggle.IsChecked;
+            Functions.removeDash = (bool)removeDash.IsChecked;
         }
 
         private void BrowseButtonClick(object sender, RoutedEventArgs e) {
@@ -38,6 +38,7 @@ namespace ShowAutoRenamer {
 
             if (result == true) {
                 Functions.fileQueue = dlg.FileNames;
+                FileListBox.ItemsSource = Functions.fileQueue;
                 UpdatePreview();
             }
         }
@@ -55,8 +56,8 @@ namespace ShowAutoRenamer {
             Functions.smartRename = (bool)SmartRenameToggle.IsChecked;
             Functions.recursive = (bool)RecursiveToggle.IsChecked;
             Functions.displayName = (bool)DisplayNameField.IsChecked;
-            Functions.removeUnderscore = (bool)RemoveUnderscoreToggle.IsChecked;
-            Functions.removeDash = (bool)RemoveDashToggle.IsChecked;
+            Functions.remove_ = (bool)RemoveUnderscoreToggle.IsChecked;
+            Functions.removeDash = (bool)removeDash.IsChecked;
             UpdatePreview();
         }
 
@@ -68,10 +69,10 @@ namespace ShowAutoRenamer {
                     ShowNameInput.Text = s.title;
                 }
 
-                if (s.seasonList.Count > 0 && s.seasonList[0] != null && s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
+                /*if (s.seasonList.Count > 0 && s.seasonList[0] != null && s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
                     Preview.Content = Functions.ConstructName(
                         s.seasonList[0].episodeList[0],
-                        ShowNameInput.Text);
+                        ShowNameInput.Text);*/
             }
         }
 
@@ -92,9 +93,10 @@ namespace ShowAutoRenamer {
         }
 
         private void drop(object sender, DragEventArgs e) {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 Functions.fileQueue = (string[])e.Data.GetData(DataFormats.FileDrop);
-
+                FileListBox.ItemsSource = Functions.fileQueue;
+            }
             dragdropOverlay.Visibility = System.Windows.Visibility.Hidden;
             UpdatePreview();
         }
