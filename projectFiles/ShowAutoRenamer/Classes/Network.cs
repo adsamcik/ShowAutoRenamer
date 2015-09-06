@@ -30,6 +30,10 @@ namespace ShowAutoRenamer {
 
         public static async Task<Show> Search(string forWhat) {
             NotificationManager.DeleteSearchRelated();
+            if(string.IsNullOrWhiteSpace(forWhat)) {
+                NotificationManager.AddNotification(new Notification("Missing showname", "Show name could not be found in the title, please enter it manualy", true, Importance.high));
+                return null;
+            }
 
             string result = await Request("search?query=" + forWhat + "&type=show");
             if (result == "[]") {

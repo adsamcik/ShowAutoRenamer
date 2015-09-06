@@ -18,14 +18,16 @@ namespace ShowAutoRenamer {
             dispatcherTimer.Tick += new EventHandler(LessTimeLeft);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
 
-            if (!CheckForInternetConnection()) { SmartRenameToggle.IsChecked = false; SmartRenameToggle.IsEnabled = false; }
+            if (!CheckForInternetConnection()) { ToggleSmartRename.IsChecked = false; ToggleSmartRename.IsEnabled = false; }
 
-            Functions.useFolder = (bool)UseFolderToggle.IsChecked;
-            Functions.smartRename = (bool)SmartRenameToggle.IsChecked;
-            Functions.recursive = (bool)RecursiveToggle.IsChecked;
-            Functions.displayName = (bool)DisplayNameField.IsChecked;
-            Functions.remove_ = (bool)RemoveUnderscoreToggle.IsChecked;
-            Functions.removeDash = (bool)removeDash.IsChecked;
+            Functions.useFolder = (bool)ToggleUseFolder.IsChecked;
+            Functions.smartRename = (bool)ToggleSmartRename.IsChecked;
+            Functions.recursive = (bool)ToggleRecursive.IsChecked;
+            Functions.displayName = (bool)FieldDisplayName.IsChecked;
+            Functions.remove_ = (bool)ToggleRemoveUnderscore.IsChecked;
+            Functions.removeDash = (bool)ToggleRemoveDash.IsChecked;
+
+            LabelPreviewTitle.Content = "";
         }
 
         private void BrowseButtonClick(object sender, RoutedEventArgs e) {
@@ -48,32 +50,54 @@ namespace ShowAutoRenamer {
                 NotificationManager.AddNotification("No file added", "You can't rename void. Sorry.");
                 return;
             }
-            await Functions.Rename(ShowNameInput.Text);
+            await Functions.Rename(InputShowName.Text);
         }
 
         void Update(object sender, RoutedEventArgs e) {
-            Functions.useFolder = (bool)UseFolderToggle.IsChecked;
-            Functions.smartRename = (bool)SmartRenameToggle.IsChecked;
-            Functions.recursive = (bool)RecursiveToggle.IsChecked;
-            Functions.displayName = (bool)DisplayNameField.IsChecked;
-            Functions.remove_ = (bool)RemoveUnderscoreToggle.IsChecked;
-            Functions.removeDash = (bool)removeDash.IsChecked;
+            Functions.useFolder = (bool)ToggleUseFolder.IsChecked;
+            Functions.smartRename = (bool)ToggleSmartRename.IsChecked;
+            Functions.recursive = (bool)ToggleRecursive.IsChecked;
+            Functions.displayName = (bool)FieldDisplayName.IsChecked;
+            Functions.remove_ = (bool)ToggleRemoveUnderscore.IsChecked;
+            Functions.removeDash = (bool)ToggleRemoveDash.IsChecked;
             UpdatePreview();
         }
 
         async void UpdatePreview() {
-            Show s = await Functions.PrepareShow(Functions.fileQueue, ShowNameInput.Text);
+            if (Functions.fileQueue == null || Functions.fileQueue.Length == 0) return;
+            string name = string.IsNullOrWhiteSpace(InputShowName.Text) ? Functions.GetShowName(Functions.fileQueue[0]) : InputShowName.Text;
+            Show s = await Network.Search(name);
+
             if (s != null) {
+                if (string.IsNullOrWhiteSpace(InputShowName.Text)) {
+                    ignoreTextChange = true;
+                    InputShowName.Text = s.title;
+                }
+
+                s.seasonList.Add(new Season(Functions.GetSE(Functions.fileQueue[0], true), s));
+                s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, s.seasonList[0].season, Functions.GetSE(Functions.fileQueue[0], false)));
+
+                if (s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
+                    LabelPreviewTitle.Content = Functions.ConstructName(s.seasonList[0].episodeList[0]);
+                else
+                    LabelPreviewTitle.Content = "Episode not found";
+            }
+            else {
+                LabelPreviewTitle.Content = "Show could not be found";
+            }
+
+            //Show s = await Functions.PrepareShow(Functions.fileQueue, ShowNameInput.Text);
+            /*if (s != null) {
                 if (string.IsNullOrWhiteSpace(ShowNameInput.Text)) {
                     ignoreTextChange = true;
                     ShowNameInput.Text = s.title;
                 }
 
-                /*if (s.seasonList.Count > 0 && s.seasonList[0] != null && s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
-                    Preview.Content = Functions.ConstructName(
+                if (s.seasonList.Count > 0 && s.seasonList[0] != null && s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
+                    LabelPreviewTitle.Content = Functions.ConstructName(
                         s.seasonList[0].episodeList[0],
-                        ShowNameInput.Text);*/
-            }
+                        ShowNameInput.Text);
+            }*/
         }
 
         float timeLeft;
@@ -137,11 +161,11 @@ namespace ShowAutoRenamer {
         }
 
         private void recursive_Checked(object sender, RoutedEventArgs e) {
-            UseFolderToggle.IsChecked = true;
+            ToggleUseFolder.IsChecked = true;
         }
 
         private void useFolder_Unchecked(object sender, RoutedEventArgs e) {
-            RecursiveToggle.IsChecked = false;
+            ToggleRecursive.IsChecked = false;
         }
 
         private void nClose_Click(object sender, RoutedEventArgs e) {
@@ -151,7 +175,7 @@ namespace ShowAutoRenamer {
         bool ignoreTextChange;
         private void TextChanged() {
             NotificationManager.DeleteSearchRelated();
-            if (ShowNameInput.Text == "") showNameOverText.Visibility = System.Windows.Visibility.Visible;
+            if (InputShowName.Text == "") showNameOverText.Visibility = System.Windows.Visibility.Visible;
             else showNameOverText.Visibility = System.Windows.Visibility.Hidden;
 
             if (!ignoreTextChange)

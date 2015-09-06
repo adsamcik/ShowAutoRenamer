@@ -33,14 +33,11 @@ namespace ShowAutoRenamer {
             return name;
         }
 
-        public static string ConstructName(Episode e, string showName = "") {
+        public static string ConstructName(Episode e) {
             string preview = "";
             if (displayName) {
-                if (!string.IsNullOrWhiteSpace(showName))
-                    preview += showName.Trim() + " ";
-                else if (!string.IsNullOrWhiteSpace(e.show.title)) {
-                    preview += e.show.title.Trim() + " ";
-                }
+                if (!string.IsNullOrWhiteSpace(e.show.title))
+                    preview += e.show.title + " ";
                 else {
                     try {
                         string dir = Path.GetDirectoryName(e.path);
@@ -99,7 +96,7 @@ namespace ShowAutoRenamer {
             return show;
         }
 
-        static string GetShowName(string refFile) {
+        public static string GetShowName(string refFile) {
             refFile = Path.GetFileNameWithoutExtension(refFile);
 
             int season = GetSE(refFile, true);
@@ -229,7 +226,7 @@ namespace ShowAutoRenamer {
                     if (!File.Exists(e.path))
                         NotificationManager.AddNotification("File not found", "File not found at path:" + e.path + ". If the path is obviously incorrect, please report this as a bug.");
                     else {
-                        string newPath = Path.GetDirectoryName(e.path) + "/" + ConstructName(e, s.title) + Path.GetExtension(e.path);
+                        string newPath = Path.GetDirectoryName(e.path) + "/" + ConstructName(e) + Path.GetExtension(e.path);
                         if (!File.Exists(newPath)) System.IO.File.Move(e.path, newPath);
                         else NotificationManager.AddNotification(new Notification("Could not rename", "There is already " + Path.GetFileName(newPath)));
                     }
@@ -322,6 +319,12 @@ namespace ShowAutoRenamer {
             return who;
         }
 
+        /// <summary>
+        /// Function to get Season or Episode number from string name
+        /// </summary>
+        /// <param name="n">File name</param>
+        /// <param name="season">IsSeason</param>
+        /// <returns>Value of Season or Episode</returns>
         public static int GetSE(string n, bool season) {
             n = n.ToUpper();
 
