@@ -235,22 +235,22 @@ namespace ShowAutoRenamer {
             }
         }
 
-        public static string BeautifyName(string n, int s, int e, string fileName) {
+        public static string BeautifyName(int s, int e, string fileName) {
             string season = (s < 10) ? "0" + s.ToString() : s.ToString();
             string episode = (e < 10) ? "0" + e.ToString() : e.ToString();
             string episodeName = "";
             string showName = "";
-            n = SmartDotReplace(fileName);
-            n = TestForEndings(n);
-            n = n.Replace("(" + s + "x" + e + ")", "");
+            fileName = SmartDotReplace(fileName);
+            fileName = TestForEndings(fileName);
+            fileName = fileName.Replace("(" + s + "x" + e + ")", "");
             string splitter = "S" + season + "E" + episode;
-            if (n.ToUpper().Contains(splitter)) {
-                string[] a = Regex.Split(n, splitter, RegexOptions.IgnoreCase);
+            if (fileName.ToUpper().Contains(splitter)) {
+                string[] a = Regex.Split(fileName, splitter, RegexOptions.IgnoreCase);
                 showName = a[0];
                 episodeName = string.Join(" ", a.Skip((s == e) ? 2 : 1));
             }
-            else if (n.ToUpper().Contains("X")) {
-                string[] x = Regex.Split(n, "X", RegexOptions.IgnoreCase);
+            else if (fileName.ToUpper().Contains("X")) {
+                string[] x = Regex.Split(fileName, "X", RegexOptions.IgnoreCase);
                 int result;
                 if ((x[0].Length > 0 && int.TryParse(x[0].Last().ToString(), out result)) && (x[1].Length > 0 && int.TryParse(x[1].First().ToString(), out result))) {
                     if (x[0].Length > 1 && int.TryParse(x[0].Substring(x[0].Length - 2, 2), out result)) x[0] = x[0].Remove(x[0].Length - 2, 2);
@@ -263,8 +263,8 @@ namespace ShowAutoRenamer {
                 }
             }
 
-            if (removeDash) n = Regex.Replace(n, "-", " ", RegexOptions.IgnoreCase);
-            if (remove_) n = Regex.Replace(n, "_", " ", RegexOptions.IgnoreCase);
+            if (removeDash) fileName = Regex.Replace(fileName, "-", " ", RegexOptions.IgnoreCase);
+            if (remove_) fileName = Regex.Replace(fileName, "_", " ", RegexOptions.IgnoreCase);
 
             //Trim unwanted characters at the beginning and end
             char[] trimChars = { ' ', '-' };
@@ -277,7 +277,6 @@ namespace ShowAutoRenamer {
             final += (episodeName.Trim() != "") ? " - " + episodeName.Trim() : "";
             return NameCleanup(final);
         }
-
 
         public static string SmartDotReplace(string n) {
             string[] r = n.Split('.');

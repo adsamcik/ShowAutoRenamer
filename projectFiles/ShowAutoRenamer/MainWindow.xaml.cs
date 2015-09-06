@@ -66,7 +66,11 @@ namespace ShowAutoRenamer {
         async void UpdatePreview() {
             if (Functions.fileQueue == null || Functions.fileQueue.Length == 0) return;
             string name = string.IsNullOrWhiteSpace(InputShowName.Text) ? Functions.GetShowName(Functions.fileQueue[0]) : InputShowName.Text;
-            Show s = await Network.Search(name);
+            Show s;
+            if (Functions.smartRename)
+                s = await Network.Search(name);
+            else
+                s = new Show(name);
 
             if (s != null) {
                 if (string.IsNullOrWhiteSpace(InputShowName.Text)) {
@@ -75,12 +79,17 @@ namespace ShowAutoRenamer {
                 }
 
                 s.seasonList.Add(new Season(Functions.GetSE(Functions.fileQueue[0], true), s));
-                s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, s.seasonList[0].season, Functions.GetSE(Functions.fileQueue[0], false)));
 
-                if (s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
-                    LabelPreviewTitle.Content = Functions.ConstructName(s.seasonList[0].episodeList[0]);
-                else
-                    LabelPreviewTitle.Content = "Episode not found";
+                if (Functions.smartRename) {
+                    s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, s.seasonList[0].season, Functions.GetSE(Functions.fileQueue[0], false)));
+
+                    if (s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
+                        LabelPreviewTitle.Content = Functions.ConstructName(s.seasonList[0].episodeList[0]);
+                    else
+                        LabelPreviewTitle.Content = "Episode not found";
+                }
+                else 
+                    LabelPreviewTitle.Content = Functions.BeautifyName(s.seasonList[0].season, Functions.GetSE(Functions.fileQueue[0], false), Functions.fileQueue[0]);
             }
             else {
                 LabelPreviewTitle.Content = "Show could not be found";
