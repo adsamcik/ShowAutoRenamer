@@ -326,6 +326,7 @@ namespace ShowAutoRenamer {
         /// <returns>Value of Season or Episode</returns>
         public static int GetSE(string n, bool season) {
             n = n.ToUpper();
+            n = n.Replace('-', ' ');
 
             string lookFor = (season) ? "S" : "E";
 
