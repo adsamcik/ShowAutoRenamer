@@ -2,11 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Shapes;
 
 namespace ShowAutoRenamer {
     public static class Network {
@@ -51,7 +48,9 @@ namespace ShowAutoRenamer {
         }
 
         public static async Task<Episode> GetEpisode(Show sh, int season, int episode) {
-            return JsonConvert.DeserializeObject<Episode>(await Request("shows/" + sh.title + "/seasons/" + season + "/episodes/" + episode));
+            Episode e = JsonConvert.DeserializeObject<Episode>(await Request("shows/" + sh.title + "/seasons/" + season + "/episodes/" + episode));
+            e.show = sh;
+            return e;
         }
 
         public static async Task<Season> GetSeason(Show show, int season) {
