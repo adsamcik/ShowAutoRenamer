@@ -21,6 +21,11 @@ namespace ShowAutoRenamer {
             this.error = error;
         }
 
+        public Episode(int season, int episode) {
+            this.season = season;
+            this.number = episode;
+        }
+
         public Episode(string title, int season, int episode, Show s) {
             this.title = title;
             this.season = season;

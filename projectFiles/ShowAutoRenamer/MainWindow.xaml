@@ -179,7 +179,7 @@
                 <DropShadowEffect Opacity="0.4" Direction="270" BlurRadius="8" ShadowDepth="4"/>
             </Rectangle.Effect>
         </Rectangle>
-        <Button Content="X" Grid.Column="1" HorizontalAlignment="Center" Margin="316,0,8,0" Width="76" BorderThickness="0" Background="#FFE62828" BorderBrush="#FF9C9C9C" FontWeight="Bold" Foreground="White" Style="{DynamicResource CloseButStyle}" Padding="0,2,0,0" FontSize="16" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" Click="Close_Click"/>
+        <Button Content="X" Grid.Column="1" HorizontalAlignment="Center" Margin="350,1,0,289" Width="50" BorderThickness="0" Background="#FFE62828" BorderBrush="#FF9C9C9C" FontWeight="Bold" Foreground="White" Style="{DynamicResource CloseButStyle}" Padding="0,2,0,0" FontSize="16" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" Click="Close_Click" Grid.RowSpan="2"/>
         <Grid x:Name="notification" Grid.Column="1" Margin="10,190,10,0" Grid.Row="1" VerticalAlignment="Top" Height="90">
             <Rectangle Fill="White" Stroke="#FFE8E8E8"/>
             <Button x:Name="nClose" Content="X" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Style="{DynamicResource CloseButStyle}" FontFamily="Segoe UI Semibold" BorderThickness="0" Background="Gainsboro" Height="24" Foreground="White" Click="nClose_Click" Margin="320,0,0,66"/>

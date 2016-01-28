@@ -7,22 +7,27 @@ using System.Threading.Tasks;
 
 namespace ShowAutoRenamer {
     public class Show {
-#pragma warning disable 0649
         public string title;
-#pragma warning disable 0649
-        public int tvdb_id;
+        public IDs ids;
 
         public IList<Season> seasonList = new List<Season>();
 
         public Show() { }
 
-        public Show(string title, int tvdb_id) {
+        public Show(string title, int trakt) {
             this.title = title;
-            this.tvdb_id = tvdb_id;
+            this.ids = new IDs() { trakt = trakt };
         }
 
         public Show(string title) {
             this.title = title;
+        }
+
+        public class IDs {
+            public int trakt;
+            public string imdb;
+            public int tmdb;
+            public int tvdb;
         }
 
 

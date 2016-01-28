@@ -12,7 +12,6 @@ namespace ShowAutoRenamer {
         public MainWindow() {
             InitializeComponent();
 
-            Network.Initialize();
             NotificationManager.Initialize(notification, nTitle, nText, System.Windows.Threading.Dispatcher.CurrentDispatcher);
 
             dispatcherTimer.Tick += new EventHandler(LessTimeLeft);
@@ -78,10 +77,11 @@ namespace ShowAutoRenamer {
                     InputShowName.Text = s.title;
                 }
 
-                s.seasonList.Add(new Season(Functions.GetSE(Functions.fileQueue[0], true), s));
+                Season season = new Season(Functions.GetSeason(Functions.fileQueue[0]), s);
+                s.seasonList.Add(season);
 
                 if (Functions.smartRename) {
-                    s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, s.seasonList[0].season, Functions.GetSE(Functions.fileQueue[0], false)));
+                    s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, season.season, Functions.GetEpisode(Functions.fileQueue[0])));
 
                     if (s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
                         LabelPreviewTitle.Content = Functions.ConstructName(s.seasonList[0].episodeList[0]);
@@ -89,7 +89,7 @@ namespace ShowAutoRenamer {
                         LabelPreviewTitle.Content = "Episode not found";
                 }
                 else 
-                    LabelPreviewTitle.Content = Functions.BeautifyName(s.seasonList[0].season, Functions.GetSE(Functions.fileQueue[0], false), Functions.fileQueue[0]);
+                    LabelPreviewTitle.Content = Functions.BeautifyName(s.seasonList[0].season, Functions.GetEpisode(Functions.fileQueue[0]), Functions.fileQueue[0]);
             }
             else {
                 LabelPreviewTitle.Content = "Show could not be found";

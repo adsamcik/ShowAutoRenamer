@@ -9,17 +9,14 @@ namespace ShowAutoRenamer {
     public static class Network {
         public const string API_KEY = "5c241f3e48baaeb82e5f86889c570dd00c0ef2b57c8f8aae5b6143edbf0c70c3";
 
-        public static void Initialize() {
-            
-        }
-
         static async Task<string> Request(string requestString) {
             requestString = requestString.Replace(" ", "-");
             Debug.WriteLine("request url https://api-v2launch.trakt.tv/" + requestString);
             using (var httpClient = new HttpClient { BaseAddress = new Uri("https://api-v2launch.trakt.tv/") }) {
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("trakt-api-version", "2");
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("trakt-api-key", API_KEY);
-                using (var response = await httpClient.GetAsync(requestString)) {      
+                using (var response = await httpClient.GetAsync(requestString)) {
+                    Debug.WriteLine(await response.Content.ReadAsStringAsync());   
                     return await response.Content.ReadAsStringAsync();
                 }
             }
@@ -48,7 +45,10 @@ namespace ShowAutoRenamer {
         }
 
         public static async Task<Episode> GetEpisode(Show sh, int season, int episode) {
-            Episode e = JsonConvert.DeserializeObject<Episode>(await Request("shows/" + sh.title + "/seasons/" + season + "/episodes/" + episode));
+            string result = await Request("shows/" + sh.ids.trakt + "/seasons/" + season + "/episodes/" + episode);
+            if (result == null)
+                return null;
+            Episode e = JsonConvert.DeserializeObject<Episode>(result);
             e.show = sh;
             return e;
         }
