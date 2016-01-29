@@ -22,6 +22,15 @@ S01E01 - Days Gone Bye.
 - Supports Drag&Drop
 - Written in C#
 
+##Changes in 4.0, 4.1
+- Trakt api updated
+- Redesigned
+- Multi-file support
+- Removed recursive and folder options, since they are no longer required and only created issues
+- Many functions improved
+- Added advanced naming support (4.1)
+- bugfixes
+
 ##Changes in 3.0
 - Completely rewritten, now uses internal classes to keep information about shows, seasons and episodes.
 - Updated json plugin
