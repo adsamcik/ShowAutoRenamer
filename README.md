@@ -23,7 +23,7 @@ S01E01 - Days Gone Bye.
 - Written in C#
 
 ##Changes in 3.0
-- Comletely rewritten, now uses internal classes to keep information about shows, seasons and episodes.
+- Completely rewritten, now uses internal classes to keep information about shows, seasons and episodes.
 - Updated json plugin
 - UI improvements
 - Application is now asynchronous!
