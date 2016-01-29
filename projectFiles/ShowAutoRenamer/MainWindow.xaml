@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ShowAutoRenamer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Show renamer" Height="317" Width="650" ResizeMode="NoResize" Drop="drop" AllowDrop="True" SnapsToDevicePixels="True" DragEnter="Window_DragEnter" DragLeave="Window_DragLeave" WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True" IsTabStop="True">
+        Title="Show renamer" Height="317" Width="650" ResizeMode="NoResize" Drop="drop" AllowDrop="True" SnapsToDevicePixels="True" DragEnter="Window_DragEnter" DragLeave="Window_DragLeave" WindowStartupLocation="CenterOwner" IsTabStop="True" AllowsTransparency="True" WindowStyle="None">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -118,10 +118,10 @@
                                 <Setter Property="Opacity" TargetName="border" Value="0.56"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="#ffefefef"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FF0064C8"/>
                             </Trigger>
                             <Trigger Property="IsKeyboardFocused" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="#ffffffff"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FF6464C8"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -147,42 +147,45 @@
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="8*"/>
         </Grid.ColumnDefinitions>
-        <Label VerticalAlignment="Top" Background="Gainsboro" Margin="10,40,10,0" Grid.Column="1" Height="240" Grid.Row="1" BorderThickness="0" FontFamily="Segoe UI Semibold">
-            <ListBox x:Name="FileListBox" Height="230" Width="370" BorderThickness="0" Background="Transparent"/>
+        <Label VerticalAlignment="Top" Background="Gainsboro" Margin="10,10,10,0" Grid.Column="1" Height="270" Grid.Row="1" BorderThickness="0" FontFamily="Segoe UI Semibold">
+            <ListBox x:Name="FileListBox" Height="260" Width="341" BorderThickness="0" Background="Transparent"/>
         </Label>
-        <Grid Background="#FF3684A8" Grid.Row="4" ClipToBounds="True">
+        <Grid
+            Grid.Row="1" ClipToBounds="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="8*"/>
                 <ColumnDefinition Width="8*"/>
             </Grid.ColumnDefinitions>
-            <CheckBox x:Name="ToggleRemoveDash" Content="Remove -" HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" Height="15" Width="70" IsEnabled="False"/>
-            <CheckBox x:Name="ToggleRemoveUnderscore" Content="Remove _" HorizontalAlignment="Left" Margin="8,48,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" Height="15" Width="71" IsEnabled="False" Grid.Column="1"/>
-            <CheckBox x:Name="ToggleUseFolder" Content="Use Folder" HorizontalAlignment="Left" Margin="8,28,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" Height="15" Width="76" Unchecked="useFolder_Unchecked" IsEnabled="False"/>
-            <CheckBox x:Name="FieldDisplayName" Content="Show name in title" HorizontalAlignment="Left" Margin="8,48,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" Height="15" Width="118"/>
-            <CheckBox x:Name="ToggleSmartRename" Content="Smart-Rename" HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" Height="15" Width="110" IsChecked="True" Grid.Column="1" Grid.Row="2"/>
-            <CheckBox x:Name="ToggleRecursive" Content="Recursive" HorizontalAlignment="Left" Margin="8,28,0,0" VerticalAlignment="Top" Click="Update" Foreground="White" Height="15" Width="70" Checked="recursive_Checked" RenderTransformOrigin="0.443,0.133" IsEnabled="False" Grid.Column="1"/>
-            <Grid Margin="0,28,0,150" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2">
-                <TextBox x:Name="InputShowName" Height="25" VerticalAlignment="Top" Width="225" Background="#00E6E6E6" VerticalContentAlignment="Bottom" Margin="0" FontFamily="Segoe UI Semibold" BorderBrush="#FFC8C8C8" BorderThickness="0,0,0,2" Padding="10,0,0,1" SelectionBrush="White" Foreground="White" Style="{DynamicResource textBoxStyle}" TextChanged="showName_TextChanged" HorizontalAlignment="Center" ClipToBounds="True"/>
-                <TextBlock x:Name="showNameOverText" Margin="9,0,0,-1" Text="Show name" VerticalAlignment="Bottom" Height="24" Padding="3,4,0,0" IsHitTestVisible="False" Foreground="#FFDADADA" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" Width="75"/>
+            <CheckBox x:Name="ToggleRemoveDash" Content="Remove -" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Click="Update" Foreground="Black" Height="15" Width="69" IsEnabled="False"/>
+            <CheckBox x:Name="ToggleRemoveUnderscore" Content="Remove _" HorizontalAlignment="Left" Margin="10,188,0,0" VerticalAlignment="Top" Click="Update" Foreground="Black" Height="15" Width="70" IsEnabled="False" Background="White"/>
+            <CheckBox x:Name="FieldDisplayName" Content="Show title" HorizontalAlignment="Left" Margin="8,188,0,0" VerticalAlignment="Top" Click="Update" Foreground="Black" Height="15" Width="116" Grid.Column="1"/>
+            <CheckBox x:Name="ToggleSmartRename" Content="Smart-Rename" HorizontalAlignment="Left" Margin="8,168,0,0" VerticalAlignment="Top" Click="Update" Foreground="Black" Height="15" Width="108" IsChecked="True" Grid.Column="1"/>
+            <Grid Margin="13,208,11,57" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2" Width="255">
+                <TextBox x:Name="InputShowName" Height="25" VerticalAlignment="Top" Background="#00E6E6E6" VerticalContentAlignment="Bottom" FontFamily="Segoe UI Semibold" BorderBrush="#FF648CE1" BorderThickness="0,0,0,2" Padding="10,0,0,1" SelectionBrush="Black" Foreground="Black" Style="{DynamicResource textBoxStyle}" TextChanged="showName_TextChanged" HorizontalAlignment="Stretch" ClipToBounds="True"/>
+                <TextBlock x:Name="showNameOverText" Text="Show name" VerticalAlignment="Bottom" Height="24" Padding="3,4,0,0" IsHitTestVisible="False" Foreground="#FFA0A0A0" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" Width="75" Margin="9,0,0,-1"/>
             </Grid>
-            <Button Content="Select" HorizontalAlignment="Center" Width="115" Height="30" Click="BrowseButtonClick" BorderThickness="0" Background="#FF648CE1" Foreground="White" FontSize="18" FontFamily="Segoe UI Semibold" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource ButtonStyle}" Margin="0,0,120,0" VerticalAlignment="Bottom"/>
-            <Button x:Name="begin" Content="Rename" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="115" Click="RenameButtonClick" Height="30" BorderThickness="0" Background="#FF648CE1" Padding="0" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="White" Style="{DynamicResource ButtonStyle}" Margin="135,0,0,0" Grid.ColumnSpan="2"/>
+            <Button Content="Select" HorizontalAlignment="Center" Width="115" Height="30" Click="BrowseButtonClick" BorderThickness="0" Background="#FF648CE1" Foreground="White" FontSize="18" FontFamily="Segoe UI Semibold" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource ButtonStyle}" Margin="8" VerticalAlignment="Bottom"/>
+            <Button x:Name="begin" Content="Rename" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="115" Click="RenameButtonClick" Height="30" BorderThickness="0" Background="#FF648CE1" Padding="0" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="White" Style="{DynamicResource ButtonStyle}" Margin="8" Grid.Column="1"/>
         </Grid>
-        <Grid x:Name="notification" Grid.Column="1" Margin="10,190,10,0" Grid.Row="1" VerticalAlignment="Top" Height="90">
+        <Grid x:Name="notification" Grid.Column="1" Margin="10,191,10,9" Grid.Row="1" Height="90">
             <Rectangle Fill="White" Stroke="#FFE8E8E8"/>
             <Button x:Name="nClose" Content="X" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Style="{DynamicResource CloseButStyle}" FontFamily="Segoe UI Semibold" BorderThickness="0" Background="Gainsboro" Height="24" Foreground="White" Click="nClose_Click" Margin="320,0,0,66"/>
-            <TextBlock x:Name="nText" Margin="0,25,0,0" TextWrapping="Wrap" Padding="5,0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Right" Width="380"/>
+            <TextBlock x:Name="nText" Margin="0,25,0,0" TextWrapping="Wrap" Padding="5,0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Right" Width="351"/>
             <Label x:Name="nTitle" Content="Label" BorderBrush="Gainsboro" BorderThickness="0,0,0,1" RenderTransformOrigin="-0.579,0.556" Height="24" Padding="5,1,5,0" FontFamily="Segoe UI Semibold" FontSize="14" Foreground="#FF969696" Margin="0,0,60,66"/>
         </Grid>
 
-        <Rectangle Fill="#FF0064C8" Grid.ColumnSpan="2" StrokeThickness="0" Margin="0" MouseDown="Rectangle_MouseDown" />
-        <Button Content="X" Grid.Column="1" HorizontalAlignment="Center" Margin="350,0,0,289" Width="50" BorderThickness="0" Background="#00E62828" BorderBrush="#FF9C9C9C" FontWeight="Bold" Foreground="White" Style="{DynamicResource CloseButStyle}" Padding="0,2,0,0" FontSize="16" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" Click="Close_Click" Grid.RowSpan="2"/>
+        <Rectangle Fill="#FF0064C8" Grid.ColumnSpan="2" StrokeThickness="0" Margin="0" MouseDown="Rectangle_MouseDown" >
+            <Rectangle.Effect>
+                <DropShadowEffect Opacity="0.25" BlurRadius="3" Direction="270" ShadowDepth="3"/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <Button Content="X" Grid.Column="1" HorizontalAlignment="Center" Width="50" BorderThickness="0" Background="#00E62828" BorderBrush="#FF9C9C9C" FontWeight="Bold" Foreground="White" Style="{DynamicResource CloseButStyle}" Padding="0,2,0,0" FontSize="16" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" Click="Close_Click" Margin="321,0,0,0"/>
         <Label Content="SHOW AUTO-RENAMER alpha 4.0" Margin="10,1,99,0" FontFamily="Segoe UI Semibold" FontSize="14.667" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" IsHitTestVisible="False" AllowDrop="False" Foreground="Gainsboro" Grid.ColumnSpan="2"/>
         <Rectangle x:Name="dragdropOverlay" Stroke="#FF7396F0" SnapsToDevicePixels="True" Grid.ColumnSpan="2" Grid.Row="1" Fill="#997396F0" Cursor="None" Drop="drop" StrokeThickness="3" Visibility="Hidden"/>
-        <Label x:Name="LabelPreviewTitle" Content="Preview title g y" Grid.Column="1" Margin="10,10,10,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.474,0.462" Width="380" FontFamily="Segoe UI Semibold" FontSize="13.333" Height="25" SnapsToDevicePixels="True" Padding="0" VerticalContentAlignment="Center"/>
+        <Label x:Name="LabelPreviewTitle" Content="Preview title g y" Margin="10,10,10,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.474,0.462" FontFamily="Segoe UI Semibold" FontSize="13.333" Height="25" SnapsToDevicePixels="True" Padding="8,0" VerticalContentAlignment="Center" Background="Gainsboro"/>
 
 
     </Grid>

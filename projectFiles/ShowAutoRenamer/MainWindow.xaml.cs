@@ -19,9 +19,7 @@ namespace ShowAutoRenamer {
 
             if (!CheckForInternetConnection()) { ToggleSmartRename.IsChecked = false; ToggleSmartRename.IsEnabled = false; }
 
-            Functions.useFolder = (bool)ToggleUseFolder.IsChecked;
             Functions.smartRename = (bool)ToggleSmartRename.IsChecked;
-            Functions.recursive = (bool)ToggleRecursive.IsChecked;
             Functions.displayName = (bool)FieldDisplayName.IsChecked;
             Functions.remove_ = (bool)ToggleRemoveUnderscore.IsChecked;
             Functions.removeDash = (bool)ToggleRemoveDash.IsChecked;
@@ -53,9 +51,7 @@ namespace ShowAutoRenamer {
         }
 
         void Update(object sender, RoutedEventArgs e) {
-            Functions.useFolder = (bool)ToggleUseFolder.IsChecked;
             Functions.smartRename = (bool)ToggleSmartRename.IsChecked;
-            Functions.recursive = (bool)ToggleRecursive.IsChecked;
             Functions.displayName = (bool)FieldDisplayName.IsChecked;
             Functions.remove_ = (bool)ToggleRemoveUnderscore.IsChecked;
             Functions.removeDash = (bool)ToggleRemoveDash.IsChecked;
@@ -169,14 +165,6 @@ namespace ShowAutoRenamer {
             }
         }
 
-        private void recursive_Checked(object sender, RoutedEventArgs e) {
-            ToggleUseFolder.IsChecked = true;
-        }
-
-        private void useFolder_Unchecked(object sender, RoutedEventArgs e) {
-            ToggleRecursive.IsChecked = false;
-        }
-
         private void nClose_Click(object sender, RoutedEventArgs e) {
             NotificationManager.RemoveNotification();
         }
@@ -197,6 +185,5 @@ namespace ShowAutoRenamer {
             if (!Functions.insideInput) TextChanged();
             else Functions.insideInput = false;
         }
-
     }
 }
