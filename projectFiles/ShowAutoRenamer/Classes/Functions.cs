@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ShowAutoRenamer {
     public static class Functions {
+        public static string regex;
         public static bool useFolder, smartRename, recursive, displayName, remove_, removeDash, insideInput;
 
         public static List<Show> shows = new List<Show>();

@@ -97,3 +97,6 @@ D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Debug\Newtonsoft.Json
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Debug\System.Net.Http.Extensions.xml
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Debug\System.Net.Http.Primitives.xml
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.csproj.App.config
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\TitleRegexWindow.g.cs
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer_MarkupCompile.lref
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\TitleRegexWindow.baml

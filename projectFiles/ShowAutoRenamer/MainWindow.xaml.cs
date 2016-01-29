@@ -3,6 +3,7 @@ using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace ShowAutoRenamer {
@@ -184,6 +185,30 @@ namespace ShowAutoRenamer {
         private void showName_TextChanged(object sender, TextChangedEventArgs e) {
             if (!Functions.insideInput) TextChanged();
             else Functions.insideInput = false;
+        }
+
+        private void image_MouseEnter(object sender, MouseEventArgs e) {
+            advancedTitleIcon.Source = new BitmapImage(new Uri("Icons/ic_settings_applications_bluish_24dp.png", UriKind.Relative)); ;
+        }
+
+        private void image_MouseLeave(object sender, MouseEventArgs e) {
+            advancedTitleIcon.Source = new BitmapImage(new Uri("Icons/ic_settings_applications_whitish_24dp.png", UriKind.Relative)); ;
+        }
+
+        BitmapImage getIcon(string iconName) {
+            BitmapImage icon = new BitmapImage();
+            icon.BeginInit();
+            icon.UriSource = new Uri("pack://application:,,,/AssemblyName;component/Icons/" + iconName);
+            icon.EndInit();
+            return icon;
+        }
+
+        private void advancedTitleIcon_MouseUp(object sender, MouseButtonEventArgs e) {
+            TitleRegexWindow trw = new TitleRegexWindow();
+            if (Functions.fileQueue != null && Functions.fileQueue.Length > 0)
+                trw.Initialize(Functions.GetSeasonAndEpisode(Functions.fileQueue[0]));
+            trw.ShowDialog();
+                    
         }
     }
 }
