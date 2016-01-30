@@ -217,6 +217,9 @@ namespace ShowAutoRenamer {
                 trw.Initialize(ep);
             }
 
+            trw.Left = Left + 10;
+            trw.Top = Top + (Height - trw.ActualHeight) / 4 - 15;
+
             if (trw.ShowDialog() == true) {
                 trw.GetResults(out RenameData.regex, out RenameData.episodeAdd, out RenameData.seasonAdd);
                 UpdatePreview();
