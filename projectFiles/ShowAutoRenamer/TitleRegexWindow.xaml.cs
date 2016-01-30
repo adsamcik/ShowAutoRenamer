@@ -19,6 +19,8 @@ namespace ShowAutoRenamer {
     /// </summary>
     public partial class TitleRegexWindow : Window {
         Episode e;
+        int episodeAdd, seasonAdd;
+
         public TitleRegexWindow() {
             InitializeComponent();
         }
@@ -30,8 +32,14 @@ namespace ShowAutoRenamer {
             textBoxTitleRegex_TextChanged(null, null);
         }
 
+        public void GetResults(out string regex, out int episodeAdd, out int seasonAdd) {
+            regex = textBoxTitleRegex.Text;
+            episodeAdd = this.episodeAdd;
+            seasonAdd = this.seasonAdd;
+        }
+
         private void DoneButtonClick(object sender, RoutedEventArgs e) {
-            Functions.regex = textBoxTitleRegex.Text;
+            DialogResult = true;
             Close();
         }
 
@@ -42,16 +50,16 @@ namespace ShowAutoRenamer {
                 string title = textBoxTitleRegex.Text;
                 title = Regex.Replace(title, "{title}", this.e.title, RegexOptions.IgnoreCase);
                 title = Regex.Replace(title, "{showname}", this.e.show.title, RegexOptions.IgnoreCase);
-                if (!DetectSubAddRegex(ref title, "season", this.e.season))
+                if (!DetectSubAddRegex(ref title, "season", this.e.season, out seasonAdd))
                     title = Regex.Replace(title, "{season}", this.e.season.ToString(), RegexOptions.IgnoreCase);
-                if (!DetectSubAddRegex(ref title, "episode", this.e.number))
+                if (!DetectSubAddRegex(ref title, "episode", this.e.number, out episodeAdd))
                     title = Regex.Replace(title, "{episode}", this.e.number.ToString(), RegexOptions.IgnoreCase);
 
                 textBlockTitlePreview.Text = title;
             }
         }
 
-        bool DetectSubAddRegex(ref string text, string before, int beforeVal) {
+        bool DetectSubAddRegex(ref string text, string before, int beforeVal, out int addValue) {
             Match m;
             if ((m = Regex.Match(text, "{" + before)).Success) {
                 if (text[m.Index + m.Length] == '-' || text[m.Index + m.Length] == '+') {
@@ -61,16 +69,19 @@ namespace ShowAutoRenamer {
                         int result;
                         if (int.TryParse(text.Substring(startAt, index - startAt), out result)) {
                             text = Regex.Replace(text, "{" + before + "[\\+\\-0-9]+}", (beforeVal + result).ToString(), RegexOptions.IgnoreCase);
+                            addValue = result;
                             return true;
                         }
                     }
                 }
             }
+            addValue = 0;
             return false;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e) {
-            this.Close();
+            DialogResult = false;
+            Close();
         }
 
         private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e) {

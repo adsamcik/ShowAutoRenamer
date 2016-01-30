@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShowAutoRenamer.Classes;
+using System;
 using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Controls;
@@ -85,7 +86,7 @@ namespace ShowAutoRenamer {
                     else
                         LabelPreviewTitle.Content = "Episode not found";
                 }
-                else 
+                else
                     LabelPreviewTitle.Content = Functions.BeautifyName(s.seasonList[0].season, Functions.GetEpisode(Functions.fileQueue[0]), Functions.fileQueue[0]);
             }
             else {
@@ -149,7 +150,7 @@ namespace ShowAutoRenamer {
         }
 
         private void Close_Click(object sender, RoutedEventArgs e) {
-            this.Close();
+            Close();
         }
 
         private void Window_DragEnter(object sender, DragEventArgs e) {
@@ -207,8 +208,8 @@ namespace ShowAutoRenamer {
             TitleRegexWindow trw = new TitleRegexWindow();
             if (Functions.fileQueue != null && Functions.fileQueue.Length > 0)
                 trw.Initialize(Functions.GetSeasonAndEpisode(Functions.fileQueue[0]));
-            trw.ShowDialog();
-                    
+            if (trw.ShowDialog() == true)
+                trw.GetResults(out RenameData.regex, out RenameData.episodeAdd, out RenameData.seasonAdd);
         }
     }
 }
