@@ -100,3 +100,5 @@ D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\TitleRegexWindow.g.cs
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer_MarkupCompile.lref
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\TitleRegexWindow.baml
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\App.baml
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\styles.baml
