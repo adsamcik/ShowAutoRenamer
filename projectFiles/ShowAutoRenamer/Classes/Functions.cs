@@ -324,7 +324,7 @@ namespace ShowAutoRenamer {
         /// <param name="n">File name</param>
         /// <param name="season">IsSeason</param>
         /// <returns>Value of Season or Episode</returns>
-        public static Episode GetSeasonAndEpisode(string n) {
+        public static Episode GetEpisodeFromName(string n) {
             int result = -1;
             Match m = Regex.Match(n, "s(\\d{1,2})e(\\d{1,2})", RegexOptions.IgnoreCase);
             if (m.Success) {
@@ -335,6 +335,14 @@ namespace ShowAutoRenamer {
                     e.season = result;
                 if (int.TryParse(n.Substring(indexof + 1, m.Length - (indexof - m.Index) - 1), out result))
                     e.number = result;
+
+                e.title = n.Substring(m.Index + m.Length, n.Length - m.Index - m.Length);
+                indexof = e.title.LastIndexOf('.');
+                if (indexof >= 0)
+                    e.title = e.title.Substring(0, indexof);
+                e.title = Regex.Replace(e.title, "^[\\.\\- ]*", "");
+
+                e.show = new Show(n.Substring(0, m.Index));
 
                 return e;
             }
@@ -349,19 +357,59 @@ namespace ShowAutoRenamer {
                 if (int.TryParse(n.Substring(indexof + 1, m.Length - (indexof - m.Index) - 1), out result))
                     e.number = result;
 
+                e.title = n.Substring(m.Index + m.Length, n.Length - m.Index - m.Length);
+                indexof = e.title.LastIndexOf('.');
+                if (indexof >= 0)
+                    e.title = e.title.Substring(0, indexof);
+                e.title = Regex.Replace(e.title, "^[.- ]*", "");
+                e.show = new Show(n.Substring(0, m.Index));
+
                 return e;
             }
 
-            if (result == -1 && n.Contains("PILOT")) return new Episode(1, 0);
+            if (result == -1 && n.ToLower().Contains("pilot")) {
+                string[] split = Regex.Split(n, "pilot", RegexOptions.IgnoreCase);
+                return new Episode(split[0], 1, 0, new Show(Regex.Replace(split[1], "\\..*", "")));
+            }
             else return null;
         }
 
         public static int GetSeason(string n) {
-            return GetSeasonAndEpisode(n).season;
+            return GetEpisodeFromName(n).season;
         }
 
         public static int GetEpisode(string n) {
-            return GetSeasonAndEpisode(n).number;
+            return GetEpisodeFromName(n).number;
+        }
+
+        public static string RegexTitle(string regex, Episode e) {
+            regex = Regex.Replace(regex, "{title}", e.title, RegexOptions.IgnoreCase);
+            regex = Regex.Replace(regex, "{showname}", e.show.title, RegexOptions.IgnoreCase);
+            if (!DetectSubAddRegex(ref regex, "season", e.season))
+                regex = Regex.Replace(regex, "{season}", e.season.ToString(), RegexOptions.IgnoreCase);
+            if (!DetectSubAddRegex(ref regex, "episode", e.number))
+                regex = Regex.Replace(regex, "{episode}", e.number.ToString(), RegexOptions.IgnoreCase);
+
+            return regex;
+        }
+
+
+        public static bool DetectSubAddRegex(ref string text, string before, int beforeVal) {
+            Match m;
+            if ((m = Regex.Match(text, "{" + before)).Success) {
+                if (text[m.Index + m.Length] == '-' || text[m.Index + m.Length] == '+') {
+                    int startAt = m.Index + m.Length;
+                    int index = text.IndexOf('}', startAt);
+                    if (index >= 0) {
+                        int result;
+                        if (int.TryParse(text.Substring(startAt, index - startAt), out result)) {
+                            text = Regex.Replace(text, "{" + before + "[\\+\\-0-9]+}", (beforeVal + result).ToString(), RegexOptions.IgnoreCase);
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
     }
 }

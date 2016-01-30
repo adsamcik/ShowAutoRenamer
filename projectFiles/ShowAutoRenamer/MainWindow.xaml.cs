@@ -82,12 +82,16 @@ namespace ShowAutoRenamer {
                     s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, season.season, Functions.GetEpisode(Functions.fileQueue[0])));
 
                     if (s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
-                        LabelPreviewTitle.Content = Functions.ConstructName(s.seasonList[0].episodeList[0]);
+                        LabelPreviewTitle.Content = RenameData.isRegexSet ?
+                            Functions.RegexTitle(RenameData.regex, s.seasonList[0].episodeList[0]) :
+                            Functions.ConstructName(s.seasonList[0].episodeList[0]);
                     else
                         LabelPreviewTitle.Content = "Episode not found";
                 }
                 else
-                    LabelPreviewTitle.Content = Functions.BeautifyName(s.seasonList[0].season, Functions.GetEpisode(Functions.fileQueue[0]), Functions.fileQueue[0]);
+                    LabelPreviewTitle.Content = RenameData.isRegexSet ?
+                        Functions.RegexTitle(RenameData.regex, Functions.GetEpisodeFromName(Functions.fileQueue[0])) :
+                        Functions.BeautifyName(s.seasonList[0].season, Functions.GetEpisode(Functions.fileQueue[0]), Functions.fileQueue[0]);
             }
             else {
                 LabelPreviewTitle.Content = "Show could not be found";
@@ -206,10 +210,17 @@ namespace ShowAutoRenamer {
 
         private void advancedTitleIcon_MouseUp(object sender, MouseButtonEventArgs e) {
             TitleRegexWindow trw = new TitleRegexWindow();
-            if (Functions.fileQueue != null && Functions.fileQueue.Length > 0)
-                trw.Initialize(Functions.GetSeasonAndEpisode(Functions.fileQueue[0]));
-            if (trw.ShowDialog() == true)
+            if (Functions.fileQueue != null && Functions.fileQueue.Length > 0) {
+                Episode ep = Functions.GetEpisodeFromName(Functions.fileQueue[0]);
+                if (!string.IsNullOrEmpty(InputShowName.Text))
+                    ep.show = new Show(InputShowName.Text);
+                trw.Initialize(ep);
+            }
+
+            if (trw.ShowDialog() == true) {
                 trw.GetResults(out RenameData.regex, out RenameData.episodeAdd, out RenameData.seasonAdd);
+                UpdatePreview();
+            }
         }
     }
 }

@@ -12,8 +12,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Button x:Name="buttonDone" Content="Done" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="90" Click="DoneButtonClick" Height="27" BorderThickness="0" Background="#FF648CE1" Padding="0" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="White" Style="{DynamicResource ButtonStyle}" Margin="0,0,8,8" Cursor="Hand" Grid.Row="1"/>
-        <TextBox x:Name="textBoxTitleRegex" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="306" TextChanged="textBoxTitleRegex_TextChanged" Grid.Row="1"/>
-        <TextBlock x:Name="textBlockTitlePreview" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="306" Grid.Row="1"/>
+        <TextBox x:Name="textBoxTitleRegex" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="306" TextChanged="textBoxTitleRegex_TextChanged" Grid.Row="1"/>
+        <TextBlock x:Name="textBlockTitlePreview" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="306" Grid.Row="1"/>
 
         <Rectangle Fill="#FF0064C8" StrokeThickness="0" Margin="0" MouseDown="Rectangle_MouseDown" >
             <Rectangle.Effect>

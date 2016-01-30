@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShowAutoRenamer.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,13 +24,16 @@ namespace ShowAutoRenamer {
 
         public TitleRegexWindow() {
             InitializeComponent();
+            this.e = new Episode("Episode name", 1, 1, new ShowAutoRenamer.Show("Show name"));
+            textBoxTitleRegex.Text = RenameData.regex;
         }
 
         public void Initialize(Episode e) {
             this.e = e;
-            this.e.show = new Show("Futurama");
-            this.e.title = "Episode title";
-            textBoxTitleRegex_TextChanged(null, null);
+
+            if (RenameData.isRegexSet)
+                textBlockTitlePreview.Text = RegexTitle(textBoxTitleRegex.Text, this.e);
+
         }
 
         public void GetResults(out string regex, out int episodeAdd, out int seasonAdd) {
@@ -44,19 +48,30 @@ namespace ShowAutoRenamer {
         }
 
         private void textBoxTitleRegex_TextChanged(object sender, TextChangedEventArgs e) {
-            if (IsLoaded && !string.IsNullOrEmpty(textBlockTitlePreview.Text)) {
-                if (this.e == null)
-                    this.e = new Episode("Episode name", 1, 1, new ShowAutoRenamer.Show("Show name"));
-                string title = textBoxTitleRegex.Text;
-                title = Regex.Replace(title, "{title}", this.e.title, RegexOptions.IgnoreCase);
-                title = Regex.Replace(title, "{showname}", this.e.show.title, RegexOptions.IgnoreCase);
-                if (!DetectSubAddRegex(ref title, "season", this.e.season, out seasonAdd))
-                    title = Regex.Replace(title, "{season}", this.e.season.ToString(), RegexOptions.IgnoreCase);
-                if (!DetectSubAddRegex(ref title, "episode", this.e.number, out episodeAdd))
-                    title = Regex.Replace(title, "{episode}", this.e.number.ToString(), RegexOptions.IgnoreCase);
+            if (IsLoaded && !string.IsNullOrEmpty(textBlockTitlePreview.Text))
+                textBlockTitlePreview.Text = RegexTitle(textBoxTitleRegex.Text, this.e);
+        }
 
-                textBlockTitlePreview.Text = title;
+        private void Close_Click(object sender, RoutedEventArgs e) {
+            DialogResult = false;
+            Close();
+        }
+
+        private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e) {
+            if (e.LeftButton == MouseButtonState.Pressed) {
+                DragMove();
             }
+        }
+
+        string RegexTitle(string regex, Episode e) {
+            regex = Regex.Replace(regex, "{title}", e.title, RegexOptions.IgnoreCase);
+            regex = Regex.Replace(regex, "{showname}", e.show.title, RegexOptions.IgnoreCase);
+            if (!DetectSubAddRegex(ref regex, "season", e.season, out seasonAdd))
+                regex = Regex.Replace(regex, "{season}", e.season.ToString(), RegexOptions.IgnoreCase);
+            if (!DetectSubAddRegex(ref regex, "episode", e.number, out episodeAdd))
+                regex = Regex.Replace(regex, "{episode}", e.number.ToString(), RegexOptions.IgnoreCase);
+
+            return regex;
         }
 
         bool DetectSubAddRegex(ref string text, string before, int beforeVal, out int addValue) {
@@ -79,15 +94,5 @@ namespace ShowAutoRenamer {
             return false;
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e) {
-            DialogResult = false;
-            Close();
-        }
-
-        private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e) {
-            if (e.LeftButton == MouseButtonState.Pressed) {
-                DragMove();
-            }
-        }
     }
 }

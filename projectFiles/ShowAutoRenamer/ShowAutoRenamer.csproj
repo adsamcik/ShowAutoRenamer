@@ -106,6 +106,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\Network.cs" />
+    <Compile Include="Classes\RenameData.cs" />
     <Compile Include="Objects\Notification.cs" />
     <Compile Include="Classes\NotificationManager.cs" />
     <Compile Include="Objects\Season.cs" />

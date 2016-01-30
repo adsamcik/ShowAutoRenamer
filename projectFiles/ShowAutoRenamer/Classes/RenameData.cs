@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShowAutoRenamer.Classes {
     public static class RenameData {
+        public static bool isRegexSet { get { return !string.IsNullOrEmpty(regex); } }
         public static int episodeAdd, seasonAdd;
         public static string regex;
 
