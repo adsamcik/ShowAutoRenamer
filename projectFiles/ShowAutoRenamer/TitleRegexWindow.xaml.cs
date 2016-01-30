@@ -53,7 +53,7 @@ namespace ShowAutoRenamer {
 
         bool DetectSubAddRegex(ref string text, string before, int beforeVal) {
             Match m;
-            if ((m = Regex.Match(text, "{season")).Success) {
+            if ((m = Regex.Match(text, "{" + before)).Success) {
                 if (text[m.Index + m.Length] == '-' || text[m.Index + m.Length] == '+') {
                     int startAt = m.Index + m.Length;
                     int index = text.IndexOf('}', startAt);
