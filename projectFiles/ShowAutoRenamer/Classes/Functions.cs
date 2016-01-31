@@ -425,7 +425,7 @@ namespace ShowAutoRenamer {
             Match m;
             if((m=Regex.Match(input, regexName)).Success) {
                 bool isZero = input[m.Index + 1] == '0';
-                return Regex.Replace(input, regexName + ".*}", value.ToString(isZero ? 2 : 1), RegexOptions.IgnoreCase);
+                return Regex.Replace(input, regexName + ".*?}", value.ToString(isZero ? 2 : 1), RegexOptions.IgnoreCase);
             }
             return input;
         }
