@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShowAutoRenamer.Classes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,17 +14,6 @@ namespace ShowAutoRenamer {
 
         public static List<Show> shows = new List<Show>();
         public static string[] fileQueue;
-
-        public static async Task<string[]> GetFilesInDirectory(string path) {
-            path = Path.GetDirectoryName(path);
-            FileInfo[] fileList;
-            DirectoryInfo directory = new DirectoryInfo(path);
-            fileList = directory.GetFiles();
-
-            var filtered = fileList.Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0);
-
-            return filtered.Select(f => f.FullName).ToArray();
-        }
 
         public static string NameCleanup(string name) {
             string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
@@ -114,17 +104,7 @@ namespace ShowAutoRenamer {
 
         static async Task<Season> PrepareSeason(string refFile, Show show) {
             Season season = new Season(GetSeason(refFile), show);
-            if (useFolder) {
-                string[] files = await GetFilesInDirectory(refFile);
-
-                for (int i = 0; i < files.Length; i++) {
-                    Episode e;
-                    e = PrepareEpisode(files[i], season);
-                    if (e != null) season.episodeList.Add(e);
-                }
-            }
-            else season.episodeList.Add(PrepareEpisode(refFile, season));
-
+            season.episodeList.Add(PrepareEpisode(refFile, season));
             return season;
         }
 
@@ -136,22 +116,11 @@ namespace ShowAutoRenamer {
             }
             else {
                 Season season = new Season(seasonReference.season, show);
-                if (useFolder) {
-                    string[] files = await GetFilesInDirectory(refFile);
-
-                    for (int i = 0; i < files.Length; i++) {
-                        Episode e;
-                        e = await PrepareEpisodeNetwork(files[i], seasonReference);
-                        if (e != null) season.episodeList.Add(e);
-                    }
-                }
-                else {
-                    Episode e = await PrepareEpisodeNetwork(refFile, seasonReference);
-                    Debug.WriteLine("episode");
-                    if (e != null) {
-                        season.episodeList.Add(e);
-                        Debug.WriteLine(season.episodeList[season.episodeList.Count - 1].title);
-                    }
+                Episode e = await PrepareEpisodeNetwork(refFile, seasonReference);
+                Debug.WriteLine("episode");
+                if (e != null) {
+                    season.episodeList.Add(e);
+                    Debug.WriteLine(season.episodeList[season.episodeList.Count - 1].title);
                 }
 
 
@@ -225,8 +194,10 @@ namespace ShowAutoRenamer {
                     if (!File.Exists(e.path))
                         NotificationManager.AddNotification("File not found", "File not found at path:" + e.path + ". If the path is obviously incorrect, please report this as a bug.");
                     else {
-                        string newPath = Path.GetDirectoryName(e.path) + "/" + ConstructName(e) + Path.GetExtension(e.path);
-                        if (!File.Exists(newPath)) System.IO.File.Move(e.path, newPath);
+                        string newPath = Path.GetDirectoryName(e.path) + "/" + 
+                            (RenameData.isRegexSet ? RegexTitle(RenameData.regex, s.seasonList[0].episodeList[0]) : ConstructName(e)) 
+                            + Path.GetExtension(e.path);
+                        if (!File.Exists(newPath)) File.Move(e.path, newPath);
                         else NotificationManager.AddNotification(new Notification("Could not rename", "There is already " + Path.GetFileName(newPath)));
                     }
 
@@ -423,7 +394,7 @@ namespace ShowAutoRenamer {
         public static string ResolveZeroFormat(string regexName, string input, int value) {
             regexName = "{.?" + regexName;
             Match m;
-            if((m=Regex.Match(input, regexName)).Success) {
+            if ((m = Regex.Match(input, regexName)).Success) {
                 bool isZero = input[m.Index + 1] == '0';
                 return Regex.Replace(input, regexName + ".*?}", value.ToString(isZero ? 2 : 1), RegexOptions.IgnoreCase);
             }
