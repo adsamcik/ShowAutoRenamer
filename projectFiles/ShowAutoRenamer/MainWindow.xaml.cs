@@ -75,11 +75,11 @@ namespace ShowAutoRenamer {
                     InputShowName.Text = s.title;
                 }
 
-                Season season = new Season(Functions.GetSeason(Functions.fileQueue[0]), s);
+                Season season = new Season(Functions.GetSeason(Functions.fileQueue[0]) + RenameData.seasonAdd, s);
                 s.seasonList.Add(season);
 
                 if (Functions.smartRename) {
-                    s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, season.season, Functions.GetEpisode(Functions.fileQueue[0])));
+                    s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, season.season, Functions.GetEpisode(Functions.fileQueue[0]) + RenameData.episodeAdd));
 
                     if (s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
                         LabelPreviewTitle.Content = RenameData.isRegexSet ?

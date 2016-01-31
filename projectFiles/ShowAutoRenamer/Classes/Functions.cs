@@ -357,14 +357,16 @@ namespace ShowAutoRenamer {
 
         public static bool DetectSubAddRegex(ref string text, string before, int beforeVal) {
             Match m;
-            if ((m = Regex.Match(text, "{" + before)).Success) {
-                if (text[m.Index + m.Length] == '-' || text[m.Index + m.Length] == '+') {
-                    int startAt = m.Index + m.Length;
+            if ((m = Regex.Match(text, "{.?" + before + ".*?}")).Success) {
+                int startIndex = 1 + (text[m.Index + 1] == '0' ? 1 : 0) + m.Index + before.Length;
+                if (startIndex < text.Length && (text[startIndex] == '-' || text[startIndex] == '+')) {
+                    int startAt = startIndex + 1;
                     int index = text.IndexOf('}', startAt);
                     if (index >= 0) {
                         int result;
                         if (int.TryParse(text.Substring(startAt, index - startAt), out result)) {
-                            text = ResolveZeroFormat(before, text, beforeVal + result);
+                            //text = Regex.Replace(text, "{.?" + before + "[\\+\\-0-9]+}", (beforeVal + result).ToString(isZero ? 2 : 1), RegexOptions.IgnoreCase);
+                            text = ResolveZeroFormat(before, text, beforeVal);
                             return true;
                         }
                     }
