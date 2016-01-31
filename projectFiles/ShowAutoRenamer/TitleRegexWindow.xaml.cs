@@ -76,8 +76,8 @@ namespace ShowAutoRenamer {
 
         bool DetectSubAddRegex(ref string text, string before, int beforeVal, out int addValue) {
             Match m;
-            if ((m = Regex.Match(text, "{.?" + before)).Success) {
-                if (text[m.Index + m.Length] == '-' || text[m.Index + m.Length] == '+') {
+            if ((m = Regex.Match(text, "{.?" + before + ".*?}")).Success) {
+                if (m.Index + m.Length < text.Length && (text[m.Index + m.Length] == '-' || text[m.Index + m.Length] == '+')) {
                     int startAt = m.Index + m.Length;
                     int index = text.IndexOf('}', startAt);
                     if (index >= 0) {
