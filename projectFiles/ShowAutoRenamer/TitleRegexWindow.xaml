@@ -21,7 +21,7 @@
                 <DropShadowEffect Opacity="0.25" BlurRadius="3" Direction="270" ShadowDepth="3"/>
             </Rectangle.Effect>
         </Rectangle>
-        <Label Content="Advanced name editing" Margin="10,1,99,0" FontFamily="Segoe UI Semibold" FontSize="14.667" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" IsHitTestVisible="False" AllowDrop="False" Foreground="Gainsboro" Grid.ColumnSpan="2"/>
+        <Label Content="Advanced name creator" Margin="10,1,99,0" FontFamily="Segoe UI Semibold" FontSize="14.667" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" IsHitTestVisible="False" AllowDrop="False" Foreground="Gainsboro" Grid.ColumnSpan="2"/>
         <Button Content="X" HorizontalAlignment="Right" Width="50" BorderThickness="0" Background="#00E62828" BorderBrush="#FF9C9C9C" FontWeight="Bold" Foreground="White" Style="{DynamicResource CloseButStyle}" Padding="0,2,0,0" FontSize="16" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" Click="Close_Click" />
         <Grid Grid.Row="2" Margin="15,0,15,45" Background="#FFDCDCDC">
             <Grid Grid.Row="2" Margin="5">
