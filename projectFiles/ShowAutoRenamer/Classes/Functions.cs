@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace ShowAutoRenamer {
     public static class Functions {
-        public static string regex;
         public static bool useFolder, smartRename, recursive, displayName, remove_, removeDash, insideInput;
 
         public static List<Show> shows = new List<Show>();
@@ -386,9 +385,9 @@ namespace ShowAutoRenamer {
             regex = Regex.Replace(regex, "{title}", e.title, RegexOptions.IgnoreCase);
             regex = Regex.Replace(regex, "{showname}", e.show.title, RegexOptions.IgnoreCase);
             if (!DetectSubAddRegex(ref regex, "season", e.season))
-                regex = Regex.Replace(regex, "{season}", e.season.ToString(), RegexOptions.IgnoreCase);
+                regex = ResolveZeroFormat("season", regex, e.season);
             if (!DetectSubAddRegex(ref regex, "episode", e.number))
-                regex = Regex.Replace(regex, "{episode}", e.number.ToString(), RegexOptions.IgnoreCase);
+                regex = ResolveZeroFormat("episode", regex, e.season);
 
             return regex;
         }
@@ -403,13 +402,32 @@ namespace ShowAutoRenamer {
                     if (index >= 0) {
                         int result;
                         if (int.TryParse(text.Substring(startAt, index - startAt), out result)) {
-                            text = Regex.Replace(text, "{" + before + "[\\+\\-0-9]+}", (beforeVal + result).ToString(), RegexOptions.IgnoreCase);
+                            text = ResolveZeroFormat(before, text, beforeVal + result);
                             return true;
                         }
                     }
                 }
             }
             return false;
+        }
+
+        public static string ToString(this int source, int MinCharacterCount) {
+            StringBuilder sb = new StringBuilder();
+            int length = source.ToString().Length;
+            for (int i = length; i < MinCharacterCount; i++)
+                sb.Append('0');
+            sb.Append(source.ToString());
+            return sb.ToString();
+        }
+
+        public static string ResolveZeroFormat(string regexName, string input, int value) {
+            regexName = "{.?" + regexName;
+            Match m;
+            if((m=Regex.Match(input, regexName)).Success) {
+                bool isZero = input[m.Index + 1] == '0';
+                return Regex.Replace(input, regexName + ".*}", value.ToString(isZero ? 2 : 1), RegexOptions.IgnoreCase);
+            }
+            return input;
         }
     }
 }

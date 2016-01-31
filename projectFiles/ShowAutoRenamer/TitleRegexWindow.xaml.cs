@@ -48,7 +48,7 @@ namespace ShowAutoRenamer {
         }
 
         private void textBoxTitleRegex_TextChanged(object sender, TextChangedEventArgs e) {
-            if (IsLoaded && !string.IsNullOrEmpty(textBlockTitlePreview.Text))
+            if (IsLoaded && !string.IsNullOrEmpty(textBoxTitleRegex.Text))
                 textBlockTitlePreview.Text = RegexTitle(textBoxTitleRegex.Text, this.e);
         }
 
@@ -67,23 +67,24 @@ namespace ShowAutoRenamer {
             regex = Regex.Replace(regex, "{title}", e.title, RegexOptions.IgnoreCase);
             regex = Regex.Replace(regex, "{showname}", e.show.title, RegexOptions.IgnoreCase);
             if (!DetectSubAddRegex(ref regex, "season", e.season, out seasonAdd))
-                regex = Regex.Replace(regex, "{season}", e.season.ToString(), RegexOptions.IgnoreCase);
+                regex = Functions.ResolveZeroFormat("season", regex, e.season);
             if (!DetectSubAddRegex(ref regex, "episode", e.number, out episodeAdd))
-                regex = Regex.Replace(regex, "{episode}", e.number.ToString(), RegexOptions.IgnoreCase);
+                regex = Functions.ResolveZeroFormat("episode", regex, e.season);
 
             return regex;
         }
 
         bool DetectSubAddRegex(ref string text, string before, int beforeVal, out int addValue) {
             Match m;
-            if ((m = Regex.Match(text, "{" + before)).Success) {
+            if ((m = Regex.Match(text, "{.?" + before)).Success) {
                 if (text[m.Index + m.Length] == '-' || text[m.Index + m.Length] == '+') {
                     int startAt = m.Index + m.Length;
                     int index = text.IndexOf('}', startAt);
                     if (index >= 0) {
                         int result;
                         if (int.TryParse(text.Substring(startAt, index - startAt), out result)) {
-                            text = Regex.Replace(text, "{" + before + "[\\+\\-0-9]+}", (beforeVal + result).ToString(), RegexOptions.IgnoreCase);
+                            //text = Regex.Replace(text, "{.?" + before + "[\\+\\-0-9]+}", (beforeVal + result).ToString(isZero ? 2 : 1), RegexOptions.IgnoreCase);
+                            text = Functions.ResolveZeroFormat(before, text, beforeVal + result);
                             addValue = result;
                             return true;
                         }
