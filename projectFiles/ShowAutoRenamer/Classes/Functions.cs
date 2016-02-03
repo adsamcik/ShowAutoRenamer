@@ -18,7 +18,7 @@ namespace ShowAutoRenamer {
         public async static Task<Show> PrepareShow(string[] refFile, string showName = "") {
             if (refFile.Length == 0) return null;
             Show show;
-            string tempName = string.IsNullOrWhiteSpace(showName) ? GetShowName(refFile[0]) : showName;
+            string tempName = string.IsNullOrWhiteSpace(showName) ? GetEpisodeFromName(refFile[0]).show.title : showName;
             if (smartRename && !string.IsNullOrWhiteSpace(tempName)) {
                 show = await Network.Search(tempName);
                 if (show == null) return null;
@@ -34,23 +34,6 @@ namespace ShowAutoRenamer {
             }
 
             return show;
-        }
-
-        //TODO FIX 
-        public static string GetShowName(string refFile) {
-            refFile = Path.GetFileNameWithoutExtension(refFile);
-
-            int season = GetSeason(refFile);
-            int episode = GetEpisode(refFile);
-            string n = SmartDotReplace(refFile);
-            n = TestForEndings(n);
-            if (Regex.Match(n, "s(\\d{1,2})e(\\d{1,2})", RegexOptions.IgnoreCase).Success) {
-                return Regex.Split(n, "s(\\d{1,2})e(\\d{1,2})", RegexOptions.IgnoreCase)[0];
-            }
-            else if (Regex.Match(n, "(\\d{1,2})x(\\d{1,2})", RegexOptions.IgnoreCase).Success) {
-                return Regex.Split(n, "(\\d{1,2})x(\\d{1,2})", RegexOptions.IgnoreCase)[0];
-            }
-            return "";
         }
 
         static Season PrepareSeason(string refFile, Show show) {

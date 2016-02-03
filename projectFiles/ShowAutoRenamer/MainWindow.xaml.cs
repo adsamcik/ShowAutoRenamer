@@ -62,7 +62,7 @@ namespace ShowAutoRenamer {
 
         async void UpdatePreview() {
             if (Functions.fileQueue == null || Functions.fileQueue.Length == 0) return;
-            string name = string.IsNullOrWhiteSpace(InputShowName.Text) ? Functions.GetShowName(Functions.fileQueue[0]) : InputShowName.Text;
+            string name = string.IsNullOrWhiteSpace(InputShowName.Text) ? Functions.GetEpisodeFromName(Functions.fileQueue[0]).title : InputShowName.Text;
             Show s;
             if (Functions.smartRename)
                 s = await Network.Search(name);
