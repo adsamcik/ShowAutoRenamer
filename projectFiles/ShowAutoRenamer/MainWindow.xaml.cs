@@ -46,7 +46,7 @@ namespace ShowAutoRenamer {
 
         private async void RenameButtonClick(object sender, RoutedEventArgs e) {
             if (Functions.fileQueue == null || Functions.fileQueue.Length == 0) {
-                NotificationManager.AddNotification("No file added", "You can't rename void. Sorry.");
+                NotificationManager.AddNotification("No file added", "But don't worry, everything was renamed.");
                 return;
             }
             await Functions.Rename(InputShowName.Text);
@@ -82,33 +82,16 @@ namespace ShowAutoRenamer {
                     s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, season.season, Functions.GetEpisode(Functions.fileQueue[0]) + RenameData.episodeAdd));
 
                     if (s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
-                        LabelPreviewTitle.Content = RenameData.isRegexSet ?
-                            Functions.RegexTitle(RenameData.regex, s.seasonList[0].episodeList[0]) :
-                            Functions.ConstructName(s.seasonList[0].episodeList[0]);
+                        LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, s.seasonList[0].episodeList[0]);
                     else
                         LabelPreviewTitle.Content = "Episode not found";
                 }
                 else
-                    LabelPreviewTitle.Content = RenameData.isRegexSet ?
-                        Functions.RegexTitle(RenameData.regex, Functions.GetEpisodeFromName(Functions.fileQueue[0])) :
-                        Functions.BeautifyName(s.seasonList[0].season, Functions.GetEpisode(Functions.fileQueue[0]), Functions.fileQueue[0]);
+                    LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, Functions.GetEpisodeFromName(Functions.fileQueue[0]));
             }
             else {
                 LabelPreviewTitle.Content = "Show could not be found";
             }
-
-            //Show s = await Functions.PrepareShow(Functions.fileQueue, ShowNameInput.Text);
-            /*if (s != null) {
-                if (string.IsNullOrWhiteSpace(ShowNameInput.Text)) {
-                    ignoreTextChange = true;
-                    ShowNameInput.Text = s.title;
-                }
-
-                if (s.seasonList.Count > 0 && s.seasonList[0] != null && s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
-                    LabelPreviewTitle.Content = Functions.ConstructName(
-                        s.seasonList[0].episodeList[0],
-                        ShowNameInput.Text);
-            }*/
         }
 
         float timeLeft;

@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ShowAutoRenamer.Classes {
     public static class RenameData {
-        public static bool isRegexSet { get { return !string.IsNullOrEmpty(regex); } }
         public static int episodeAdd, seasonAdd;
-        public static string regex;
+        public static string regex = "S{0season}E{0episode} - {title}";
 
         public static void Clear() {
             episodeAdd = 0;

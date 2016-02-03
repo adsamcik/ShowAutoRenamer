@@ -35,7 +35,7 @@ namespace ShowAutoRenamer {
                 return null;
             }
             else
-                return JsonConvert.DeserializeObject<Show>(Functions.CutFromJson(result, "show"));
+                return JsonConvert.DeserializeObject<Show>(CutFromJson(result, "show"));
         }
 
         public static async Task<List<Episode>> GetEpisodes(string showName, int season) {
@@ -60,6 +60,23 @@ namespace ShowAutoRenamer {
             if (s != default(Season))
                 s.episodeList = await GetEpisodes(show.title, s.season);
             return s;
+        }
+
+        public static string CutFromJson(string source, string lookForObjectName) {
+            string result = source.Substring(source.IndexOf(@"""" + lookForObjectName + @""":{") + lookForObjectName.Length + 3);
+            int nestedDepth = 0;
+            for (int i = 0; i < result.Length; i++) {
+                if (result[i] == '}') {
+                    if (nestedDepth == 0) {
+                        result = result.Substring(0, i);
+                        break;
+                    }
+                    else
+                        nestedDepth--;
+                }
+                else if (result[i] == '{') nestedDepth++;
+            }
+            return result;
         }
     }
 }

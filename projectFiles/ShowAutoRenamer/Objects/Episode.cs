@@ -42,7 +42,7 @@ namespace ShowAutoRenamer {
         }
 
         public string GetNameForFile() {
-            return "S" + (season < 10 ? "0" + season : season.ToString()) + "E" + (number < 10 ? "0" + number : number.ToString()) + ((string.IsNullOrWhiteSpace(title)) ? "" : " - " + title);
+            return Functions.RegexTitle(Path.GetFileNameWithoutExtension(path),this) + Path.GetExtension(path);
         }
     }
 }

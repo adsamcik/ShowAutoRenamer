@@ -24,16 +24,14 @@ namespace ShowAutoRenamer {
 
         public TitleRegexWindow() {
             InitializeComponent();
-            this.e = new Episode("Episode name", 1, 1, new ShowAutoRenamer.Show("Show name"));
+            e = new Episode("Episode name", 1, 1, new ShowAutoRenamer.Show("Show name"));
             textBoxTitleRegex.Text = RenameData.regex;
+            textBlockTitlePreview.Text = RegexTitle(textBoxTitleRegex.Text, e);
         }
 
         public void Initialize(Episode e) {
             this.e = e;
-
-            if (RenameData.isRegexSet)
-                textBlockTitlePreview.Text = RegexTitle(textBoxTitleRegex.Text, this.e);
-
+            textBlockTitlePreview.Text = RegexTitle(textBoxTitleRegex.Text, this.e);
         }
 
         public void GetResults(out string regex, out int episodeAdd, out int seasonAdd) {
