@@ -78,7 +78,13 @@ namespace ShowAutoRenamer {
                         NotificationManager.AddNotification("File not found", "File not found at path:" + e.path + ". If the path is obviously incorrect, please report this as a bug.");
                     else {
                         string newPath = Path.GetDirectoryName(e.path) + "/" + RegexTitle(RenameData.regex, s.seasonList[0].episodeList[0]) + Path.GetExtension(e.path);
-                        if (!File.Exists(newPath)) File.Move(e.path, newPath);
+                        if (!File.Exists(newPath)) {
+                            File.Move(e.path, newPath);
+                            int index = Array.IndexOf(fileQueue, e.path);
+                            if (index >= 0)
+                                fileQueue[index] = newPath;
+                            e.path = newPath;                           
+                        }
                         else NotificationManager.AddNotification(new Notification("Could not rename", "There is already " + Path.GetFileName(newPath)));
                     }
 
