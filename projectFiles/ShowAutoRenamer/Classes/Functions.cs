@@ -48,7 +48,7 @@ namespace ShowAutoRenamer {
         static async Task<Season> PrepareSeasonNetwork(string refFile, Show show) {
             Season season;
             int number = GetSeason(Path.GetFileNameWithoutExtension(refFile)) + RenameData.seasonAdd;
-            if ((season = show.seasonList.First(x => x.season == number)) == null)
+            if (show.seasonList.Count == 0 || (season = show.seasonList.First(x => x.season == number)) == null)
                 season = new Season(number, show);
 
             Episode e = await PrepareEpisodeNetwork(refFile, season);
@@ -98,32 +98,15 @@ namespace ShowAutoRenamer {
         }
 
         public static string TestForEndings(string n) {
-
+            Match m;
             string[] splitters = new string[] { "1080P", "720P", "DVD", "PROPER", "REPACK", "DVB", "CZ", "EN", "ENG", "HDTV", "HD" };
 
             for (int i = 0; i < splitters.Length; i++) {
-                n = Contains(n, splitters[i]);
+                m = Regex.Match(n, splitters[i]);
+                if (m.Success)
+                    n = n.Remove(m.Index, m.Length);
             }
             return n;
-        }
-
-        public static string Contains(this string who, string what) {
-            string tempString = Regex.Replace(who, "-", " ", RegexOptions.IgnoreCase);
-            tempString = Regex.Replace(tempString, "_", " ", RegexOptions.IgnoreCase);
-            tempString = tempString.ToUpper();
-            if (tempString.Contains(what)) {
-                string[] split = Regex.Split(tempString, what, RegexOptions.IgnoreCase);
-                if ((split[split.Length - 2].EndsWith(" ") || split[split.Length - 2].EndsWith(".") || split[split.Length - 2].Length < 1) &&
-                    (split[split.Length - 1].StartsWith(" ") || split[split.Length - 1].StartsWith(".") || split[split.Length - 1].Length < 1)) {
-                    if (who.Length - what.Length > split[split.Length - 1].Length) who = who.Remove(who.Length - what.Length - split[split.Length - 1].Length);
-                    Contains(who, what);
-                }
-            }
-
-            who = who.Trim();
-            if (who.EndsWith("-")) who.Remove(who.Length - 2);
-
-            return who;
         }
 
         /// <summary>
@@ -133,6 +116,7 @@ namespace ShowAutoRenamer {
         /// <param name="season">IsSeason</param>
         /// <returns>Value of Season or Episode</returns>
         public static Episode GetEpisodeFromName(string n) {
+            n = Path.GetFileNameWithoutExtension(n);
             int result = -1;
             Match m = Regex.Match(n, "s(\\d{1,2})e(\\d{1,2})", RegexOptions.IgnoreCase);
             if (m.Success) {
@@ -145,12 +129,9 @@ namespace ShowAutoRenamer {
                     e.number = result;
 
                 e.title = n.Substring(m.Index + m.Length, n.Length - m.Index - m.Length);
-                indexof = e.title.LastIndexOf('.');
-                if (indexof >= 0)
-                    e.title = e.title.Substring(0, indexof);
-                e.title = Regex.Replace(e.title, "^[\\.\\- ]*", "");
+                e.title = TestForEndings(SmartDotReplace(Regex.Replace(e.title, "^[\\.\\- ]*", ""))).Trim();
 
-                e.show = new Show(n.Substring(0, m.Index));
+                e.show = new Show(SmartDotReplace(n.Substring(0, m.Index)).Trim());
 
                 return e;
             }
@@ -169,8 +150,8 @@ namespace ShowAutoRenamer {
                 indexof = e.title.LastIndexOf('.');
                 if (indexof >= 0)
                     e.title = e.title.Substring(0, indexof);
-                e.title = Regex.Replace(e.title, "^[.- ]*", "");
-                e.show = new Show(n.Substring(0, m.Index));
+                e.title = TestForEndings(SmartDotReplace(Regex.Replace(e.title, "^[.- ]*", ""))).Trim();
+                e.show = new Show(n.Substring(0, m.Index).Trim());
 
                 return e;
             }
@@ -196,7 +177,7 @@ namespace ShowAutoRenamer {
             if (!DetectSubAddRegex(ref regex, "season", e.season))
                 regex = ResolveZeroFormat("season", regex, e.season);
             if (!DetectSubAddRegex(ref regex, "episode", e.number))
-                regex = ResolveZeroFormat("episode", regex, e.season);
+                regex = ResolveZeroFormat("episode", regex, e.number);
 
             return regex;
         }

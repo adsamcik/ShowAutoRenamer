@@ -67,7 +67,7 @@ namespace ShowAutoRenamer {
             if (!DetectSubAddRegex(ref regex, "season", e.season, out seasonAdd))
                 regex = Functions.ResolveZeroFormat("season", regex, e.season);
             if (!DetectSubAddRegex(ref regex, "episode", e.number, out episodeAdd))
-                regex = Functions.ResolveZeroFormat("episode", regex, e.season);
+                regex = Functions.ResolveZeroFormat("episode", regex, e.number);
 
             return regex;
         }

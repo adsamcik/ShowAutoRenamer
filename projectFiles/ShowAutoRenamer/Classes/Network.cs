@@ -54,7 +54,7 @@ namespace ShowAutoRenamer {
         }
 
         public static async Task<Season> GetSeason(Show show, int season) {
-            string result = await Request("shows/" + show.title + "/seasons/" + season);
+            string result = await Request("shows/" + show.ids.trakt + "/seasons/" + season);
             Season s = new Season(season, show);
             s.episodeList = JsonConvert.DeserializeObject<List<Episode>>(result);
             if (s != default(Season))
