@@ -150,6 +150,7 @@ namespace ShowAutoRenamer {
         /// <param name="season">IsSeason</param>
         /// <returns>Value of Season or Episode</returns>
         public static Episode GetEpisodeFromName(string n) {
+            string path = n;
             n = Path.GetFileNameWithoutExtension(n);
             int result = -1;
             Match m = Regex.Match(n, "s(\\d{1,2})e(\\d{1,2})", RegexOptions.IgnoreCase);
@@ -166,6 +167,7 @@ namespace ShowAutoRenamer {
                 e.title = TestForEndings(SmartDotReplace(Regex.Replace(e.title, "^[\\.\\- ]*", ""))).Trim();
 
                 e.show = new Show(SmartDotReplace(n.Substring(0, m.Index)).Trim());
+                e.path = path;
 
                 return e;
             }
@@ -186,23 +188,26 @@ namespace ShowAutoRenamer {
                     e.title = e.title.Substring(0, indexof);
                 e.title = TestForEndings(SmartDotReplace(Regex.Replace(e.title, "^[.- ]*", ""))).Trim();
                 e.show = new Show(n.Substring(0, m.Index).Trim());
+                e.path = path;
 
                 return e;
             }
 
             if (result == -1 && n.ToLower().Contains("pilot")) {
                 string[] split = Regex.Split(n, "pilot", RegexOptions.IgnoreCase);
-                return new Episode(split[0], 1, 0, new Show(Regex.Replace(split[1], "\\..*", "")));
+                return new Episode(split[0], 1, 0, new Show(Regex.Replace(split[1], "\\..*", ""))) { path = path };
             }
             else return null;
         }
 
         public static int GetSeason(string n) {
-            return GetEpisodeFromName(n).season;
+            Episode e = GetEpisodeFromName(n);
+            return e == null ? -1 : e.season;
         }
 
         public static int GetEpisode(string n) {
-            return GetEpisodeFromName(n).number;
+            Episode e = GetEpisodeFromName(n);
+            return e == null ? -1 : e.number;
         }
 
         public static string RegexTitle(string regex, Episode e) {

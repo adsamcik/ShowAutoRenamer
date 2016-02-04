@@ -65,7 +65,7 @@ namespace ShowAutoRenamer {
         void UpdatePreview() {
             if (Functions.fileQueue != null && Functions.fileQueue.Length > 0) {
                 if (FileListBox.SelectedItem != null)
-                    UpdatePreview(((EpisodeFile)FileListBox.SelectedItem).name);
+                    UpdatePreview(((EpisodeFile)FileListBox.SelectedItem).path);
                 else
                     UpdatePreview(Functions.fileQueue[0].path);
             }
@@ -92,17 +92,14 @@ namespace ShowAutoRenamer {
                     LabelPreviewTitle.Content = "Show could not be found";
                     return;
                 }
-                else
+                else {
+                    ignoreTextChange = true;
                     InputShowName.Text = s.title;
+                }
             }
             else {
                 InputShowName.Text = name;
                 s = new Show(name);
-            }
-
-            if (string.IsNullOrWhiteSpace(InputShowName.Text)) {
-                ignoreTextChange = true;
-                InputShowName.Text = s.title;
             }
 
             Season season = new Season(Functions.GetSeason(filePath) + RenameData.seasonAdd, s);
@@ -116,8 +113,12 @@ namespace ShowAutoRenamer {
                 else
                     LabelPreviewTitle.Content = "Episode not found";
             }
-            else
-                LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, Functions.GetEpisodeFromName(filePath));
+            else {
+                Episode e = Functions.GetEpisodeFromName(filePath);
+                e.show = s;
+                if (e != null)
+                    LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, e);
+            }
         }
 
         float timeLeft;
@@ -247,7 +248,8 @@ namespace ShowAutoRenamer {
         }
 
         private void FileListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
-            System.Diagnostics.Process.Start("explorer.exe", "/select," + ((EpisodeFile)((ListBox)sender).SelectedItem).path);
+            if (FileListBox.SelectedItem != null)
+                System.Diagnostics.Process.Start("explorer.exe", "/select," + ((EpisodeFile)FileListBox.SelectedItem).path);
             //System.Diagnostics.Process.Start(System.IO.Path.GetDirectoryName());
         }
     }
