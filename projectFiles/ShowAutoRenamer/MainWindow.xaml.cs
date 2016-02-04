@@ -1,5 +1,6 @@
 ﻿using ShowAutoRenamer.Classes;
 using System;
+using System.Collections.ObjectModel;
 using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,8 +12,13 @@ namespace ShowAutoRenamer {
 
     public partial class MainWindow : Window {
 
+        string[EpisodeFile] Queue { get { return Functions.fileQueue; } }
+        
+
         public MainWindow() {
             InitializeComponent();
+            Queue.CollectionChanged += Queue_CollectionChanged;
+            FileListBox.ItemsSource = Queue;
 
             NotificationManager.Initialize(notification, nTitle, nText, System.Windows.Threading.Dispatcher.CurrentDispatcher);
 
@@ -28,23 +34,26 @@ namespace ShowAutoRenamer {
             LabelPreviewTitle.Content = "";
         }
 
+        private void Queue_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            FileListBox.Items.Refresh();
+        }
+
         private void BrowseButtonClick(object sender, RoutedEventArgs e) {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
             dlg.Filter = "ALL|*.*|VIDEO FILES | *.mp4;*.avi;*.mkv";
             dlg.Multiselect = true;
 
-            Nullable<bool> result = dlg.ShowDialog();
+            bool? result = dlg.ShowDialog();
 
             if (result == true) {
-                Functions.fileQueue = dlg.FileNames;
-                FileListBox.ItemsSource = Functions.fileQueue;
+                AddToQueue(dlg.FileNames);
                 UpdatePreview();
             }
         }
 
         private async void RenameButtonClick(object sender, RoutedEventArgs e) {
-            if (Functions.fileQueue == null || Functions.fileQueue.Length == 0) {
+            if (Functions.fileQueue == null || Functions.fileQueue.Count == 0) {
                 NotificationManager.AddNotification("No file added", "But don't worry, everything was renamed.");
                 return;
             }
@@ -59,37 +68,53 @@ namespace ShowAutoRenamer {
         }
 
         async void UpdatePreview() {
-            if (Functions.fileQueue == null || Functions.fileQueue.Length == 0) return;
-            string name = string.IsNullOrWhiteSpace(InputShowName.Text) ? Functions.GetEpisodeFromName(Functions.fileQueue[0]).show.title : InputShowName.Text;
-            Show s;
-            if (Functions.smartRename)
-                s = await Network.Search(name);
+            if (Functions.fileQueue == null || Functions.fileQueue.Count == 0) return;
+            string name = null;
+            if (string.IsNullOrWhiteSpace(InputShowName.Text)) {
+                Episode e = Functions.GetEpisodeFromName(Functions.fileQueue[0].path);
+                if (e != null && e.show != null)
+                    name = e.show.title;
+            }
             else
-                s = new Show(name);
+                name = InputShowName.Text;
 
-            if (s != null) {
-                if (string.IsNullOrWhiteSpace(InputShowName.Text)) {
-                    ignoreTextChange = true;
-                    InputShowName.Text = s.title;
-                }
-
-                Season season = new Season(Functions.GetSeason(Functions.fileQueue[0]) + RenameData.seasonAdd, s);
-                s.seasonList.Add(season);
-
-                if (Functions.smartRename) {
-                    s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, season.season, Functions.GetEpisode(Functions.fileQueue[0]) + RenameData.episodeAdd));
-
-                    if (s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
-                        LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, s.seasonList[0].episodeList[0]);
-                    else
-                        LabelPreviewTitle.Content = "Episode not found";
+            if (string.IsNullOrEmpty(name) && Functions.smartRename) {
+                LabelPreviewTitle.Content = "Show could not be found";
+                return;
+            }
+            Show s;
+            if (Functions.smartRename) {
+                s = await Network.Search(name);
+                if (s == null) {
+                    LabelPreviewTitle.Content = "Show could not be found";
+                    return;
                 }
                 else
-                    LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, Functions.GetEpisodeFromName(Functions.fileQueue[0]));
+                    InputShowName.Text = s.title;
             }
             else {
-                LabelPreviewTitle.Content = "Show could not be found";
+                InputShowName.Text = name;
+                s = new Show(name);
             }
+
+            if (string.IsNullOrWhiteSpace(InputShowName.Text)) {
+                ignoreTextChange = true;
+                InputShowName.Text = s.title;
+            }
+
+            Season season = new Season(Functions.GetSeason(Functions.fileQueue[0].path) + RenameData.seasonAdd, s);
+            s.seasonList.Add(season);
+
+            if (Functions.smartRename) {
+                s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, season.season, Functions.GetEpisode(Functions.fileQueue[0].path) + RenameData.episodeAdd));
+
+                if (s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
+                    LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, s.seasonList[0].episodeList[0]);
+                else
+                    LabelPreviewTitle.Content = "Episode not found";
+            }
+            else
+                LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, Functions.GetEpisodeFromName(Functions.fileQueue[0].path));
         }
 
         float timeLeft;
@@ -108,9 +133,15 @@ namespace ShowAutoRenamer {
             }
         }
 
+        void AddToQueue(string[] files) {
+            Queue.Clear();
+            foreach (var file in files)
+                Queue.Add(new EpisodeFile(file));
+        }
+
         private void drop(object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
-                Functions.fileQueue = (string[])e.Data.GetData(DataFormats.FileDrop);
+                AddToQueue((string[])e.Data.GetData(DataFormats.FileDrop));
                 FileListBox.ItemsSource = Functions.fileQueue;
             }
             dragdropOverlay.Visibility = System.Windows.Visibility.Hidden;
@@ -190,8 +221,8 @@ namespace ShowAutoRenamer {
 
         private void advancedTitleIcon_MouseUp(object sender, MouseButtonEventArgs e) {
             TitleRegexWindow trw = new TitleRegexWindow();
-            if (Functions.fileQueue != null && Functions.fileQueue.Length > 0) {
-                Episode ep = Functions.GetEpisodeFromName(Functions.fileQueue[0]);
+            if (Functions.fileQueue != null && Functions.fileQueue.Count > 0) {
+                Episode ep = Functions.GetEpisodeFromName(Functions.fileQueue[0].path);
                 if (!string.IsNullOrEmpty(InputShowName.Text))
                     ep.show = new Show(InputShowName.Text);
                 trw.Initialize(ep);

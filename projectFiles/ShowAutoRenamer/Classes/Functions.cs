@@ -1,6 +1,7 @@
 ﻿using ShowAutoRenamer.Classes;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,12 +14,28 @@ namespace ShowAutoRenamer {
         public static bool smartRename, remove_, removeDash;
 
         public static List<Show> shows = new List<Show>();
-        public static string[] fileQueue;
 
-        public async static Task<Show> PrepareShow(string[] refFile, string showName = "") {
+        public static System.Windows.Controls.ListBox listBox;
+        public static EpisodeFile[] fileQueue = new EpisodeFile[];
+        
+
+        public static void RenameInQueue(string path, string newName) {
+            for (int i = 0; i < fileQueue.Count; i++) {
+                if(fileQueue[i].path == path) {
+                    fileQueue[i].path = newName;
+                    if (listBox != null) {
+                        listBox.InvalidateArrange();
+                        listBox.UpdateLayout();
+                    }
+                    break;
+                }
+            }
+        }
+
+        public async static Task<Show> PrepareShow(EpisodeFile[] refFile, string showName = "") {
             if (refFile.Length == 0) return null;
             Show show;
-            string tempName = string.IsNullOrWhiteSpace(showName) ? GetEpisodeFromName(refFile[0]).show.title : showName;
+            string tempName = string.IsNullOrWhiteSpace(showName) ? GetEpisodeFromName(refFile[0].path).show.title : showName;
             if (smartRename && !string.IsNullOrWhiteSpace(tempName)) {
                 show = await Network.Search(tempName);
                 if (show == null) return null;
@@ -28,9 +45,9 @@ namespace ShowAutoRenamer {
 
             for (int i = 0; i < refFile.Length; i++) {
                 if (smartRename)
-                    show.seasonList.Add(await PrepareSeasonNetwork(refFile[i], show));
+                    show.seasonList.Add(await PrepareSeasonNetwork(refFile[i].path, show));
                 else
-                    show.seasonList.Add(PrepareSeason(refFile[i], show));
+                    show.seasonList.Add(PrepareSeason(refFile[i].path, show));
             }
 
             return show;
@@ -80,9 +97,7 @@ namespace ShowAutoRenamer {
                         string newPath = Path.GetDirectoryName(e.path) + "/" + RegexTitle(RenameData.regex, s.seasonList[0].episodeList[0]) + Path.GetExtension(e.path);
                         if (!File.Exists(newPath)) {
                             File.Move(e.path, newPath);
-                            int index = Array.IndexOf(fileQueue, e.path);
-                            if (index >= 0)
-                                fileQueue[index] = newPath;
+                            RenameInQueue(e.path, newPath);
                             e.path = newPath;                           
                         }
                         else NotificationManager.AddNotification(new Notification("Could not rename", "There is already " + Path.GetFileName(newPath)));
@@ -99,7 +114,6 @@ namespace ShowAutoRenamer {
                 if (r[i].Length == 1) n += r[i] + ".";
                 else n += r[i] + " ";
             }
-            //n.Any(c => char.IsUpper(c));
             return n;
         }
 

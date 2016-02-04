@@ -115,6 +115,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\EpisodeFile.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\Network.cs" />
     <Compile Include="Classes\RenameData.cs" />
