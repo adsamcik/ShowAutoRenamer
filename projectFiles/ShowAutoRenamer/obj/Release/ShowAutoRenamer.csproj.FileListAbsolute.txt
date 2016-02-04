@@ -53,4 +53,8 @@ D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\System.Net.Ht
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\Newtonsoft.Json.xml
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\System.Net.Http.Extensions.xml
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\bin\Release\System.Net.Http.Primitives.xml
-D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer.csproj.App.config
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\App.baml
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\TitleRegexWindow.g.cs
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\ShowAutoRenamer_MarkupCompile.lref
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\styles.baml
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Release\TitleRegexWindow.baml

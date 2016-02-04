@@ -59,6 +59,7 @@ namespace ShowAutoRenamer {
 
         static Season PrepareSeason(string refFile, Show show) {
             Episode e = GetEpisodeFromName(refFile);
+            e.show = show;
             bool found = true;
             Season season = null;
             if (show.seasonList.Count > 0)

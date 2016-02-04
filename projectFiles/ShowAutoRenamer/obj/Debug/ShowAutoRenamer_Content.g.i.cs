@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("icons/ic_settings_applications_bluish_24dp.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("icons/ic_settings_applications_whitish_24dp.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("icons/logo.png")]
 
 
