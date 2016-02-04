@@ -12,7 +12,7 @@
             <ColumnDefinition Width="8*"/>
         </Grid.ColumnDefinitions>
         <Label VerticalAlignment="Top" Background="Gainsboro" Margin="10,10,10,0" Grid.Column="1" Height="270" Grid.Row="1" BorderThickness="0" FontFamily="Segoe UI Semibold">
-            <ListBox x:Name="FileListBox" Height="260" Width="341" BorderThickness="0" Background="Transparent">
+            <ListBox x:Name="FileListBox" Height="260" Width="341" BorderThickness="0" Background="Transparent" SelectionChanged="FileListBox_SelectionChanged" MouseDoubleClick="FileListBox_MouseDoubleClick">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

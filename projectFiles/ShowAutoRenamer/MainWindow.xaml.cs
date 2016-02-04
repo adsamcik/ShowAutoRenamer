@@ -41,9 +41,9 @@ namespace ShowAutoRenamer {
 
             bool? result = dlg.ShowDialog();
 
-            if (result == true) {
+            if (result == true && dlg.FileNames.Length > 0) {
                 AddToQueue(dlg.FileNames);
-                UpdatePreview();
+                UpdatePreview(dlg.FileNames[0]);
             }
         }
 
@@ -62,11 +62,15 @@ namespace ShowAutoRenamer {
             UpdatePreview();
         }
 
-        async void UpdatePreview() {
-            if (Functions.fileQueue == null || Functions.fileQueue.Length == 0) return;
+        void UpdatePreview() {
+            if (Functions.fileQueue != null && Functions.fileQueue.Length > 0)
+                UpdatePreview(Functions.fileQueue[0].path);
+        }
+
+        async void UpdatePreview(string filePath) {
             string name = null;
             if (string.IsNullOrWhiteSpace(InputShowName.Text)) {
-                Episode e = Functions.GetEpisodeFromName(Functions.fileQueue[0].path);
+                Episode e = Functions.GetEpisodeFromName(filePath);
                 if (e != null && e.show != null)
                     name = e.show.title;
             }
@@ -97,11 +101,11 @@ namespace ShowAutoRenamer {
                 InputShowName.Text = s.title;
             }
 
-            Season season = new Season(Functions.GetSeason(Functions.fileQueue[0].path) + RenameData.seasonAdd, s);
+            Season season = new Season(Functions.GetSeason(filePath) + RenameData.seasonAdd, s);
             s.seasonList.Add(season);
 
             if (Functions.smartRename) {
-                s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, season.season, Functions.GetEpisode(Functions.fileQueue[0].path) + RenameData.episodeAdd));
+                s.seasonList[0].episodeList.Add(await Network.GetEpisode(s, season.season, Functions.GetEpisode(filePath) + RenameData.episodeAdd));
 
                 if (s.seasonList[0].episodeList.Count > 0 && s.seasonList[0].episodeList[0] != null)
                     LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, s.seasonList[0].episodeList[0]);
@@ -109,7 +113,7 @@ namespace ShowAutoRenamer {
                     LabelPreviewTitle.Content = "Episode not found";
             }
             else
-                LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, Functions.GetEpisodeFromName(Functions.fileQueue[0].path));
+                LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, Functions.GetEpisodeFromName(filePath));
         }
 
         float timeLeft;
@@ -232,6 +236,16 @@ namespace ShowAutoRenamer {
                 trw.GetResults(out RenameData.regex, out RenameData.episodeAdd, out RenameData.seasonAdd);
                 UpdatePreview();
             }
+        }
+
+        private void FileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (Functions.fileQueue != null && Functions.fileQueue.Length > 0)
+                UpdatePreview(((EpisodeFile)FileListBox.SelectedItem).name);
+        }
+
+        private void FileListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + ((EpisodeFile)((ListBox)sender).SelectedItem).path);
+            //System.Diagnostics.Process.Start(System.IO.Path.GetDirectoryName());
         }
     }
 }
