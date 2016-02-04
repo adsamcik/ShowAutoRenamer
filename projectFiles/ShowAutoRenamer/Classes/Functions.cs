@@ -60,7 +60,10 @@ namespace ShowAutoRenamer {
         static Season PrepareSeason(string refFile, Show show) {
             Episode e = GetEpisodeFromName(refFile);
             bool found = true;
-            Season season = show.seasonList.First(x => x.season == e.season);
+            Season season = null;
+            if (show.seasonList.Count > 0)
+                season = show.seasonList.First(x => x.season == e.season);
+
             if (season == null) {
                 found = false;
                 season = new Season(e.season, show);

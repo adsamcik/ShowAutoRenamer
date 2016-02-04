@@ -63,8 +63,12 @@ namespace ShowAutoRenamer {
         }
 
         void UpdatePreview() {
-            if (Functions.fileQueue != null && Functions.fileQueue.Length > 0)
-                UpdatePreview(Functions.fileQueue[0].path);
+            if (Functions.fileQueue != null && Functions.fileQueue.Length > 0) {
+                if (FileListBox.SelectedItem != null)
+                    UpdatePreview(((EpisodeFile)FileListBox.SelectedItem).name);
+                else
+                    UpdatePreview(Functions.fileQueue[0].path);
+            }
         }
 
         async void UpdatePreview(string filePath) {
@@ -239,8 +243,7 @@ namespace ShowAutoRenamer {
         }
 
         private void FileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (Functions.fileQueue != null && Functions.fileQueue.Length > 0)
-                UpdatePreview(((EpisodeFile)FileListBox.SelectedItem).name);
+            UpdatePreview();
         }
 
         private void FileListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
