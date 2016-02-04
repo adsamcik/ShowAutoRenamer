@@ -12,13 +12,12 @@ namespace ShowAutoRenamer {
 
     public partial class MainWindow : Window {
 
-        string[EpisodeFile] Queue { get { return Functions.fileQueue; } }
-        
+        EpisodeFile[] Queue { get { return Functions.fileQueue; } }
+
 
         public MainWindow() {
             InitializeComponent();
-            Queue.CollectionChanged += Queue_CollectionChanged;
-            FileListBox.ItemsSource = Queue;
+            Functions.listBox = FileListBox;
 
             NotificationManager.Initialize(notification, nTitle, nText, System.Windows.Threading.Dispatcher.CurrentDispatcher);
 
@@ -32,10 +31,6 @@ namespace ShowAutoRenamer {
             Functions.removeDash = (bool)ToggleRemoveDash.IsChecked;
 
             LabelPreviewTitle.Content = "";
-        }
-
-        private void Queue_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            FileListBox.Items.Refresh();
         }
 
         private void BrowseButtonClick(object sender, RoutedEventArgs e) {
@@ -53,7 +48,7 @@ namespace ShowAutoRenamer {
         }
 
         private async void RenameButtonClick(object sender, RoutedEventArgs e) {
-            if (Functions.fileQueue == null || Functions.fileQueue.Count == 0) {
+            if (Functions.fileQueue == null || Functions.fileQueue.Length == 0) {
                 NotificationManager.AddNotification("No file added", "But don't worry, everything was renamed.");
                 return;
             }
@@ -68,7 +63,7 @@ namespace ShowAutoRenamer {
         }
 
         async void UpdatePreview() {
-            if (Functions.fileQueue == null || Functions.fileQueue.Count == 0) return;
+            if (Functions.fileQueue == null || Functions.fileQueue.Length == 0) return;
             string name = null;
             if (string.IsNullOrWhiteSpace(InputShowName.Text)) {
                 Episode e = Functions.GetEpisodeFromName(Functions.fileQueue[0].path);
@@ -134,9 +129,11 @@ namespace ShowAutoRenamer {
         }
 
         void AddToQueue(string[] files) {
-            Queue.Clear();
-            foreach (var file in files)
-                Queue.Add(new EpisodeFile(file));
+            EpisodeFile[] ef = new EpisodeFile[files.Length];
+            for (int i = 0; i < files.Length; i++)
+                ef[i] = new EpisodeFile(files[i]);
+            Functions.fileQueue = ef;
+            FileListBox.ItemsSource = ef;
         }
 
         private void drop(object sender, DragEventArgs e) {
@@ -221,7 +218,7 @@ namespace ShowAutoRenamer {
 
         private void advancedTitleIcon_MouseUp(object sender, MouseButtonEventArgs e) {
             TitleRegexWindow trw = new TitleRegexWindow();
-            if (Functions.fileQueue != null && Functions.fileQueue.Count > 0) {
+            if (Functions.fileQueue != null && Functions.fileQueue.Length > 0) {
                 Episode ep = Functions.GetEpisodeFromName(Functions.fileQueue[0].path);
                 if (!string.IsNullOrEmpty(InputShowName.Text))
                     ep.show = new Show(InputShowName.Text);

@@ -16,17 +16,15 @@ namespace ShowAutoRenamer {
         public static List<Show> shows = new List<Show>();
 
         public static System.Windows.Controls.ListBox listBox;
-        public static EpisodeFile[] fileQueue = new EpisodeFile[];
+        public static EpisodeFile[] fileQueue;
         
 
         public static void RenameInQueue(string path, string newName) {
-            for (int i = 0; i < fileQueue.Count; i++) {
+            for (int i = 0; i < fileQueue.Length; i++) {
                 if(fileQueue[i].path == path) {
                     fileQueue[i].path = newName;
-                    if (listBox != null) {
-                        listBox.InvalidateArrange();
-                        listBox.UpdateLayout();
-                    }
+                    if (listBox != null)
+                        listBox.Items.Refresh();
                     break;
                 }
             }
