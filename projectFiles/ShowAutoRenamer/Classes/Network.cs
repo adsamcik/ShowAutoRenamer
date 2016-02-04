@@ -16,7 +16,7 @@ namespace ShowAutoRenamer {
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("trakt-api-version", "2");
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("trakt-api-key", API_KEY);
                 using (var response = await httpClient.GetAsync(requestString)) {
-                    Debug.WriteLine(await response.Content.ReadAsStringAsync());   
+                    Debug.WriteLine(await response.Content.ReadAsStringAsync());
                     return await response.Content.ReadAsStringAsync();
                 }
             }
@@ -24,7 +24,7 @@ namespace ShowAutoRenamer {
 
         public static async Task<Show> Search(string forWhat) {
             NotificationManager.DeleteSearchRelated();
-            if(string.IsNullOrWhiteSpace(forWhat)) {
+            if (string.IsNullOrWhiteSpace(forWhat)) {
                 NotificationManager.AddNotification(new Notification("Missing showname", "Show name could not be found in the title, please enter it manualy", true, Importance.high));
                 return null;
             }
@@ -34,8 +34,13 @@ namespace ShowAutoRenamer {
                 NotificationManager.AddNotification(new Notification(forWhat + " was not found.", "Are you sure this is the right name for the show?", true, Importance.high));
                 return null;
             }
-            else
-                return JsonConvert.DeserializeObject<Show>(CutFromJson(result, "show"));
+            else {
+                string cut = CutFromJson(result, "show");
+                if (!string.IsNullOrWhiteSpace(cut))
+                    return JsonConvert.DeserializeObject<Show>(cut);
+                else
+                    return null;
+            }
         }
 
         public static async Task<List<Episode>> GetEpisodes(string showName, int season) {

@@ -10,7 +10,7 @@ namespace ShowAutoRenamer {
         public string title;
         public IDs ids;
 
-        public IList<Season> seasonList = new List<Season>();
+        public List<Season> seasonList = new List<Season>();
 
         public Show() { }
 

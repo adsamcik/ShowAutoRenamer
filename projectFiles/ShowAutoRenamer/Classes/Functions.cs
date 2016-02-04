@@ -61,11 +61,8 @@ namespace ShowAutoRenamer {
             Episode e = GetEpisodeFromName(refFile);
             e.show = show;
             bool found = true;
-            Season season = null;
-            if (show.seasonList.Count > 0)
-                season = show.seasonList.First(x => x.season == e.season);
-
-            if (season == null) {
+            Season season;
+            if ((season = show.seasonList.Find(x => x.season == e.season)) == null) {
                 found = false;
                 season = new Season(e.season, show);
             }
@@ -78,7 +75,7 @@ namespace ShowAutoRenamer {
             Season season;
             bool found = true;
             int number = GetSeason(Path.GetFileNameWithoutExtension(refFile)) + RenameData.seasonAdd;
-            if (show.seasonList.Count == 0 || (season = show.seasonList.First(x => x.season == number)) == null) {
+            if ((season = show.seasonList.Find(x => x.season == number)) == null) {
                 found = false;
                 season = new Season(number, show);
             }
