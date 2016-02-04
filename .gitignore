@@ -43,5 +43,5 @@ Temporary Items
 .apdisk
 
 projectFiles/.dropbox.attr
-projectFiles/ShowAutoRenamer/bin
-projectFiles/ShowAutoRenamer/obj
+projectFiles/ShowAutoRenamer/bin/*
+projectFiles/ShowAutoRenamer/obj/*
