@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ShowAutoRenamer {
     public static class Functions {
-        public static bool useFolder, smartRename, recursive, displayName, remove_, removeDash, insideInput;
+        public static bool smartRename, remove_, removeDash;
 
         public static List<Show> shows = new List<Show>();
         public static string[] fileQueue;
@@ -99,12 +99,12 @@ namespace ShowAutoRenamer {
 
         public static string TestForEndings(string n) {
             Match m;
-            string[] splitters = new string[] { "1080P", "720P", "DVD", "PROPER", "REPACK", "DVB", "CZ", "EN", "ENG", "HDTV", "HD" };
+            string[] splitters = new string[] { "1080P", "720P", "DVD", "PROPER", "REPACK", "DVB", "CZ", "EN", "ENG", "HDTV", "HD", "webrip" };
 
             for (int i = 0; i < splitters.Length; i++) {
-                m = Regex.Match(n, splitters[i]);
+                m = Regex.Match(n, splitters[i], RegexOptions.IgnoreCase);
                 if (m.Success)
-                    n = n.Remove(m.Index, m.Length);
+                    n = n.Substring(0, m.Index);
             }
             return n;
         }
@@ -193,7 +193,6 @@ namespace ShowAutoRenamer {
                     if (index >= 0) {
                         int result;
                         if (int.TryParse(text.Substring(startAt, index - startAt), out result)) {
-                            //text = Regex.Replace(text, "{.?" + before + "[\\+\\-0-9]+}", (beforeVal + result).ToString(isZero ? 2 : 1), RegexOptions.IgnoreCase);
                             text = ResolveZeroFormat(before, text, beforeVal);
                             return true;
                         }

@@ -22,7 +22,6 @@ namespace ShowAutoRenamer {
             if (!CheckForInternetConnection()) { ToggleSmartRename.IsChecked = false; ToggleSmartRename.IsEnabled = false; }
 
             Functions.smartRename = (bool)ToggleSmartRename.IsChecked;
-            Functions.displayName = (bool)FieldDisplayName.IsChecked;
             Functions.remove_ = (bool)ToggleRemoveUnderscore.IsChecked;
             Functions.removeDash = (bool)ToggleRemoveDash.IsChecked;
 
@@ -54,7 +53,6 @@ namespace ShowAutoRenamer {
 
         void Update(object sender, RoutedEventArgs e) {
             Functions.smartRename = (bool)ToggleSmartRename.IsChecked;
-            Functions.displayName = (bool)FieldDisplayName.IsChecked;
             Functions.remove_ = (bool)ToggleRemoveUnderscore.IsChecked;
             Functions.removeDash = (bool)ToggleRemoveDash.IsChecked;
             UpdatePreview();
@@ -171,8 +169,7 @@ namespace ShowAutoRenamer {
         }
 
         private void showName_TextChanged(object sender, TextChangedEventArgs e) {
-            if (!Functions.insideInput) TextChanged();
-            else Functions.insideInput = false;
+            TextChanged();
         }
 
         private void image_MouseEnter(object sender, MouseEventArgs e) {
