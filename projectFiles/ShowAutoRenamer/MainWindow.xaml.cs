@@ -145,7 +145,7 @@ namespace ShowAutoRenamer {
                 AddToQueue((string[])e.Data.GetData(DataFormats.FileDrop));
                 FileListBox.ItemsSource = Functions.fileQueue;
             }
-            dragdropOverlay.Visibility = System.Windows.Visibility.Hidden;
+            dragdropOverlay.Visibility = Visibility.Hidden;
             UpdatePreview();
         }
 
@@ -171,7 +171,7 @@ namespace ShowAutoRenamer {
         }
 
         private void Window_DragEnter(object sender, DragEventArgs e) {
-            dragdropOverlay.Visibility = System.Windows.Visibility.Visible;
+            dragdropOverlay.Visibility = Visibility.Visible;
         }
 
         private void Window_DragLeave(object sender, DragEventArgs e) {

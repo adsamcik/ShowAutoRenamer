@@ -92,7 +92,7 @@ namespace ShowAutoRenamer {
                     if (!File.Exists(e.path))
                         NotificationManager.AddNotification("File not found", "File not found at path:" + e.path + ". If the path is obviously incorrect, please report this as a bug.");
                     else {
-                        string newPath = Path.GetDirectoryName(e.path) + "/" + RegexTitle(RenameData.regex, s.seasonList[0].episodeList[0]) + Path.GetExtension(e.path);
+                        string newPath = Path.GetDirectoryName(e.path) + "/" + RegexTitle(RenameData.regex, s.seasonList[i].episodeList[y]) + Path.GetExtension(e.path);
                         if (!File.Exists(newPath)) {
                             File.Move(e.path, newPath);
                             RenameInQueue(e.path, newPath);
@@ -190,8 +190,8 @@ namespace ShowAutoRenamer {
         }
 
         public static string RegexTitle(string regex, Episode e) {
-            regex = Regex.Replace(regex, "{title}", e.title, RegexOptions.IgnoreCase);
-            regex = Regex.Replace(regex, "{showname}", e.show.title, RegexOptions.IgnoreCase);
+            regex = Regex.Replace(regex, "{title}", NameCleanup(e.title), RegexOptions.IgnoreCase);
+            regex = Regex.Replace(regex, "{showname}", NameCleanup(e.show.title), RegexOptions.IgnoreCase);
             if (!DetectSubAddRegex(ref regex, "season", e.season))
                 regex = ResolveZeroFormat("season", regex, e.season);
             if (!DetectSubAddRegex(ref regex, "episode", e.number))
@@ -237,6 +237,13 @@ namespace ShowAutoRenamer {
                 return Regex.Replace(input, regexName + ".*?}", value.ToString(isZero ? 2 : 1), RegexOptions.IgnoreCase);
             }
             return input;
+        }
+
+        public static string NameCleanup(string name) {
+            string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+            Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+            name = r.Replace(name, "");
+            return name;
         }
     }
 }

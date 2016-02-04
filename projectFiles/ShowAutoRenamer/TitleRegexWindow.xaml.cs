@@ -62,8 +62,8 @@ namespace ShowAutoRenamer {
         }
 
         string RegexTitle(string regex, Episode e) {
-            regex = Regex.Replace(regex, "{title}", e.title, RegexOptions.IgnoreCase);
-            regex = Regex.Replace(regex, "{showname}", e.show.title, RegexOptions.IgnoreCase);
+            regex = Regex.Replace(regex, "{title}", Functions.NameCleanup(e.title), RegexOptions.IgnoreCase);
+            regex = Regex.Replace(regex, "{showname}", Functions.NameCleanup(e.show.title), RegexOptions.IgnoreCase);
             if (!DetectSubAddRegex(ref regex, "season", e.season, out seasonAdd))
                 regex = Functions.ResolveZeroFormat("season", regex, e.season);
             if (!DetectSubAddRegex(ref regex, "episode", e.number, out episodeAdd))
