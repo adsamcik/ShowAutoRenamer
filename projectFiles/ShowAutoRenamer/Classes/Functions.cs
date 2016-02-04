@@ -17,11 +17,11 @@ namespace ShowAutoRenamer {
 
         public static System.Windows.Controls.ListBox listBox;
         public static EpisodeFile[] fileQueue;
-        
+
 
         public static void RenameInQueue(string path, string newName) {
             for (int i = 0; i < fileQueue.Length; i++) {
-                if(fileQueue[i].path == path) {
+                if (fileQueue[i].path == path) {
                     fileQueue[i].path = newName;
                     if (listBox != null)
                         listBox.Items.Refresh();
@@ -42,10 +42,16 @@ namespace ShowAutoRenamer {
                 show = new Show(tempName);
 
             for (int i = 0; i < refFile.Length; i++) {
-                if (smartRename)
-                    show.seasonList.Add(await PrepareSeasonNetwork(refFile[i].path, show));
-                else
-                    show.seasonList.Add(PrepareSeason(refFile[i].path, show));
+                if (smartRename) {
+                    Season s = await PrepareSeasonNetwork(refFile[i].path, show);
+                    if (s != null)
+                        show.seasonList.Add(s);
+                }
+                else {
+                    Season s = PrepareSeason(refFile[i].path, show);
+                    if (s != null)
+                        show.seasonList.Add(s);
+                }
             }
 
             return show;
@@ -53,24 +59,31 @@ namespace ShowAutoRenamer {
 
         static Season PrepareSeason(string refFile, Show show) {
             Episode e = GetEpisodeFromName(refFile);
+            bool found = true;
             Season season = show.seasonList.First(x => x.season == e.season);
-            if (season == null)
+            if (season == null) {
+                found = false;
                 season = new Season(e.season, show);
+            }
+
             season.episodeList.Add(e);
-            return season;
+            return found ? null : season;
         }
 
         static async Task<Season> PrepareSeasonNetwork(string refFile, Show show) {
             Season season;
+            bool found = true;
             int number = GetSeason(Path.GetFileNameWithoutExtension(refFile)) + RenameData.seasonAdd;
-            if (show.seasonList.Count == 0 || (season = show.seasonList.First(x => x.season == number)) == null)
+            if (show.seasonList.Count == 0 || (season = show.seasonList.First(x => x.season == number)) == null) {
+                found = false;
                 season = new Season(number, show);
+            }
 
             Episode e = await PrepareEpisodeNetwork(refFile, season);
             if (e != null)
                 season.episodeList.Add(e);
 
-            return season;
+            return found ? null : season;
         }
 
         public async static Task<Episode> PrepareEpisodeNetwork(string filePath, Season s) {
@@ -96,7 +109,7 @@ namespace ShowAutoRenamer {
                         if (!File.Exists(newPath)) {
                             File.Move(e.path, newPath);
                             RenameInQueue(e.path, newPath);
-                            e.path = newPath;                           
+                            e.path = newPath;
                         }
                         else NotificationManager.AddNotification(new Notification("Could not rename", "There is already " + Path.GetFileName(newPath)));
                     }
