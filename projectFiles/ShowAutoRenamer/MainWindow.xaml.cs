@@ -19,7 +19,7 @@ namespace ShowAutoRenamer {
             InitializeComponent();
             Functions.listBox = FileListBox;
 
-            NotificationManager.Initialize(notification, nTitle, nText, System.Windows.Threading.Dispatcher.CurrentDispatcher);
+            NotificationManager.Initialize(notification, nTitle, nText, Dispatcher.CurrentDispatcher);
 
             dispatcherTimer.Tick += new EventHandler(LessTimeLeft);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
