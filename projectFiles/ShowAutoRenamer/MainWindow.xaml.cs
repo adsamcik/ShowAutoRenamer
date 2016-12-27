@@ -229,6 +229,10 @@ namespace ShowAutoRenamer {
             TitleRegexWindow trw = new TitleRegexWindow();
             if (Functions.fileQueue != null && Functions.fileQueue.Length > 0) {
                 Episode ep = Functions.GetEpisodeFromName(Functions.fileQueue[0].path);
+                if(ep == null) {
+                    NotificationManager.AddNotification(new Notification("Could not resolve show", "Show name format is invalid or unsupported", false, Importance.important));
+                    return;
+                }
                 if (!string.IsNullOrEmpty(InputShowName.Text))
                     ep.show = new Show(InputShowName.Text);
                 trw.Initialize(ep);
