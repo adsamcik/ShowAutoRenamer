@@ -187,6 +187,10 @@ namespace ShowAutoRenamer {
 
                 return e;
             }
+            m = Regex.Match(n, @"(\d+)$");
+            if(m.Success) {
+                return new Episode(null, 1, int.Parse(m.Value), path, new Show(n.Substring(0, m.Index)));
+            }
 
             if (result == -1 && n.ToLower().Contains("pilot")) {
                 string[] split = Regex.Split(n, "pilot", RegexOptions.IgnoreCase);
