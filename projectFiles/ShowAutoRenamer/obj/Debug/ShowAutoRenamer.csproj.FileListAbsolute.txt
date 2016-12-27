@@ -100,4 +100,3 @@ D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.csproj.GenerateResource.Cache
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.exe
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.pdb
-D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.csprojResolveAssemblyReference.cache
