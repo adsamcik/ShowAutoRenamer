@@ -49,8 +49,7 @@ namespace ShowAutoRenamer {
         static void Update() {
             notifications = notifications.OrderByDescending(x => x.importance).ToList();
             dispatcher.Invoke((Action)(() => {
-                if (notifications.Count == 0) { nGrid.Visibility = System.Windows.Visibility.Hidden; return; }
-                else if (nGrid.Visibility == System.Windows.Visibility.Hidden) nGrid.Visibility = System.Windows.Visibility.Visible;
+                if (notifications.Count == 0) { nGrid.Visibility = System.Windows.Visibility.Hidden; return; } else if (nGrid.Visibility == System.Windows.Visibility.Hidden) nGrid.Visibility = System.Windows.Visibility.Visible;
 
                 title.Content = notifications[0].title;
                 text.Text = notifications[0].text;

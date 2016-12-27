@@ -37,8 +37,7 @@ namespace ShowAutoRenamer {
             if (smartRename && !string.IsNullOrWhiteSpace(tempName)) {
                 show = await Network.Search(tempName);
                 if (show == null) return null;
-            }
-            else
+            } else
                 show = new Show(tempName);
 
             for (int i = 0; i < refFile.Length; i++) {
@@ -46,8 +45,7 @@ namespace ShowAutoRenamer {
                     Season s = await PrepareSeasonNetwork(refFile[i].path, show);
                     if (s != null)
                         show.seasonList.Add(s);
-                }
-                else {
+                } else {
                     Season s = PrepareSeason(refFile[i].path, show);
                     if (s != null)
                         show.seasonList.Add(s);
@@ -111,15 +109,14 @@ namespace ShowAutoRenamer {
                             File.Move(e.path, newPath);
                             RenameInQueue(e.path, newPath);
                             e.path = newPath;
-                        }
-                        else NotificationManager.AddNotification(new Notification("Could not rename", "There is already " + Path.GetFileName(newPath)));
+                        } else NotificationManager.AddNotification(new Notification("Could not rename", "There is already " + Path.GetFileName(newPath)));
                     }
 
                 }
             }
         }
 
-        public static string SmartDotReplace(string n) {
+        public static string ContextAwareDotReplace(string n) {
             string[] r = n.Split('.');
             n = "";
             for (int i = 0; i < r.Length; i++) {
@@ -162,9 +159,9 @@ namespace ShowAutoRenamer {
                     e.number = result;
 
                 e.title = n.Substring(m.Index + m.Length, n.Length - m.Index - m.Length);
-                e.title = TestForEndings(SmartDotReplace(Regex.Replace(e.title, "^[\\.\\- ]*", ""))).Trim();
+                e.title = TestForEndings(ContextAwareDotReplace(Regex.Replace(e.title, "^[\\.\\- ]*", ""))).Trim();
 
-                e.show = new Show(SmartDotReplace(n.Substring(0, m.Index)).Trim());
+                e.show = new Show(ContextAwareDotReplace(n.Substring(0, m.Index)).Trim());
                 e.path = path;
 
                 return e;
@@ -184,7 +181,7 @@ namespace ShowAutoRenamer {
                 indexof = e.title.LastIndexOf('.');
                 if (indexof >= 0)
                     e.title = e.title.Substring(0, indexof);
-                e.title = TestForEndings(SmartDotReplace(Regex.Replace(e.title, "^[.- ]*", ""))).Trim();
+                e.title = TestForEndings(ContextAwareDotReplace(Regex.Replace(e.title, "^[.- ]*", ""))).Trim();
                 e.show = new Show(n.Substring(0, m.Index).Trim());
                 e.path = path;
 
@@ -194,8 +191,7 @@ namespace ShowAutoRenamer {
             if (result == -1 && n.ToLower().Contains("pilot")) {
                 string[] split = Regex.Split(n, "pilot", RegexOptions.IgnoreCase);
                 return new Episode(split[0], 1, 0, new Show(Regex.Replace(split[1], "\\..*", ""))) { path = path };
-            }
-            else return null;
+            } else return null;
         }
 
         public static int GetSeason(string n) {

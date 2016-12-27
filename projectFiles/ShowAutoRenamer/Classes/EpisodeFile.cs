@@ -6,29 +6,24 @@ using System.Threading.Tasks;
 
 namespace ShowAutoRenamer.Classes {
     public class EpisodeFile {
-        public string name
-        {
-            get
-            {
+        public string name {
+            get {
                 return System.IO.Path.GetFileNameWithoutExtension(path);
             }
         }
 
-        public string nameWithExtension
-        {
-            get
-            {
+        public string nameWithExtension {
+            get {
                 return System.IO.Path.GetFileName(path);
             }
         }
 
-        public string folder
-        {
-            get
-            {
+        public string folder {
+            get {
                 return System.IO.Path.GetDirectoryName(path);
             }
         }
+
         public string path;
         public bool renaming;
 

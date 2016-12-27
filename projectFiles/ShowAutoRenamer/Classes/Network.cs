@@ -33,8 +33,7 @@ namespace ShowAutoRenamer {
             if (result == "[]") {
                 NotificationManager.AddNotification(new Notification(forWhat + " was not found.", "Are you sure this is the right name for the show?", true, Importance.high));
                 return null;
-            }
-            else {
+            } else {
                 string cut = CutFromJson(result, "show");
                 if (!string.IsNullOrWhiteSpace(cut))
                     return JsonConvert.DeserializeObject<Show>(cut);
@@ -75,11 +74,9 @@ namespace ShowAutoRenamer {
                     if (nestedDepth == 0) {
                         result = result.Substring(0, i);
                         break;
-                    }
-                    else
+                    } else
                         nestedDepth--;
-                }
-                else if (result[i] == '{') nestedDepth++;
+                } else if (result[i] == '{') nestedDepth++;
             }
             return result;
         }
