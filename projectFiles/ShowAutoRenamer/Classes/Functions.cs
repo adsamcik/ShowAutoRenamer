@@ -131,7 +131,7 @@ namespace ShowAutoRenamer {
             string[] splitters = new string[] { "1080P", "720P", "DVD", "PROPER", "REPACK", "DVB", "CZ", "EN", "ENG", "HDTV", "HD", "webrip" };
 
             for (int i = 0; i < splitters.Length; i++) {
-                m = Regex.Match(n, splitters[i], RegexOptions.IgnoreCase);
+                m = Regex.Match(n, "[^a-z]*" + splitters[i] + "([^a-z]+|$)", RegexOptions.IgnoreCase);
                 if (m.Success)
                     n = n.Substring(0, m.Index);
             }
@@ -188,7 +188,7 @@ namespace ShowAutoRenamer {
                 return e;
             }
             m = Regex.Match(n, @"(\d+)$");
-            if(m.Success) {
+            if (m.Success) {
                 return new Episode(null, 1, int.Parse(m.Value), path, new Show(n.Substring(0, m.Index)));
             }
 
