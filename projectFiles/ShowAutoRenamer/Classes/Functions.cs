@@ -179,9 +179,9 @@ namespace ShowAutoRenamer {
 
                 e.title = n.Substring(m.Index + m.Length, n.Length - m.Index - m.Length);
                 indexof = e.title.LastIndexOf('.');
-                if (indexof >= 0)
+                if (indexof > 0)
                     e.title = e.title.Substring(0, indexof);
-                e.title = TestForEndings(ContextAwareDotReplace(Regex.Replace(e.title, "^[.- ]*", ""))).Trim();
+                e.title = TestForEndings(ContextAwareDotReplace(Regex.Replace(e.title, "^[-. ]*", ""))).Trim();
                 e.show = new Show(n.Substring(0, m.Index).Trim());
                 e.path = path;
 
