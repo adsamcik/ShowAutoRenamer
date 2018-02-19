@@ -32,7 +32,7 @@
             <CheckBox x:Name="ToggleRemoveUnderscore" Content="Remove _" HorizontalAlignment="Left" Margin="10,188,0,0" VerticalAlignment="Top" Click="Update" Foreground="Black" Height="15" Width="70" IsEnabled="False" Background="White"/>
             <CheckBox x:Name="ToggleSmartRename" Content="Smart-Rename" HorizontalAlignment="Left" Margin="8,168,0,0" VerticalAlignment="Top" Click="Update" Foreground="Black" Height="15" Width="108" IsChecked="True" Grid.Column="1"/>
             <Grid Margin="13,208,11,57" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2" Width="255">
-                <TextBox x:Name="InputShowName" Height="25" VerticalAlignment="Top" Background="#00E6E6E6" VerticalContentAlignment="Bottom" FontFamily="Segoe UI Semibold" BorderBrush="#FF648CE1" BorderThickness="0,0,0,2" Padding="0,0,0,1" SelectionBrush="Black" Foreground="Black" Style="{DynamicResource textBoxStyle}" TextChanged="showName_TextChanged" HorizontalAlignment="Stretch" ClipToBounds="True"/>
+                <TextBox x:Name="InputShowName" Height="25" VerticalAlignment="Top" Background="#00E6E6E6" VerticalContentAlignment="Bottom" FontFamily="Segoe UI Semibold" BorderBrush="#FF648CE1" BorderThickness="0,0,0,2" Padding="0,0,0,1" SelectionBrush="Black" Foreground="Black" Style="{DynamicResource textBoxStyle}" TextChanged="ShowName_TextChanged" HorizontalAlignment="Stretch" ClipToBounds="True"/>
                 <TextBlock x:Name="showNameOverText" Text="Show name" VerticalAlignment="Bottom" Height="24" Padding="3,4,0,0" IsHitTestVisible="False" Foreground="#FFA0A0A0" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" Width="75" Margin="-1,0,0,-1"/>
             </Grid>
             <Button Content="Select" HorizontalAlignment="Center" Width="115" Height="30" Click="BrowseButtonClick" BorderThickness="0" Background="#FF648CE1" Foreground="White" FontSize="18" FontFamily="Segoe UI Semibold" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource ButtonStyle}" Margin="8" VerticalAlignment="Bottom" Cursor="Hand"/>
@@ -40,7 +40,7 @@
         </Grid>
         <Grid x:Name="notification" Grid.Column="1" Margin="10,191,10,9" Grid.Row="1" Height="90">
             <Rectangle Fill="White" Stroke="#FFE8E8E8"/>
-            <Button x:Name="nClose" Content="X" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Style="{DynamicResource CloseButStyle}" FontFamily="Segoe UI Semibold" BorderThickness="0" Background="Gainsboro" Height="24" Foreground="White" Click="nClose_Click" Margin="320,0,0,66"/>
+            <Button x:Name="nClose" Content="X" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Style="{DynamicResource CloseButStyle}" FontFamily="Segoe UI Semibold" BorderThickness="0" Background="Gainsboro" Height="24" Foreground="White" Click="NotificationClose_Click" Margin="320,0,0,66"/>
             <TextBlock x:Name="nText" Margin="0,25,0,0" TextWrapping="Wrap" Padding="5,0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Right" Width="351"/>
             <Label x:Name="nTitle" Content="Label" BorderBrush="Gainsboro" BorderThickness="0,0,0,1" RenderTransformOrigin="-0.579,0.556" Height="24" Padding="5,1,5,0" FontFamily="Segoe UI Semibold" FontSize="14" Foreground="#FF969696" Margin="0,0,60,66"/>
         </Grid>
@@ -54,6 +54,6 @@
         <Label Content="SHOW AUTO-RENAMER beta 5.1" Margin="10,1,99,0" FontFamily="Segoe UI Semibold" FontSize="14.667" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" IsHitTestVisible="False" AllowDrop="False" Foreground="Gainsboro" Grid.ColumnSpan="2"/>
         <Rectangle x:Name="dragdropOverlay" Stroke="#FF7396F0" SnapsToDevicePixels="True" Grid.ColumnSpan="2" Grid.Row="1" Fill="#997396F0" Cursor="None" Drop="drop" StrokeThickness="3" Visibility="Hidden"/>
         <Label x:Name="LabelPreviewTitle" Margin="10,10,30,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.474,0.462" FontFamily="Segoe UI Semibold" FontSize="13.333" Height="25" SnapsToDevicePixels="True" Padding="8,0" VerticalContentAlignment="Center" Background="Gainsboro"/>
-        <Image x:Name="advancedTitleIcon" Height="25" Width="25" Margin="0,10,0,0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Top" Source="icons/ic_settings_applications_whitish_24dp.png" Cursor="Hand" ToolTip="Advanced title" Focusable="True" AllowDrop="False" MouseEnter="image_MouseEnter" MouseLeave="image_MouseLeave" MouseUp="advancedTitleIcon_MouseUp"/>
+        <Image x:Name="advancedTitleIcon" Height="25" Width="25" Margin="0,10,0,0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Top" Source="icons/ic_settings_applications_whitish_24dp.png" Cursor="Hand" ToolTip="Advanced title" Focusable="True" AllowDrop="False" MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave" MouseUp="AdvancedTitleIcon_MouseUp"/>
     </Grid>
 </Window>

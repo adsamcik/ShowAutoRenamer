@@ -189,7 +189,7 @@ namespace ShowAutoRenamer {
             }
         }
 
-        private void nClose_Click(object sender, RoutedEventArgs e) {
+        private void NotificationClose_Click(object sender, RoutedEventArgs e) {
             NotificationManager.RemoveNotification();
         }
 
@@ -205,19 +205,19 @@ namespace ShowAutoRenamer {
                 ignoreTextChange = false;
         }
 
-        private void showName_TextChanged(object sender, TextChangedEventArgs e) {
+        private void ShowName_TextChanged(object sender, TextChangedEventArgs e) {
             TextChanged();
         }
 
-        private void image_MouseEnter(object sender, MouseEventArgs e) {
+        private void Image_MouseEnter(object sender, MouseEventArgs e) {
             advancedTitleIcon.Source = new BitmapImage(new Uri("Icons/ic_settings_applications_bluish_24dp.png", UriKind.Relative)); ;
         }
 
-        private void image_MouseLeave(object sender, MouseEventArgs e) {
+        private void Image_MouseLeave(object sender, MouseEventArgs e) {
             advancedTitleIcon.Source = new BitmapImage(new Uri("Icons/ic_settings_applications_whitish_24dp.png", UriKind.Relative)); ;
         }
 
-        BitmapImage getIcon(string iconName) {
+        BitmapImage GetIcon(string iconName) {
             BitmapImage icon = new BitmapImage();
             icon.BeginInit();
             icon.UriSource = new Uri("pack://application:,,,/AssemblyName;component/Icons/" + iconName);
@@ -225,7 +225,7 @@ namespace ShowAutoRenamer {
             return icon;
         }
 
-        private void advancedTitleIcon_MouseUp(object sender, MouseButtonEventArgs e) {
+        private void AdvancedTitleIcon_MouseUp(object sender, MouseButtonEventArgs e) {
             TitleRegexWindow trw = new TitleRegexWindow();
             if (Functions.fileQueue != null && Functions.fileQueue.Length > 0) {
                 Episode ep = Functions.GetEpisodeFromName(Functions.fileQueue[0].path);
