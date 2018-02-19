@@ -45,3 +45,5 @@ Temporary Items
 projectFiles/.dropbox.attr
 projectFiles/ShowAutoRenamer/bin/**
 projectFiles/ShowAutoRenamer/obj/**
+projectFiles/.vs/*
+projectFiles/packages/*
