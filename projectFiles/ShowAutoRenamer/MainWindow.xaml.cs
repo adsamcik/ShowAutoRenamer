@@ -138,14 +138,15 @@ namespace ShowAutoRenamer {
         }
 
         void AddToQueue(string[] files) {
+            Show s = new Show();
             EpisodeFile[] ef = new EpisodeFile[files.Length];
             for (int i = 0; i < files.Length; i++)
-                ef[i] = new EpisodeFile(files[i]);
+                ef[i] = new EpisodeFile(s, files[i]);
             Functions.fileQueue = ef;
             FileListBox.ItemsSource = ef;
         }
 
-        private void drop(object sender, DragEventArgs e) {
+        private void Drop(object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 AddToQueue((string[])e.Data.GetData(DataFormats.FileDrop));
                 FileListBox.ItemsSource = Functions.fileQueue;

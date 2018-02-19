@@ -184,7 +184,7 @@ namespace ShowAutoRenamer {
             case 1:
             
             #line 4 "..\..\MainWindow.xaml"
-            ((ShowAutoRenamer.MainWindow)(target)).Drop += new System.Windows.DragEventHandler(this.drop);
+            ((ShowAutoRenamer.MainWindow)(target)).Drop += new System.Windows.DragEventHandler(this.Drop);
             
             #line default
             #line hidden
@@ -310,7 +310,7 @@ namespace ShowAutoRenamer {
             this.dragdropOverlay = ((System.Windows.Shapes.Rectangle)(target));
             
             #line 55 "..\..\MainWindow.xaml"
-            this.dragdropOverlay.Drop += new System.Windows.DragEventHandler(this.drop);
+            this.dragdropOverlay.Drop += new System.Windows.DragEventHandler(this.Drop);
             
             #line default
             #line hidden

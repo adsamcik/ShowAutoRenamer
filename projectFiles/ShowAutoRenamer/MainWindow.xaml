@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ShowAutoRenamer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Show renamer" Height="320" Width="650" ResizeMode="NoResize" Drop="drop" AllowDrop="True" SnapsToDevicePixels="True" DragEnter="Window_DragEnter" DragLeave="Window_DragLeave" WindowStartupLocation="Manual" IsTabStop="True" AllowsTransparency="True" WindowStyle="None" Icon="Icons/Logo.png">
+        Title="Show renamer" Height="320" Width="650" ResizeMode="NoResize" Drop="Drop" AllowDrop="True" SnapsToDevicePixels="True" DragEnter="Window_DragEnter" DragLeave="Window_DragLeave" WindowStartupLocation="Manual" IsTabStop="True" AllowsTransparency="True" WindowStyle="None" Icon="Icons/Logo.png">
     <Grid Background="#FFF0F0F0">
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -52,7 +52,7 @@
         </Rectangle>
         <Button Content="X" Grid.Column="1" HorizontalAlignment="Center" Width="50" BorderThickness="0" Background="#00E62828" BorderBrush="#FF9C9C9C" FontWeight="Bold" Foreground="White" Style="{DynamicResource CloseButStyle}" Padding="0,2,0,0" FontSize="16" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" Click="Close_Click" Margin="321,0,0,0" />
         <Label Content="SHOW AUTO-RENAMER beta 5.1" Margin="10,1,99,0" FontFamily="Segoe UI Semibold" FontSize="14.667" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" IsHitTestVisible="False" AllowDrop="False" Foreground="Gainsboro" Grid.ColumnSpan="2"/>
-        <Rectangle x:Name="dragdropOverlay" Stroke="#FF7396F0" SnapsToDevicePixels="True" Grid.ColumnSpan="2" Grid.Row="1" Fill="#997396F0" Cursor="None" Drop="drop" StrokeThickness="3" Visibility="Hidden"/>
+        <Rectangle x:Name="dragdropOverlay" Stroke="#FF7396F0" SnapsToDevicePixels="True" Grid.ColumnSpan="2" Grid.Row="1" Fill="#997396F0" Cursor="None" Drop="Drop" StrokeThickness="3" Visibility="Hidden"/>
         <Label x:Name="LabelPreviewTitle" Margin="10,10,30,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.474,0.462" FontFamily="Segoe UI Semibold" FontSize="13.333" Height="25" SnapsToDevicePixels="True" Padding="8,0" VerticalContentAlignment="Center" Background="Gainsboro"/>
         <Image x:Name="advancedTitleIcon" Height="25" Width="25" Margin="0,10,0,0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Top" Source="icons/ic_settings_applications_whitish_24dp.png" Cursor="Hand" ToolTip="Advanced title" Focusable="True" AllowDrop="False" MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave" MouseUp="AdvancedTitleIcon_MouseUp"/>
     </Grid>
