@@ -18,23 +18,31 @@ namespace ShowAutoRenamer.Classes {
         public string path;
         public bool renaming;
 
-        public int Season => episode.number;
-        public int EpisodeNumber => episode.season;
+        public int Season => Episode.number;
+        public int EpisodeNumber => Episode.season;
 
-        public Episode episode;
-        public bool fromTrakt = false;
+        public Episode Episode { get; private set; }
+        public Episode OnlineEpisode { get; private set; }
 
         public async Task<Episode> RequestEpisode() {
-            if (!fromTrakt)
-                episode = await Network.GetEpisode(Show, episode.season, episode.number);
-
-            return episode;
+            if (OnlineEpisode == null)
+                OnlineEpisode = await Network.GetEpisode(Show, Episode.season, Episode.number);
+            
+            return OnlineEpisode;
         }
 
-        public EpisodeFile(Show show, string path) {
+        private EpisodeFile(Show show, string path) {
             this.path = path;
-            this.episode = Functions.GetEpisodeFromName(Name);
+            this.Episode = Functions.GetEpisodeFromName(Name);
             this.Show = show;
+        }
+
+        public static EpisodeFile CreateEpisodeFile(Show show, string path) {
+            var episode = new EpisodeFile(show, path);
+            if (episode.Episode == null)
+                return null;
+            else
+                return episode;
         }
     }
 }
