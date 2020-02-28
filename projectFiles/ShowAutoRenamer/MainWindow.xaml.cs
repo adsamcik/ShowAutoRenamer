@@ -77,13 +77,13 @@ namespace ShowAutoRenamer {
                 var request = file.RequestEpisode();
                 request.Wait();
                 var episode = request.Result;
-                if (episode != null)
+                if (episode != null) {
                     LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, episode);
-                else
-                    LabelPreviewTitle.Content = "Episode not found";
-            } else {
-                LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, file.Episode);
+                    return;
+                }
             }
+                
+            LabelPreviewTitle.Content = Functions.RegexTitle(RenameData.regex, file.Episode);
         }
 
         float timeLeft;

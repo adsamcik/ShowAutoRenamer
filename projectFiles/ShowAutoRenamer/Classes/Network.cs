@@ -49,9 +49,15 @@ namespace ShowAutoRenamer {
         }
 
         public static async Task<Episode> GetEpisode(Show sh, int season, int episode) {
-            string result = await Request("shows/" + sh.ids.trakt + "/seasons/" + season + "/episodes/" + episode);
-            if (string.IsNullOrEmpty(result))
+            if(sh.ids == null) {
                 return null;
+            }
+
+            string result = await Request("shows/" + sh.ids.trakt + "/seasons/" + season + "/episodes/" + episode);
+            if (string.IsNullOrEmpty(result)) {
+                return null;
+            }
+
             Episode e = JsonConvert.DeserializeObject<Episode>(result);
             e.show = sh;
             return e;

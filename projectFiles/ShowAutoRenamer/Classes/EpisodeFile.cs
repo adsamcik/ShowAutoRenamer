@@ -31,7 +31,7 @@ namespace ShowAutoRenamer.Classes {
             return OnlineEpisode;
         }
 
-        private EpisodeFile(Show show, string path) {
+        public EpisodeFile(Show show, string path) {
             this.path = path;
             this.Episode = Functions.GetEpisodeFromName(Name);
             this.Show = show;
