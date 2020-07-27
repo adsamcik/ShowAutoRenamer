@@ -11,7 +11,7 @@ Automagically renames all your episodes to nicer, easier to read format. For exa
 
 **Stable builds** should be the most stable builds, but there still might be bugs and issues.
 
-##Features
+## Features
 - Renames your ugly episode names to ones that are easier to read
 - Beautiful and user friendly
 - Smart-Rename - automatically and asynchronously finds episode name in trakt database
@@ -20,7 +20,7 @@ Automagically renames all your episodes to nicer, easier to read format. For exa
 - Support advanced naming (you can create your own type of name like this {showname} S{episode}E{season} {title})
 - Written in C#
 
-##Changes in 4.0, 4.1
+## Changes in 4.0, 4.1
 - Trakt api updated
 - Redesigned
 - Multi-file support
@@ -29,7 +29,7 @@ Automagically renames all your episodes to nicer, easier to read format. For exa
 - Added advanced naming support (4.1)
 - bugfixes
 
-##Changes in 3.0
+## Changes in 3.0
 - Completely rewritten, now uses internal classes to keep information about shows, seasons and episodes.
 - Updated json plugin
 - UI improvements
