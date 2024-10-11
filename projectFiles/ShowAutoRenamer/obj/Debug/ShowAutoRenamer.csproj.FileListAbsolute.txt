@@ -102,3 +102,4 @@ D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.pdb
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.csprojAssemblyReference.cache
 D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.csproj.CopyComplete
+D:\Github\ShowAutoRenamer\projectFiles\ShowAutoRenamer\obj\Debug\ShowAutoRenamer.csproj.AssemblyReference.cache
